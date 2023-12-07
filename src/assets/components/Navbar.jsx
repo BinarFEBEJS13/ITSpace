@@ -4,7 +4,7 @@ import logo from "../img/logo-navbar.png";
 import searchnav from "../svg/search.svg";
 import hamburgermenu from "../svg/hamburger-putih.svg";
 import login from "../svg/log-in.svg";
-// import svg navbar
+// import svg navbar web & laptop
 import beranda from "../svg/beranda.svg";
 import list from "../svg/list.svg";
 import bell from "../svg/bell-putih.svg";
