@@ -18,6 +18,18 @@
         shadow-lg shadow-gray-200 rounded-md overflow-hidden;
 }
 
+@media (max-width: 320px) {
+  .card {
+    @apply rounded-2xl
+  }
+}
+
+@media (max-width: 320px) {
+  .mobile {
+    @apply w-[19rem]
+  }
+}
+
 td {
   padding: 12px 20px;
 }

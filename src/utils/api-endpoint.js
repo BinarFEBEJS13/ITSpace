@@ -8,9 +8,11 @@ export const API_ENDPOINT = {
   RESEND_OTP: "/auth/resend-otp",
   VERIFY_OTP: "/auth/verify-otp",
   RESET_PASSWORD: "/auth/reset-password",
-  CHANGE_PASWORD: "/auth/change-password",
+  CHANGE_PASSWORD: "/auth/change-password",
   //Categories
   CATEGORIES: "/categories",
   // Users
   USERS: "/users",
+  // Transactions
+  MY_TRANSACTIONS: "/auth/my-transactions"
 };

@@ -11,8 +11,8 @@ import diamond from "../svg/diamond.svg";
 export const Pembayaran = () => {
   return (
     <div className="flex justify-center">
-      <div className="flex flex-col justify-center ml-0 sm:ml-4 mt-[4rem] sm:mt-4 w-[23rem] sm:w-[18rem] px-5">
-        <h2 className="flex w-[90%] sm:w-full text-[1.5rem] sm:text-lg text-start sm:justify-center font-extrabold">Riwayat Pembayaran</h2>
+      <div className="flex flex-col justify-center ml-0 sm:ml-4 mt-[2rem] sm:mt-4 w-[21rem] sm:w-[18rem] px-5">
+        <h2 className="flex w-[90%] sm:w-full text-[1.5rem] sm:text-lg justify-start sm:justify-center font-extrabold">Riwayat Pembayaran</h2>
         <div className="card mt-3 gap-2">
           <img src={imagepayment} alt=""></img>
           <div className="flex flex-col gap-[2px] ml-2 mt-1">
@@ -77,7 +77,7 @@ export const Pembayaran = () => {
             </div>
           </div>
         </div>
-        <div className="card mt-3 gap-2">
+        <div className="hidden sm:block card mt-3 gap-2">
           <img src={imagepayment} alt=""></img>
           <div className="flex flex-col gap-[2px] ml-2 mt-1">
             <div className="flex space-x-8 text-[10px] font-bold">

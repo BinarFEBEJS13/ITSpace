@@ -1,13 +1,13 @@
 import React from "react";
 import { Navbar } from "../assets/components/Navbar";
+import { useNavigate } from "react-router-dom";
 
 export const Notifikasi = () => {
+  const navigate = useNavigate()
   return (
     <div className="flex flex-col w-full h-screen">
-      <div className="hidden sm:flex">
-        <Navbar></Navbar>
-      </div>
-      <div className="hidden sm:flex justify-start sm:justify-center ">
+      <Navbar></Navbar>
+      <div className="hidden sm:flex justify-start sm:justify-center cursor-pointer" onClick={() => navigate("/")}>
         <div className="flex justify-start w-[55%] px-0 mt-5">
           <div className="flex space-x-2">
             <div className="text-[#6148FF]">

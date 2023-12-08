@@ -7,22 +7,21 @@ import { Navbar } from "../assets/components/Navbar";
 import { Profile } from "../assets/components/Profile";
 import { Pembayaran } from "../assets/components/Pembayaran";
 import { UbahPassword } from "../assets/components/UbahPassword";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Akun = () => {
   const [Akun, setAkun] = useState("profile");
+  const navigate = useNavigate()
 
   const handleAccount = (item) => {
     setAkun(item);
   };
 
   return (
-    <div className="flex flex-col w-full h-screen bg-blue-100 sm:bg-white">
-      <div className="hidden sm:flex">
-        <Navbar></Navbar>
-      </div>
-      <div className="hidden sm:flex justify-start sm:justify-center ">
-        <div className="flex justify-start w-[55%] px-0 mt-5">
+    <div className="flex flex-col w-full h-screen bg-blue-50 sm:bg-white">
+      <Navbar></Navbar>
+      <div className="hidden sm:flex justify-start sm:justify-center cursor-pointer" onClick={() => navigate("/")}>
+        <div className="flex justify-start w-[55%] sm:w-[60%] md:w-[85%] lg:w-[71%] xl:w-[58%] px-0 mt-5">
           <div className="flex space-x-2">
             <div className="text-[#6148FF]">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -34,7 +33,7 @@ export const Akun = () => {
         </div>
       </div>
       <div className="flex flex-col sm:flex-row sm:justify-center">
-        <div className="flex px-0 sm:w-[50%] mt-8">
+        <div className="flex px-0 sm:w-[80%] md:w-[78%] lg:w-[65%] xl:w-[53%] mt-8">
           <div className="relative flex flex-col bg-transparent sm:bg-white sm:border-[1.5px] sm:border-[#6148FF] w-full h-[550px] bottom-5 rounded-xl z-0">
             <div className="hidden sm:flex w-full h-[8%] justify-center items-center rounded-tl-xl rounded-tr-xl bg-[#6148FF] text-white font-semibold tracking-[1px] z-10">Akun</div>
             <div className="flex justify-center sm:hidden">

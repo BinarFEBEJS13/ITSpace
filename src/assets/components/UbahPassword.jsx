@@ -18,7 +18,7 @@ export const UbahPassword = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="flex flex-col justify-center ml-0 sm:ml-4 mt-[4rem] sm:mt-4 w-[23rem] sm:w-[18rem] px-5">
+      <div className="flex flex-col justify-center ml-0 sm:ml-4 mt-[2rem] sm:mt-4 w-[23rem] mobile sm:w-[18rem] px-5">
         <h2 className="flex w-[90%] sm:w-full text-[1.5rem] sm:text-lg text-start sm:justify-center font-extrabold">Ubah Password</h2>
         <div className="flex flex-col justify-center gap-2 mt-3">
           <div>
@@ -54,7 +54,7 @@ export const UbahPassword = () => {
               <span className="absolute mr-3 text-gray-500 text-[20px]">{confirmPassword === false ? <AiFillEye onClick={toggleConfirmPassword} /> : <AiFillEyeInvisible onClick={toggleConfirmPassword} />}</span>
             </div>
           </div>
-          <div className="mt-[15rem] sm:mt-4">
+          <div className="mt-[2rem] sm:mt-4">
             <button className="w-full p-3 sm:p-2 bg-[#6148FF] rounded-2xl text-white font-semibold text-[12px] tracking-[1px] shadow-lg shadow-gray-200">Ubah Password</button>
           </div>
         </div>
