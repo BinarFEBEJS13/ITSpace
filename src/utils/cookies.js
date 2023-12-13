@@ -5,6 +5,7 @@ const cookies = new Cookies();
 export const CookieKeys = {
   AuthToken: "Token",
   User: "user",
+  email: "email",
 };
 
 const CookieOptions = {
