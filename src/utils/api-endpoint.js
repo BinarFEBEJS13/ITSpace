@@ -13,4 +13,6 @@ export const API_ENDPOINT = {
   CATEGORIES: "/categories",
   // Users
   USERS: "/users",
+  // Enrollments
+  MY_ENROLLMENTS: "/my-enrollments",
 };

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import masuk from "../svg/log-in.svg";
 
 export const NavbarMobile = ({ onClose }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [dataToggle, setDataToggle] = useState(false);
   const [activeItem, setActiveItem] = useState("");
 
   const handleActiveItem = (item) => {
@@ -43,13 +45,26 @@ export const NavbarMobile = ({ onClose }) => {
             </button>
             {/* Filter Untuk Mobile */}
             <div className="flex rounded-md pt-10">
-              <div className="flex flex-col gap-4 items-start">
-                <button onClick={() => handleActiveItem("beranda")}>Beranda</button>
-                <button onClick={() => handleActiveItem("kursus")}>Kursus</button>
-                <button onClick={() => handleActiveItem("kelas")}>Kelas</button>
-                <button onClick={() => handleActiveItem("notifikasi")}>Notifikasi</button>
-                <button onClick={() => handleActiveItem("akun")}>Akun</button>
-              </div>
+              {/* <div className="flex flex-col gap-4 items-start"> */}
+              {dataToggle ? (
+                <div className="flex flex-col gap-4 items-start">
+                  <button onClick={() => handleActiveItem("beranda")}>Beranda</button>
+                  <button onClick={() => handleActiveItem("kursus")}>Kursus</button>
+                  <button onClick={() => handleActiveItem("kelas")}>Kelas</button>
+                  <button onClick={() => handleActiveItem("notifikasi")}>Notifikasi</button>
+                  <button onClick={() => handleActiveItem("akun")}>Akun</button>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-4 items-start">
+                  <button onClick={() => handleActiveItem("beranda")}>Beranda</button>
+                  <button onClick={() => handleActiveItem("kursus")}>Kursus</button>
+                  <div onClick={() => navigate("/login")} className="flex gap-1 bg-gradientkanan px-4 py-2 rounded-md">
+                    <img src={masuk} alt="" />
+                    <button className="text-white">Masuk</button>
+                  </div>
+                </div>
+              )}
+              {/* </div> */}
             </div>
           </div>
         </div>

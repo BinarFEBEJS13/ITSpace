@@ -89,11 +89,6 @@ export const Navbar = () => {
             <div className="hidden sm:flex items-center w-2/6 sm:w-3/6 lg:w-2/6 justify-end ">
               {/* Apbila user belum login */}
               {dataToggle ? (
-                <button className="flex gap-2 items-center text-white">
-                  <img src={login} alt="" />
-                  Masuk
-                </button>
-              ) : (
                 // Kalo user sudah login
                 <div className="flex gap-4 items-center">
                   {/* Beranda */}
@@ -151,6 +146,36 @@ export const Navbar = () => {
                       <img src={user} alt="" className="" />
                     )}
                   </div>
+                </div>
+              ) : (
+                ///////
+                <div className="flex gap-4 items-center">
+                  {/* Beranda */}
+                  <div className="cursor-pointer" onClick={() => handleActiveItem("beranda")}>
+                    {activeItem === "beranda" ? (
+                      <div className="flex text-white gap-1 lg:gap-2 bg-gradientbutton px-2 lg:px-4 py-1 rounded-md shadow-sm-button">
+                        <img src={beranda} alt="" />
+                        Beranda
+                      </div>
+                    ) : (
+                      <img src={beranda} alt="" className="" />
+                    )}
+                  </div>
+                  {/* Kursus */}
+                  <div className="cursor-pointer" onClick={() => handleActiveItem("kursus")}>
+                    {activeItem === "kursus" ? (
+                      <div className="flex text-white gap-2 bg-gradientbutton px-4 py-1 rounded-md shadow-sm-button">
+                        <img src={kursus} alt="" />
+                        Kursus
+                      </div>
+                    ) : (
+                      <img src={kursus} alt="" className="" />
+                    )}
+                  </div>
+                  <button onClick={() => navigate("/login")} className="flex gap-2 items-center text-white">
+                    <img src={login} alt="" />
+                    Masuk
+                  </button>
                 </div>
               )}
             </div>

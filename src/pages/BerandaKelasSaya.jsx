@@ -11,10 +11,16 @@ import clock from "../assets/svg/clock.svg";
 import diamond from "../assets/svg/diamond.svg";
 import complete from "../assets/svg/progress.svg";
 import { FilterMobile } from "../assets/components/FilterMobile";
+import { useGetMyEnrollments } from "../services/get-data-my-enrollments";
+import { BelumLoginKelas } from "../assets/components/HandleErrorPage/BelumLoginKelas";
+import { BelumAdaKelas } from "../assets/components/HandleErrorPage/BelumAdaKelas";
 
 export const BerandaKelasSaya = () => {
   const [activeKelas, setActiveKelas] = useState("all");
   const [progress, setProgress] = useState(100);
+
+  const { data: dataMyEnrollments } = useGetMyEnrollments();
+  console.log(dataMyEnrollments);
 
   const handleActivePopular = (item) => {
     setActiveKelas(item);
@@ -144,8 +150,9 @@ export const BerandaKelasSaya = () => {
                   </div>
                   {/* Card Kelas */}
                   <div className="flex w-full">
-                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 ">
-                      {/* Card Progress */}
+                    {/* */}
+                    {/* Card Progress */}
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                       <div className="w-full shadow-sm-button rounded-2xl ">
                         <div className="relative w-full overflow-hidden">
                           <img src={uiux} alt="" className="w-full rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
@@ -186,6 +193,14 @@ export const BerandaKelasSaya = () => {
                           </div>
                         </div>
                       </div>
+                    </div>
+                    {/* Handle Error Belum Login*/}
+                    <div className="hidden w-full py-4">
+                      <BelumLoginKelas />
+                    </div>
+                    {/* Handle Error Belum Ada kursus di kelas*/}
+                    <div className="hidden w-full py-4">
+                      <BelumAdaKelas />
                     </div>
                   </div>
                 </div>

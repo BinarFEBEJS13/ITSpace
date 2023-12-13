@@ -2,15 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Navbar } from "../assets/components/Navbar";
 // png main section
 import course from "../assets/img/course.png";
-// png kategori belajar
-import uiux from "../assets/img/uiux.png";
 // import productmanagement from "../assets/img/productmanagement.png";
 import uiuxdesign from "../assets/img/uiux.jpeg";
-import pm from "../assets/img/pm.jpeg";
-import webdev from "../assets/img/webdev.jpeg";
-import android from "../assets/img/android.jpeg";
-import ios from "../assets/img/ios.jpeg";
-import datascience from "../assets/img/datascience.jpeg";
+import frontend from "../assets/img/webdev.jpeg";
+import database from "../assets/img/android.jpeg";
+import backend from "../assets/img/ios.jpeg";
+import machinelearning from "../assets/img/datascience.jpeg";
 // svg card
 import star from "../assets/svg/star.svg";
 import level from "../assets/svg/kategori-level.svg";
@@ -26,31 +23,53 @@ import "swiper/css/navigation";
 // import required modules
 import { Pagination, Navigation } from "swiper/modules";
 import { useNavigate } from "react-router-dom";
-import { useGETDataCategories } from "../services/get-data-categories";
 import { useDispatch, useSelector } from "react-redux";
 import { actGetDataCourses } from "../redux/actions/actGetDataCourses";
+import { Footer } from "../assets/components/Footer";
+import { NotFoundCourse } from "../assets/components/HandleErrorPage/NotFoundCourse";
 
 export const Beranda = () => {
   const navigate = useNavigate();
-  const [activePopular, setActivePopular] = useState("all");
-  const courses = useSelector((state) => state.getDataCourses);
   const dispatch = useDispatch();
-
-  const { data: dataCategories } = useGETDataCategories();
-
-  console.log(dataCategories, "ini categories");
-  console.log(courses);
+  const [activePopular, setActivePopular] = useState("all");
+  const [sortDataCourse, setSortDataCourse] = useState([]);
+  const courses = useSelector((state) => state.getDataCourses?.courses);
 
   const handleActivePopular = (item) => {
     setActivePopular(item);
   };
+
+  // Handle Sort Data Course
+  useEffect(() => {
+    // Handle Sort Data Course
+    const dataKursus = courses;
+
+    if (activePopular === "all") {
+      setSortDataCourse(dataKursus);
+    }
+    if (activePopular === "uiuxdesign") {
+      setSortDataCourse(dataKursus?.filter((course) => course?.courseCategory[0]?.category?.name?.toLowerCase() === "ui/ux"));
+    }
+    if (activePopular === "frontend") {
+      setSortDataCourse(dataKursus?.filter((course) => course?.courseCategory[0]?.category?.name?.toLowerCase() === "frontend"));
+    }
+    if (activePopular === "database") {
+      setSortDataCourse(dataKursus?.filter((course) => course?.courseCategory[0]?.category?.name?.toLowerCase() === "database"));
+    }
+    if (activePopular === "backend") {
+      setSortDataCourse(dataKursus?.filter((course) => course?.courseCategory[0]?.category?.name?.toLowerCase() === "backend"));
+    }
+    if (activePopular === "machinelearning") {
+      setSortDataCourse(dataKursus?.filter((course) => course?.courseCategory[0]?.category?.name?.toLowerCase() === "machine learning"));
+    }
+  }, [activePopular, courses]);
 
   useEffect(() => {
     const getDataCourses = async () => {
       await dispatch(actGetDataCourses());
     };
     getDataCourses();
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
@@ -100,30 +119,26 @@ export const Beranda = () => {
                   Lihat Semua...
                 </h6>
               </div>
-              <div className="flex flex-wrap sm:flex-nowrap sm:gap-2 ">
+              <div className="flex flex-wrap justify-center sm:flex-nowrap sm:gap-2">
                 <div className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden">
                   <img src={uiuxdesign} alt="" className="w-44 rounded-md" />
                   <h2 className="items-center text-xs sm:text-sm font-semibold text-center">UI/UX Design</h2>
                 </div>
                 <div className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden">
-                  <img src={pm} alt="" className="w-44 rounded-md" />
-                  <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Product Management</h2>
+                  <img src={frontend} alt="" className="w-44 rounded-md" />
+                  <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Frontend</h2>
                 </div>
                 <div className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden">
-                  <img src={webdev} alt="" className="w-44 rounded-md" />
-                  <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Web Development</h2>
+                  <img src={database} alt="" className="w-44 rounded-md" />
+                  <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Database</h2>
                 </div>
                 <div className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden">
-                  <img src={android} alt="" className="w-44 rounded-md" />
-                  <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Android Development</h2>
+                  <img src={backend} alt="" className="w-44 rounded-md" />
+                  <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Backend</h2>
                 </div>
                 <div className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden">
-                  <img src={ios} alt="" className="w-44 rounded-md" />
-                  <h2 className="items-center text-xs sm:text-sm font-semibold text-center">IOS Development</h2>
-                </div>
-                <div className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden">
-                  <img src={datascience} alt="" className="w-44 rounded-md" />
-                  <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Data Science</h2>
+                  <img src={machinelearning} alt="" className="w-44 rounded-md" />
+                  <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Machine Learning</h2>
                 </div>
               </div>
             </div>
@@ -142,18 +157,12 @@ export const Beranda = () => {
               </div>
               {/* Button Filter Kursus */}
               <div className="flex w-full ">
-                <div className="flex flex-wrap lg:flex-nowrap w-full justify-center xl:justify-evenly gap-2 xl:gap-2">
+                <div className="flex flex-wrap lg:flex-nowrap w-full justify-center gap-2 xl:gap-6">
                   <button
                     className={`${activePopular === "all" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
                     onClick={() => handleActivePopular("all")}
                   >
                     All
-                  </button>
-                  <button
-                    className={`${activePopular === "datascience" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
-                    onClick={() => handleActivePopular("datascience")}
-                  >
-                    Data Science
                   </button>
                   <button
                     className={`${activePopular === "uiuxdesign" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
@@ -162,362 +171,212 @@ export const Beranda = () => {
                     UI/UX Design
                   </button>
                   <button
-                    className={`${activePopular === "android" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
-                    onClick={() => handleActivePopular("android")}
+                    className={`${activePopular === "frontend" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    onClick={() => handleActivePopular("frontend")}
                   >
-                    Android Development
+                    Frontend
                   </button>
                   <button
-                    className={`${activePopular === "web" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
-                    onClick={() => handleActivePopular("web")}
+                    className={`${activePopular === "database" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    onClick={() => handleActivePopular("database")}
                   >
-                    Web Development
+                    Database
                   </button>
                   <button
-                    className={`${activePopular === "ios" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
-                    onClick={() => handleActivePopular("ios")}
+                    className={`${activePopular === "backend" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    onClick={() => handleActivePopular("backend")}
                   >
-                    IOS Development
+                    Backend
                   </button>
                   <button
-                    className={`${activePopular === "bi" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
-                    onClick={() => handleActivePopular("bi")}
+                    className={`${activePopular === "machinelearning" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    onClick={() => handleActivePopular("machinelearning")}
                   >
-                    Business Intelligence
+                    Machine Learning
                   </button>
                 </div>
               </div>
               {/* Card Kursus */}
               <div className="flex w-full">
                 {/* Untuk Tablet dan Laptop */}
-                <div className="hidden sm:flex gap-6 w-full">
-                  <Swiper
-                    slidesPerView={4}
-                    spaceBetween={20}
-                    navigation={true}
-                    pagination={{
-                      clickable: true,
-                    }}
-                    modules={[Pagination, Navigation]}
-                    className="mySwiper "
-                    breakpoints={{
-                      319: {
-                        slidesPerView: 2,
-                        spaceBetween: 10,
-                      },
-                      768: {
-                        slidesPerView: 3,
-                        spaceBetween: 20,
-                      },
-                      1024: {
-                        slidesPerView: 4,
-                        spaceBetween: 20,
-                      },
-                    }}
-                  >
-                    <SwiperSlide>
-                      <div className="w-full shadow-sm-button rounded-2xl">
-                        <div className="relative w-full overflow-hidden">
-                          <img src={uiux} alt="" className="w-full rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
-                        </div>
-                        <div className="px-2 sm:px-4 py-4 flex flex-col gap-2 rounded-2xl">
-                          <div className="flex justify-between items-center">
-                            <h6 className="text-ungu-0 text-xs sm:text-sm overflow-x-hidden">Android Development</h6>
-                            <span className="flex items-center text-sm">
-                              <img src={star} alt="" className="w-4" />
-                              4.7
-                            </span>
-                          </div>
-                          <div>
-                            <h2 className="font-bold cursor-pointer text-xs sm:text-base">Belajar Web Designer dengan Figma</h2>
-                            <span className="opacity-50 text-xs sm:text-sm">by Angela Doe</span>
-                          </div>
-                          <div className="flex flex-wrap w-full gap-2 text-xs sm:text-sm">
-                            <span className="flex gap-2 items-center">
-                              <img src={level} alt="" className="w-4" />
-                              Intermediate Level
-                            </span>
-                            <span className="flex gap-2 items-center">
-                              <img src={modul} alt="" className="w-4" />
-                              10 Modul
-                            </span>
-                            <span className="flex gap-2 items-center">
-                              <img src={clock} alt="" className="w-4" />
-                              120 Menit
-                            </span>
-                          </div>
-                          <div className="text-sm">
-                            <div className="flex text-white items-center">
-                              <div className="flex gap-2 bg-ungu-0 px-4 py-1 rounded-md">
-                                <img src={diamond} alt="" className="w-[0.9rem] sm:w-4" />
-                                <span className="text-xs sm:text-sm">Premium</span>
+                <div className="hidden sm:flex gap-4 w-full">
+                  {sortDataCourse?.length > 0 ? (
+                    <Swiper
+                      slidesPerView={4}
+                      spaceBetween={10}
+                      navigation={true}
+                      pagination={{
+                        clickable: true,
+                      }}
+                      modules={[Pagination, Navigation]}
+                      className="mySwiper w-full"
+                      breakpoints={{
+                        319: {
+                          slidesPerView: 2,
+                          spaceBetween: 10,
+                        },
+                        768: {
+                          slidesPerView: 2,
+                          spaceBetween: 10,
+                        },
+                        1024: {
+                          slidesPerView: 3,
+                          spaceBetween: 10,
+                        },
+                        1440: {
+                          slidesPerView: 4,
+                          spaceBetween: 10,
+                        },
+                      }}
+                    >
+                      {sortDataCourse?.map((value) => {
+                        return (
+                          <SwiperSlide key={value.id} className="p-2 ">
+                            <div className="w-full shadow-sm-button rounded-2xl">
+                              <div className="relative w-full overflow-hidden">
+                                <img src={value.thumbnailUrl} alt="" className="w-full rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
+                              </div>
+                              <div className="px-2 sm:px-4 py-4 flex flex-col gap-2 rounded-2xl">
+                                <div className="flex justify-between items-center">
+                                  <h6 className="text-ungu-0 text-xs sm:text-sm overflow-x-hidden">{value?.courseCategory[0]?.category?.name}</h6>
+                                  <span className="flex items-center text-sm">
+                                    <img src={star} alt="" className="w-4" />
+                                    {value?.rate?.toFixed(1)}
+                                  </span>
+                                </div>
+                                <div>
+                                  <h2 onClick={() => navigate("/detail-kelas")} className="font-bold cursor-pointer text-xs sm:text-base">
+                                    {value.title}
+                                  </h2>
+                                  <span className="opacity-50 text-xs sm:text-sm">by {value?.mentor[0]?.author?.profile?.name}</span>
+                                </div>
+                                <div className="flex flex-wrap w-full gap-2 text-xs sm:text-sm">
+                                  <span className="flex gap-2 items-center">
+                                    <img src={level} alt="" className="w-4" />
+                                    {value.level} Level
+                                  </span>
+                                  <span className="flex gap-2 items-center">
+                                    <img src={modul} alt="" className="w-4" />
+                                    10 Modul
+                                  </span>
+                                  <span className="flex gap-2 items-center">
+                                    <img src={clock} alt="" className="w-4" />
+                                    120 Menit
+                                  </span>
+                                </div>
+                                <div className="text-sm">
+                                  <div className="flex text-white items-center">
+                                    {value?.isPremium === true ? (
+                                      <div className="flex gap-2 bg-ungu-0 px-4 py-1 rounded-md">
+                                        <img src={diamond} alt="" className="w-[0.9rem] sm:w-4" />
+                                        <span className="text-xs sm:text-sm">
+                                          {value?.price &&
+                                            Number(value.price).toLocaleString("id-ID", {
+                                              style: "currency",
+                                              currency: "IDR",
+                                              minimumFractionDigits: 0,
+                                              maximumFractionDigits: 0,
+                                            })}
+                                        </span>
+                                      </div>
+                                    ) : (
+                                      <div className="flex gap-2 bg-ungu-0 px-4 py-1 rounded-md">
+                                        <span className="text-xs sm:text-sm">Mulai Kelas</span>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                      <div className="w-full shadow-sm-button rounded-2xl">
-                        <div className="relative w-full overflow-hidden">
-                          <img src={uiux} alt="" className="w-full rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
-                        </div>
-                        <div className="px-2 sm:px-4 py-4 flex flex-col gap-2 rounded-2xl">
-                          <div className="flex justify-between items-center">
-                            <h6 className="text-ungu-0 text-xs sm:text-sm overflow-x-hidden">Android Development</h6>
-                            <span className="flex items-center text-sm">
-                              <img src={star} alt="" className="w-4" />
-                              4.7
-                            </span>
-                          </div>
-                          <div>
-                            <h2 className="font-bold cursor-pointer text-xs sm:text-base">Belajar Web Designer dengan Figma</h2>
-                            <span className="opacity-50 text-xs sm:text-sm">by Angela Doe</span>
-                          </div>
-                          <div className="flex flex-wrap w-full gap-2 text-xs sm:text-sm">
-                            <span className="flex gap-2 items-center">
-                              <img src={level} alt="" className="w-4" />
-                              Intermediate Level
-                            </span>
-                            <span className="flex gap-2 items-center">
-                              <img src={modul} alt="" className="w-4" />
-                              10 Modul
-                            </span>
-                            <span className="flex gap-2 items-center">
-                              <img src={clock} alt="" className="w-4" />
-                              120 Menit
-                            </span>
-                          </div>
-                          <div className="text-sm">
-                            <div className="flex text-white items-center">
-                              <div className="flex gap-2 bg-ungu-0 px-4 py-1 rounded-md">
-                                <img src={diamond} alt="" className="w-[0.9rem] sm:w-4" />
-                                <span className="text-xs sm:text-sm">Premium</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                      <div className="w-full shadow-sm-button rounded-2xl">
-                        <div className="relative w-full overflow-hidden">
-                          <img src={uiux} alt="" className="w-full rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
-                        </div>
-                        <div className="px-2 sm:px-4 py-4 flex flex-col gap-2 rounded-2xl">
-                          <div className="flex justify-between items-center">
-                            <h6 className="text-ungu-0 text-xs sm:text-sm overflow-x-hidden">Android Development</h6>
-                            <span className="flex items-center text-sm">
-                              <img src={star} alt="" className="w-4" />
-                              4.7
-                            </span>
-                          </div>
-                          <div>
-                            <h2 className="font-bold cursor-pointer text-xs sm:text-base">Belajar Web Designer dengan Figma</h2>
-                            <span className="opacity-50 text-xs sm:text-sm">by Angela Doe</span>
-                          </div>
-                          <div className="flex flex-wrap w-full gap-2 text-xs sm:text-sm">
-                            <span className="flex gap-2 items-center">
-                              <img src={level} alt="" className="w-4" />
-                              Intermediate Level
-                            </span>
-                            <span className="flex gap-2 items-center">
-                              <img src={modul} alt="" className="w-4" />
-                              10 Modul
-                            </span>
-                            <span className="flex gap-2 items-center">
-                              <img src={clock} alt="" className="w-4" />
-                              120 Menit
-                            </span>
-                          </div>
-                          <div className="text-sm">
-                            <div className="flex text-white items-center">
-                              <div className="flex gap-2 bg-ungu-0 px-4 py-1 rounded-md">
-                                <img src={diamond} alt="" className="w-[0.9rem] sm:w-4" />
-                                <span className="text-xs sm:text-sm">Premium</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                      <div className="w-full shadow-sm-button rounded-2xl">
-                        <div className="relative w-full overflow-hidden">
-                          <img src={uiux} alt="" className="w-full rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
-                        </div>
-                        <div className="px-2 sm:px-4 py-4 flex flex-col gap-2 rounded-2xl">
-                          <div className="flex justify-between items-center">
-                            <h6 className="text-ungu-0 text-xs sm:text-sm overflow-x-hidden">Android Development</h6>
-                            <span className="flex items-center text-sm">
-                              <img src={star} alt="" className="w-4" />
-                              4.7
-                            </span>
-                          </div>
-                          <div>
-                            <h2 className="font-bold cursor-pointer text-xs sm:text-base">Belajar Web Designer dengan Figma</h2>
-                            <span className="opacity-50 text-xs sm:text-sm">by Angela Doe</span>
-                          </div>
-                          <div className="flex flex-wrap w-full gap-2 text-xs sm:text-sm">
-                            <span className="flex gap-2 items-center">
-                              <img src={level} alt="" className="w-4" />
-                              Intermediate Level
-                            </span>
-                            <span className="flex gap-2 items-center">
-                              <img src={modul} alt="" className="w-4" />
-                              10 Modul
-                            </span>
-                            <span className="flex gap-2 items-center">
-                              <img src={clock} alt="" className="w-4" />
-                              120 Menit
-                            </span>
-                          </div>
-                          <div className="text-sm">
-                            <div className="flex text-white items-center">
-                              <div className="flex gap-2 bg-ungu-0 px-4 py-1 rounded-md">
-                                <img src={diamond} alt="" className="w-[0.9rem] sm:w-4" />
-                                <span className="text-xs sm:text-sm">Premium</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                      <div className="w-full shadow-sm-button rounded-2xl">
-                        <div className="relative w-full overflow-hidden">
-                          <img src={uiux} alt="" className="w-full rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
-                        </div>
-                        <div className="px-2 sm:px-4 py-4 flex flex-col gap-2 rounded-2xl">
-                          <div className="flex justify-between items-center">
-                            <h6 className="text-ungu-0 text-xs sm:text-sm overflow-x-hidden">Android Development</h6>
-                            <span className="flex items-center text-sm">
-                              <img src={star} alt="" className="w-4" />
-                              4.7
-                            </span>
-                          </div>
-                          <div>
-                            <h2 className="font-bold cursor-pointer text-xs sm:text-base">Belajar Web Designer dengan Figma</h2>
-                            <span className="opacity-50 text-xs sm:text-sm">by Angela Doe</span>
-                          </div>
-                          <div className="flex flex-wrap w-full gap-2 text-xs sm:text-sm">
-                            <span className="flex gap-2 items-center">
-                              <img src={level} alt="" className="w-4" />
-                              Intermediate Level
-                            </span>
-                            <span className="flex gap-2 items-center">
-                              <img src={modul} alt="" className="w-4" />
-                              10 Modul
-                            </span>
-                            <span className="flex gap-2 items-center">
-                              <img src={clock} alt="" className="w-4" />
-                              120 Menit
-                            </span>
-                          </div>
-                          <div className="text-sm">
-                            <div className="flex text-white items-center">
-                              <div className="flex gap-2 bg-ungu-0 px-4 py-1 rounded-md">
-                                <img src={diamond} alt="" className="w-[0.9rem] sm:w-4" />
-                                <span className="text-xs sm:text-sm">Premium</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                  </Swiper>
+                          </SwiperSlide>
+                        );
+                      })}
+                    </Swiper>
+                  ) : (
+                    /* Handling Error Ketika Courses Not Found*/
+                    <div className="w-full py-4">
+                      <NotFoundCourse />
+                    </div>
+                  )}
                 </div>
                 {/* Untuk Mobile */}
-                <div className="w-full sm:hidden grid grid-cols-2 gap-4">
-                  {/* Card Premium */}
-                  <div className="w-full shadow-sm-button rounded-2xl">
-                    <div className="relative w-full overflow-hidden">
-                      <img src={uiux} alt="" className="w-full rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
-                    </div>
-                    <div className="px-2 sm:px-4 py-4 flex flex-col gap-2 rounded-2xl">
-                      <div className="flex justify-between items-center">
-                        <h6 className="text-ungu-0 text-xs sm:text-sm overflow-x-hidden">UI/UX Design</h6>
-                        <span className="flex items-center text-sm">
-                          <img src={star} alt="" className="w-4" />
-                          4.7
-                        </span>
-                      </div>
-                      <div>
-                        <h2 onClick={() => navigate("/detail-kelas")} className="font-bold cursor-pointer text-xs sm:text-base">
-                          Belajar Web Designer dengan Figma
-                        </h2>
-                        <span className="opacity-50 text-xs sm:text-sm">by Angela Doe</span>
-                      </div>
-                      <div className="flex flex-wrap w-full gap-2 text-xs sm:text-sm">
-                        <span className="flex gap-2 items-center">
-                          <img src={level} alt="" className="w-4" />
-                          Intermediate Level
-                        </span>
-                        <span className="flex gap-2 items-center">
-                          <img src={modul} alt="" className="w-4" />
-                          10 Modul
-                        </span>
-                        <span className="flex gap-2 items-center">
-                          <img src={clock} alt="" className="w-4" />
-                          120 Menit
-                        </span>
-                      </div>
-                      <div className="text-sm">
-                        <div className="flex text-white items-center">
-                          <div className="flex gap-2 bg-ungu-0 px-4 py-1 rounded-md">
-                            <img src={diamond} alt="" className="w-[0.9rem] sm:w-4" />
-                            <span className="text-xs sm:text-sm">Premium</span>
+                <div className="w-full sm:hidden pt-2 pb-6 ">
+                  {sortDataCourse?.length > 0 ? (
+                    <div className="w-full sm:hidden grid grid-cols-2 gap-4">
+                      {/* Card Premium */}
+                      {sortDataCourse?.map((value) => {
+                        return (
+                          <div key={value.id} className="w-full shadow-sm-button rounded-2xl">
+                            <div className="relative w-full overflow-hidden">
+                              <img src={value.thumbnailUrl} alt="" className="w-full rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
+                            </div>
+                            <div className="px-2 sm:px-4 py-4 flex flex-col gap-2 rounded-2xl">
+                              <div className="flex justify-between items-center">
+                                <h6 className="text-ungu-0 text-xs sm:text-sm overflow-x-hidden">{value?.courseCategory[0]?.category?.name}</h6>
+                                <span className="flex items-center text-sm">
+                                  <img src={star} alt="" className="w-4" />
+                                  {value?.rate?.toFixed(1)}
+                                </span>
+                              </div>
+                              <div>
+                                <h2 onClick={() => navigate("/detail-kelas")} className="font-bold cursor-pointer text-xs sm:text-base">
+                                  {value.title}
+                                </h2>
+                                <span className="opacity-50 text-xs sm:text-sm">by {value?.mentor[0]?.author?.profile?.name}</span>
+                              </div>
+                              <div className="flex flex-wrap w-full gap-2 text-xs sm:text-sm">
+                                <span className="flex gap-2 items-center">
+                                  <img src={level} alt="" className="w-4" />
+                                  {value.level} Level
+                                </span>
+                                <span className="flex gap-2 items-center">
+                                  <img src={modul} alt="" className="w-4" />
+                                  10 Modul
+                                </span>
+                                <span className="flex gap-2 items-center">
+                                  <img src={clock} alt="" className="w-4" />
+                                  120 Menit
+                                </span>
+                              </div>
+                              <div className="text-sm">
+                                <div className="flex text-white items-center">
+                                  {value?.isPremium === true ? (
+                                    <div className="flex gap-2 bg-ungu-0 px-4 py-1 rounded-md">
+                                      <img src={diamond} alt="" className="w-[0.9rem] sm:w-4" />
+                                      <span className="text-xs sm:text-sm">
+                                        {value?.price &&
+                                          Number(value.price).toLocaleString("id-ID", {
+                                            style: "currency",
+                                            currency: "IDR",
+                                            minimumFractionDigits: 0,
+                                            maximumFractionDigits: 0,
+                                          })}
+                                      </span>
+                                    </div>
+                                  ) : (
+                                    <div className="flex gap-2 bg-ungu-0 px-4 py-1 rounded-md">
+                                      <span className="text-xs sm:text-sm">Mulai Kelas</span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
+                        );
+                      })}
                     </div>
-                  </div>
-                  {/* Card Premium */}
-                  <div className="w-full shadow-sm-button rounded-2xl">
-                    <div className="relative w-full overflow-hidden">
-                      <img src={uiux} alt="" className="w-full rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
+                  ) : (
+                    /* Handle Eror Not Found Course */
+                    <div className="w-full">
+                      <NotFoundCourse />
                     </div>
-                    <div className="px-2 sm:px-4 py-4 flex flex-col gap-2 rounded-2xl">
-                      <div className="flex justify-between items-center">
-                        <h6 className="text-ungu-0 text-xs sm:text-sm overflow-x-hidden">UI/UX Design</h6>
-                        <span className="flex items-center text-sm">
-                          <img src={star} alt="" className="w-4" />
-                          4.7
-                        </span>
-                      </div>
-                      <div>
-                        <h2 className="font-bold cursor-pointer text-xs sm:text-base">Belajar Web Designer dengan Figma</h2>
-                        <span className="opacity-50 text-xs sm:text-sm">by Angela Doe</span>
-                      </div>
-                      <div className="flex flex-wrap w-full gap-2 text-xs sm:text-sm">
-                        <span className="flex gap-2 items-center">
-                          <img src={level} alt="" className="w-4" />
-                          Intermediate Level
-                        </span>
-                        <span className="flex gap-2 items-center">
-                          <img src={modul} alt="" className="w-4" />
-                          10 Modul
-                        </span>
-                        <span className="flex gap-2 items-center">
-                          <img src={clock} alt="" className="w-4" />
-                          120 Menit
-                        </span>
-                      </div>
-                      <div className="text-sm">
-                        <div className="flex text-white items-center">
-                          <div className="flex gap-2 bg-ungu-0 px-4 py-1 rounded-md">
-                            <img src={diamond} alt="" className="w-[0.9rem] sm:w-4" />
-                            <span className="text-xs sm:text-sm">Premium</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     </>
   );

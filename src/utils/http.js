@@ -10,12 +10,12 @@ const http = axios.create({
   },
 });
 
-http.interceptors.request.use((config) => {
-  config.headers = {
-    ...config.headers,
-    Authorization: `Bearer ${CookieStorage.get(CookieKeys.AuthToken) ? CookieStorage.get(CookieKeys.AuthToken) : ""}`,
-  };
-  return config;
-});
+// http.interceptors.request.use((config) => {
+//   config.headers = {
+//     ...config.headers,
+//     Authorization: `Bearer ${CookieStorage.get(CookieKeys.AuthToken) ? CookieStorage.get(CookieKeys.AuthToken) : ""}`,
+//   };
+//   return config;
+// });
 
 export default http;
