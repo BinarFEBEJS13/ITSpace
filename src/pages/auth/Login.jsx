@@ -3,46 +3,29 @@ import LogoBg from "../../assets/img/LogoBg.jpg";
 import pass from "../../assets/svg/pass.svg";
 import passClose from "../../assets/svg/passClose.svg";
 import { useNavigate } from "react-router-dom";
+import { UseLoginUser } from "../../services/auth/login_user";
 
 export const Login = () => {
   const navigate = useNavigate();
+  const { mutate: loginUser } = UseLoginUser();
 
-  //FUNGSI UNTUK EMAIL
-  const [email, setEmail] = useState("");
-  const [isEmailTerdaftar, setIsEmailTerdaftar] = useState(true);
-  const periksaApakahEmailTerdaftar = (emailYangDimasukkan) => {
-    const emailTerdaftar = ["user1@gmail.com", "user2@gmail.com", "user3@gmail.com"];
-    const isTerdaftar = emailTerdaftar.includes(emailYangDimasukkan);
-    setIsEmailTerdaftar(isTerdaftar);
-    return isTerdaftar;
-  };
+  //EMAIL
+  const [Email, setEmail] = useState("");
 
-  //FUNGSI UNTUK PASSWORD
+  //PASSWORD
   const [PasswordVisible, setPasswordVisible] = useState(false);
-  const [inputPassword, setInputPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-
+  const [Password, setPassword] = useState("");
   const togglePasswordVisibility = () => {
     setPasswordVisible(!PasswordVisible);
   };
 
-  const handleInputPass = (event) => {
-    const newPassword = event.target.value;
-    setInputPassword(newPassword);
-
-    if (passwordError && newPassword) {
-      setPasswordError("");
+  const handleInput = (e) => {
+    if (e.target.id === "email") {
+      setEmail(e.target.value);
     }
-  };
-
-  const getPasswordByEmail = (inputEmail) => {
-    const userCredentials = {
-      "user1@gmail.com": "Ayuni.123",
-      "user2@gmail.com": "password2",
-      "user3@gmail.com": "password3",
-    };
-
-    return userCredentials[inputEmail];
+    if (e.target.id === "password") {
+      setPassword(e.target.value);
+    }
   };
 
   // UNTUK LINK LUPA KATA SANDI
@@ -51,26 +34,24 @@ export const Login = () => {
   };
 
   //FUNGSI BUTTON MASUK
-  const handleLogin = () => {
-    const isTerdaftar = periksaApakahEmailTerdaftar(email);
+  const handleLogin = async () => {
+    try {
+      const loginData = {
+        email: Email,
+        password: Password,
+      };
 
-    setIsEmailTerdaftar(isTerdaftar);
+      await loginUser(loginData);
 
-    if (!isTerdaftar) {
-      console.log("Email tidak terdaftar");
-      return;
+      console.log("Login berhasil!");
+      navigate("/");
+    } catch (error) {
+      console.error("Login error:", error);
     }
-
-    const registeredPassword = getPasswordByEmail(email);
-
-    if (inputPassword !== registeredPassword) {
-      setPasswordError("Password salah!");
-      return;
-    }
-    setPasswordError("");
-    console.log("Login berhasil!");
-    navigate("/brnd");
   };
+
+  console.log(Email, "email");
+  console.log(Password, "Password");
 
   return (
     <div className="flex flex-row w-full h-screen">
@@ -83,14 +64,12 @@ export const Login = () => {
           <div className="w-full md:w-[35rem] flex flex-col relative">
             <label className="mb-1">Email/No Telepon</label>
             <input
+              id="email"
               type="text"
-              className={`h-[3rem] w-full rounded-xl border ${!isEmailTerdaftar ? "border-red-500" : "border-gray-300"} pl-3`}
+              className="h-[3rem] w-full rounded-xl border pl-3"
               placeholder="Contoh: user1@gmail.com"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setIsEmailTerdaftar(true);
-              }}
+              value={Email}
+              onChange={handleInput}
             />
           </div>
 
@@ -98,35 +77,58 @@ export const Login = () => {
           <div className="w-full md:w-[35rem] flex flex-col">
             <div className="flex justify-between items-center mb-1">
               <label>Password</label>
-              <a href="/logres" className="text-blue-500 hover:underline" onClick={handleForgotPassword}>
+              <a
+                href="/logres"
+                className="text-blue-500 hover:underline"
+                onClick={handleForgotPassword}
+              >
                 Lupa Kata sandi
               </a>
             </div>
             <div className="relative">
               <input
+              id="password"
                 type={PasswordVisible ? "text" : "password"}
-                value={inputPassword}
-                onChange={handleInputPass}
-                className={`h-[3rem] w-full md:w-full rounded-xl border ${passwordError ? "border-red-500" : "border-gray-300"} pl-3`}
+                onChange={handleInput}
+                className="h-[3rem] w-full md:w-full rounded-xl border pl-3"
                 placeholder="Masukkan Password"
               />
-              <img src={PasswordVisible ? passClose : pass} alt={PasswordVisible ? "passClose" : "pass"} className="top-3 right-5 absolute cursor-pointer" onClick={togglePasswordVisibility} />
+              <img
+                src={PasswordVisible ? passClose : pass}
+                alt={PasswordVisible ? "passClose" : "pass"}
+                className="top-3 right-5 absolute cursor-pointer"
+                onClick={togglePasswordVisibility}
+              />
             </div>
           </div>
 
           {/* BUTTON LOGIN */}
-          <button className="h-[3rem] w-full md:w-[35rem] rounded-xl bg-gradientkanan text-white" onClick={handleLogin}>
+          <button
+            className="h-[3rem] w-full md:w-[35rem] rounded-xl bg-gradientkanan text-white"
+            onClick={handleLogin}
+          >
             Masuk
           </button>
 
           <span>
             Belum punya akun?{" "}
-            <a className="text-purple-800 font-semibold hover:underline" href="/register">
+            <a
+              className="text-purple-800 font-semibold hover:underline"
+              href="/register"
+            >
               Daftar di sini
             </a>
           </span>
-          {!isEmailTerdaftar && <div className="absolute bottom-8 mb-4 h-[3rem] w-[20rem] md:w-[20rem] bg-merah-0 text-white rounded-xl flex justify-center items-center">Email tidak terdaftar</div>}
-          {passwordError && <div className="absolute  bottom-8 mb-4 h-[3rem] w-[20rem] md:w-[20rem] bg-merah-0 text-white rounded-xl flex justify-center items-center">{passwordError}</div>}
+          {/* {!isEmailTerdaftar && (
+            <div className="absolute bottom-8 mb-4 h-[3rem] w-[20rem] md:w-[20rem] bg-merah-0 text-white rounded-xl flex justify-center items-center">
+              Email tidak terdaftar
+            </div>
+          )}
+          {passwordError && (
+            <div className="absolute  bottom-8 mb-4 h-[3rem] w-[20rem] md:w-[20rem] bg-merah-0 text-white rounded-xl flex justify-center items-center">
+              {passwordError}
+            </div>
+          )} */}
         </div>
       </div>
 
