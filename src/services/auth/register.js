@@ -2,14 +2,14 @@ import { useMutation } from "@tanstack/react-query";
 import { API_ENDPOINT } from "../../utils/api-endpoint"
 import http from "../../utils/http"
 
-const LoginUser = async (input) => {
-    return await http.post(API_ENDPOINT.LOGIN, input)
+const Register = async (input) => {
+    return await http.post(API_ENDPOINT.REGISTER, input)
 }
 
-const UseLoginUser = () => {
+const UseRegister = () => {
     return useMutation({
-        mutationFn: LoginUser
+        mutationFn: Register
     });
 }
 
-export {LoginUser, UseLoginUser}
+export {Register, UseRegister}

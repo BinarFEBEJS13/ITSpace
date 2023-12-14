@@ -6,6 +6,7 @@ export const CookieKeys = {
   AuthToken: "Token",
   Id: "id",
   User: "user",
+  email: "email",
 };
 
 const CookieOptions = {
