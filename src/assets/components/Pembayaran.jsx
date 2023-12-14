@@ -10,9 +10,11 @@ import diamond from "../svg/diamond.svg";
 
 export const Pembayaran = () => {
   return (
-    <div className="flex justify-center">
-      <div className="flex flex-col justify-center ml-0 sm:ml-4 mt-[2rem] sm:mt-4 w-[21rem] sm:w-[18rem] px-5">
-        <h2 className="flex w-[90%] sm:w-full text-[1.5rem] sm:text-lg justify-start sm:justify-center font-extrabold">Riwayat Pembayaran</h2>
+    <div className="flex justify-center overflow-x-hidden">
+      <div className="flex flex-col justify-center ml-0 sm:ml-4 mt-[2rem] sm:mt-4 mb-5 mobile w-[21rem] sm:w-[18rem] px-5">
+        <h2 className="flex w-full text-[1.5rem] sm:text-lg justify-start sm:justify-center font-extrabold">
+          Riwayat Pembayaran
+        </h2>
         <div className="card mt-3 gap-2">
           <img src={imagepayment} alt=""></img>
           <div className="flex flex-col gap-[2px] ml-2 mt-1">
@@ -23,7 +25,9 @@ export const Pembayaran = () => {
                 <p>4.7</p>
               </div>
             </div>
-            <p className="text-[10px] font-bold">Belajar Web Designer dengan Figma</p>
+            <p className="text-[10px] font-bold">
+              Belajar Web Designer dengan Figma
+            </p>
             <p className="text-[8px] sm:text-[7px]">by Angela Doe</p>
             <div className="flex text-[9px] sm:text-[7px] gap-5 font-bold">
               <div className="flex space-x-1">
@@ -55,7 +59,9 @@ export const Pembayaran = () => {
                 <p>4.8</p>
               </div>
             </div>
-            <p className="text-[10px] font-bold">Membuat Wireframe Hingga ke Visual Design</p>
+            <p className="text-[10px] font-bold">
+              Membuat Wireframe Hingga ke Visual Design
+            </p>
             <p className="text-[8px] sm:text-[7px]">by Angela Doe</p>
             <div className="flex text-[9px] sm:text-[7px] gap-5 font-bold">
               <div className="flex space-x-1">
@@ -77,7 +83,7 @@ export const Pembayaran = () => {
             </div>
           </div>
         </div>
-        <div className="hidden sm:block card mt-3 gap-2">
+        <div className="card mt-3 gap-2">
           <img src={imagepayment} alt=""></img>
           <div className="flex flex-col gap-[2px] ml-2 mt-1">
             <div className="flex space-x-8 text-[10px] font-bold">
@@ -87,7 +93,9 @@ export const Pembayaran = () => {
                 <p>4.4</p>
               </div>
             </div>
-            <p className="text-[10px] font-bold">Pengenalan tentang Design System</p>
+            <p className="text-[10px] font-bold">
+              Pengenalan tentang Design System
+            </p>
             <p className="text-[8px] sm:text-[7px]">by Angela Doe</p>
             <div className="flex text-[9px] sm:text-[7px] gap-5 font-bold">
               <div className="flex space-x-1">

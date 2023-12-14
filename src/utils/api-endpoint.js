@@ -13,6 +13,7 @@ export const API_ENDPOINT = {
   CATEGORIES: "/categories",
   // Users
   USERS: "/users",
+  USERS_ID: "/users",
   // Transactions
-  MY_TRANSACTIONS: "/auth/my-transactions"
+  MY_TRANSACTIONS: "/my-transactions"
 };

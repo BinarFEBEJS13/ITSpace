@@ -11,8 +11,8 @@ export const Notifikasi = () => {
         <div className="flex justify-start w-[55%] px-0 mt-5">
           <div className="flex space-x-2">
             <div className="text-[#6148FF]">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
               </svg>
             </div>
             <p className="text-[#6148FF] font-bold">Kembali ke Beranda</p>
@@ -30,10 +30,10 @@ export const Notifikasi = () => {
               <div className="relative flex w-full justify-start sm:justify-around">
                 <div className="flex flex-row space-x-2 mt-5">
                   <div className="flex justify-center items-center w-5 h-5 sm:w-4 sm:h-4 rounded-full bg-[#6148FF] text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 sm:w-3 sm:h-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4 sm:w-3 sm:h-3">
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
                       />
                     </svg>
@@ -53,10 +53,10 @@ export const Notifikasi = () => {
               <div className="relative flex w-full justify-start sm:justify-around space-x-[6.5rem]">
                 <div className="flex flex-row space-x-2 mt-5">
                   <div className="flex justify-center items-center w-5 h-5 sm:w-4 sm:h-4 rounded-full bg-[#6148FF] text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 sm:w-3 sm:h-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4 sm:w-3 sm:h-3">
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
                       />
                     </svg>
@@ -74,10 +74,10 @@ export const Notifikasi = () => {
               <div className="hidden w-full justify-start sm:justify-around sm:flex sm:relative md:top-0">
                 <div className="flex flex-row space-x-2 mt-5">
                   <div className="flex justify-center items-center w-4 h-4 rounded-full bg-[#6148FF] text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-3 h-3">
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
                       />
                     </svg>

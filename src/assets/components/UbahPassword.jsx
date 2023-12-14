@@ -1,19 +1,70 @@
 import React, { useState } from "react";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
+import { useChangePassword } from "../../services/auth/change_password";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const UbahPassword = () => {
-  const [oldPassword, setOldPassword] = useState(false);
-  const [newPassword, setNewPassword] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [oldPass, setOldPass] = useState("");
+  const [newPass, setNewPass] = useState("");
+  const [confirmPass, setConfirmPass] = useState("");
+
 
   const toggleOldPassword = () => {
-    setOldPassword(!oldPassword);
+    setOldPass(!oldPass);
   };
   const toggleNewPassword = () => {
-    setNewPassword(!newPassword);
+    setNewPass(!newPass);
   };
   const toggleConfirmPassword = () => {
-    setConfirmPassword(!confirmPassword);
+    setConfirmPass(!confirmPass);
+  };
+
+  const {mutate: changePassword} = useChangePassword();
+
+  const handleChangePass = (e) => {
+    if (e) {
+      if (e.target.id === 'oldPassword') {
+        setOldPassword(e.target.value);
+      }
+      if (e.target.id === "newPassword") {
+        setNewPassword(e.target.value);
+      }
+      if (e.target.id === "newPasswordValidation") {
+        setConfirmPassword(e.target.value);
+      }
+    }
+  }
+
+  console.log(oldPassword, "old Password")
+
+  const changePass = async () => {
+    try {
+      await changePassword({
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+        newPasswordValidation: confirmPassword,
+      });
+      toast.success("Password berhasil diubah!", {
+        position: "top-center",
+        autoClose: 3000, // milliseconds
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+
+      // Reset the form fields
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      console.error("Gagal mengubah password:", error);
+    }
   };
 
   return (
@@ -24,41 +75,42 @@ export const UbahPassword = () => {
           <div>
             <span className="text-[12px] sm:text-[10px] font-semibold">Masukkan Password Lama</span>
             <div className="flex items-center justify-end">
-              <input
-                type={oldPassword === false ? "password" : "text"}
+              <input id="oldPassword" onChange={handleChangePass}
+                type={oldPass === false ? "text" : "password"}
                 className="w-full p-3 sm:p-2 rounded-xl outline outline-gray-400 outline-[1.5px] placeholder:text-[12px] sm:placeholder:text-[10px]"
                 placeholder="Masukkan Password Lama"
               ></input>
-              <span className="absolute mr-3 text-gray-500 text-[20px]">{oldPassword === false ? <AiFillEye onClick={toggleOldPassword} /> : <AiFillEyeInvisible onClick={toggleOldPassword} />}</span>
+              <span className="absolute mr-3 text-gray-500 text-[20px]">{oldPass === false ? <AiFillEyeInvisible onClick={toggleOldPassword} /> : <AiFillEye onClick={toggleOldPassword} />}</span>
             </div>
           </div>
           <div>
             <span className="text-[12px] sm:text-[10px] font-semibold">Masukkan Password Baru</span>
             <div className="flex items-center justify-end">
-              <input
-                type={newPassword === false ? "password" : "text"}
+              <input id="newPassword" onChange={handleChangePass}
+                type={newPass === false ? "text" : "password"}
                 className="w-full p-3 sm:p-2 rounded-xl outline outline-gray-400 outline-[1.5px] placeholder:text-[12px] sm:placeholder:text-[10px]"
                 placeholder="Masukkan Password Baru"
               ></input>
-              <span className="absolute mr-3 text-gray-500 text-[20px]">{newPassword === false ? <AiFillEye onClick={toggleNewPassword} /> : <AiFillEyeInvisible onClick={toggleNewPassword} />}</span>
+              <span className="absolute mr-3 text-gray-500 text-[20px]">{newPass === false ? <AiFillEyeInvisible onClick={toggleNewPassword} /> : <AiFillEye onClick={toggleNewPassword} />}</span>
             </div>
           </div>
           <div>
             <span className="text-[12px] sm:text-[10px] font-semibold">Ulangi Password Baru</span>
             <div className="flex items-center justify-end">
-              <input
-                type={confirmPassword === false ? "password" : "text"}
+              <input id="newPasswordValidation" onChange={handleChangePass}
+                type={confirmPass === false ? "text" : "password"}
                 className="w-full p-3 sm:p-2 rounded-xl outline outline-gray-400 outline-[1.5px] placeholder:text-[12px] sm:placeholder:text-[10px]"
                 placeholder="Ulangi Password Baru"
               ></input>
-              <span className="absolute mr-3 text-gray-500 text-[20px]">{confirmPassword === false ? <AiFillEye onClick={toggleConfirmPassword} /> : <AiFillEyeInvisible onClick={toggleConfirmPassword} />}</span>
+              <span className="absolute mr-3 text-gray-500 text-[20px]">{confirmPass === false ? <AiFillEyeInvisible onClick={toggleConfirmPassword} /> : <AiFillEye onClick={toggleConfirmPassword} />}</span>
             </div>
           </div>
           <div className="mt-[2rem] sm:mt-4">
-            <button className="w-full p-3 sm:p-2 bg-[#6148FF] rounded-2xl text-white font-semibold text-[12px] tracking-[1px] shadow-lg shadow-gray-200">Ubah Password</button>
+            <button onClick={() => {changePass()}} className="w-full p-3 sm:p-2 bg-[#6148FF] rounded-2xl text-white font-semibold text-[12px] tracking-[1px] shadow-lg shadow-gray-200">Ubah Password</button>
           </div>
         </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 };

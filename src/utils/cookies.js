@@ -4,6 +4,7 @@ const cookies = new Cookies();
 
 export const CookieKeys = {
   AuthToken: "Token",
+  Id: "id",
   User: "user",
 };
 

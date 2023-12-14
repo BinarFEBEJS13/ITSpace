@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+html::-webkit-scrollbar {
+    width: 0.3rem;
+    background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+    background: linear-gradient(#073A75, #7805A1);
+}
+
 @layer base {
   @font-face {
     font-family: "Poppins";
