@@ -3,9 +3,12 @@ import LogoBg from "../../assets/img/LogoBg.jpg";
 import pass from "../../assets/svg/pass.svg";
 import passClose from "../../assets/svg/passClose.svg";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { LoginUser } from "../../redux/actions/authLogin";
 
 export const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   //FUNGSI UNTUK EMAIL
   const [email, setEmail] = useState("");
@@ -72,6 +75,24 @@ export const Login = () => {
     navigate("/brnd");
   };
 
+  const handleInput = (e) => {
+        if (e) {
+            if (e.target.id === 'email') {
+                setEmail(e.target.value);
+            }
+            if (e.target.id === 'password') {
+                setInputPassword(e.target.value);
+            }
+        }
+    };
+
+  const loginUser = () => {
+    dispatch(LoginUser({
+      email: email,
+      password: inputPassword
+    }))
+  }
+
   return (
     <div className="flex flex-row w-full h-screen">
       {/* SEBELAH KIRI */}
@@ -82,15 +103,12 @@ export const Login = () => {
           {/* INPUTAN EMAIL */}
           <div className="w-full md:w-[35rem] flex flex-col relative">
             <label className="mb-1">Email/No Telepon</label>
-            <input
+            <input id="email"
               type="text"
               className={`h-[3rem] w-full rounded-xl border ${!isEmailTerdaftar ? "border-red-500" : "border-gray-300"} pl-3`}
               placeholder="Contoh: user1@gmail.com"
               value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setIsEmailTerdaftar(true);
-              }}
+              onChange={handleInput}
             />
           </div>
 
@@ -103,10 +121,10 @@ export const Login = () => {
               </a>
             </div>
             <div className="relative">
-              <input
+              <input id="password"
                 type={PasswordVisible ? "text" : "password"}
                 value={inputPassword}
-                onChange={handleInputPass}
+                onChange={handleInput}
                 className={`h-[3rem] w-full md:w-full rounded-xl border ${passwordError ? "border-red-500" : "border-gray-300"} pl-3`}
                 placeholder="Masukkan Password"
               />
@@ -115,7 +133,7 @@ export const Login = () => {
           </div>
 
           {/* BUTTON LOGIN */}
-          <button className="h-[3rem] w-full md:w-[35rem] rounded-xl bg-gradientkanan text-white" onClick={handleLogin}>
+          <button className="h-[3rem] w-full md:w-[35rem] rounded-xl bg-gradientkanan text-white" onClick={() => {loginUser()}}>
             Masuk
           </button>
 
