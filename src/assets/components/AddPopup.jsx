@@ -57,13 +57,15 @@ const {mutate: addKelas} = usePostDataQuery({
     formData.append("description", Description);
     formData.append("image", fileName);
     formData.append("groupUrl", LinkKelas);
-    Mentor.mentorEmail.forEach((email, index) => {
-      formData.append(`mentorEmail[${index}]`, email);
-    });
+    formData.append(`mentorEmail[0]`, Mentor);
+    formData.append(`courseCategory[0]`, Kategori);
+    // Mentor.mentorEmail.forEach((email, index) => {
+    //   formData.append(`mentorEmail[${index}]`, email);
+    // });
   
-    [Kategori].courseCategory.forEach((category, index) => {
-      formData.append(`courseCategory[${index}]`, category);
-    });
+    // Kategori.courseCategory.forEach((category, index) => {
+    //   formData.append(`courseCategory[${index}]`, category);
+    // });
    
 
     addKelas(formData);
