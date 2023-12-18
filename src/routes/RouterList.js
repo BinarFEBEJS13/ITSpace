@@ -18,6 +18,9 @@ import { Notifikasi } from "../pages/Notifikasi";
 import { Success } from "../pages/Success";
 import { Kursus } from "../pages/Kursus";
 import AdminLogin from "../pages/Admin/Login";
+import { TableKelas } from "../assets/components/TableKelas";
+import { TableUser } from "../assets/components/TableUser";
+import { TableDashboard } from "../assets/components/TableDashboard";
 
 export const RouterList = () => {
   return (
@@ -44,6 +47,9 @@ export const RouterList = () => {
         {/* Route Admin */}
         <Route path="/admin/login" element={<AdminLogin />}></Route>
         <Route path="/admin/dashboard" element={<Dashboard />}></Route>
+        <Route path="/admin/dashboard/payment" element={<TableDashboard />}></Route>
+        <Route path="/admin/dashboard/course" element={<TableKelas />}></Route>
+        <Route path="/admin/dashboard/user" element={<TableUser/>}></Route>
       </Routes>
     </BrowserRouter>
   );

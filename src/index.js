@@ -6,6 +6,8 @@ import { RouterList } from "./routes/RouterList";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider } from "react-redux";
 import store from "./redux/store/store";
+import { ChakraProvider } from "@chakra-ui/react";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const queryITSpace = new QueryClient();
 
@@ -14,7 +16,10 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <QueryClientProvider client={queryITSpace}>
-        <RouterList />
+        <ChakraProvider toastOptions={{ defaultOptions: { position: 'bottom-left' } }}>
+          <RouterList />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </ChakraProvider>
       </QueryClientProvider>
     </Provider>
   </React.StrictMode>

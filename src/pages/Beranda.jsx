@@ -47,7 +47,7 @@ export const Beranda = () => {
 
   useEffect(() => {
     const getDataCourses = async () => {
-      await dispatch(actGetDataCourses());
+      await dispatch(actGetDataCourses()); 
     };
     getDataCourses();
   }, []);

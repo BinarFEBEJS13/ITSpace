@@ -1,6 +1,7 @@
 export const API_ENDPOINT = {
   //Courses
   COURSES: "/courses",
+  COURSES_IMG : "/courses/images",
   //Authentication
   REGISTER: "/auth/register",
   LOGIN: "/auth/login",
@@ -11,6 +12,9 @@ export const API_ENDPOINT = {
   CHANGE_PASWORD: "/auth/change-password",
   //Categories
   CATEGORIES: "/categories",
+  //TRANSACTION
+  TRANSACTION : "/transactions",
   // Users
   USERS: "/users",
+  AUTH_DECODE :"/auth/decode"
 };

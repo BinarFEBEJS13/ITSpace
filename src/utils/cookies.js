@@ -3,7 +3,7 @@ import Cookies from "universal-cookie";
 const cookies = new Cookies();
 
 export const CookieKeys = {
-  AuthToken: "Token",
+  AuthToken: "refreshToken",
   User: "user",
 };
 

@@ -1,0 +1,313 @@
+import React, { useState, useEffect } from "react";
+import { useEditCourse } from "../../services/Admin/courses/put-data-courses";
+import { FaCloudArrowUp } from "react-icons/fa6";
+import { useGetCourseBYID } from "../../services/Admin/courses/get-data-coursesID";
+import { FaTrash } from "react-icons/fa6";
+import { useParams } from "react-router-dom";
+import { useUploadImage } from "../../services/Admin/courses/post-image-course";
+
+
+export const EditPopup = (props) => {
+  const [NamaKelas, setNamaKelas] = useState("");
+  const [Kategori, setKategori] = useState([]);
+  const [KodeKelas, setKodeKelas] = useState("");
+  const [TipeKelas, setTipeKelas] = useState("0");
+  const [Level, setLevel] = useState("BEGINNER");
+  const [Harga, setHarga] = useState(0);
+  const [Mentor, setMentor] = useState([]);
+  const [Description, setDescription] = useState("");
+  const [Img, setImg] = useState(null);
+  const [LinkKelas, setLinkKelas] = useState("");
+  const [EditMode, setEditMode] = useState("");
+  
+  const [fileName, setFileName] = useState("No selected file");
+
+  const { handleClose, selectedCourseData } = props;
+  
+
+  const {
+    data: Edit,
+    refetch: refetchData,
+  } = useGetCourseBYID({
+    courseId: selectedCourseData.id
+  });
+  console.log(selectedCourseData.id, "INI ID KATA ");
+  const courseKategori = selectedCourseData.courseCategory.map(
+    (kategori) => kategori.category.name
+  );
+  const MmentorData = selectedCourseData.mentor.map(
+    (mentor) => mentor.author.profile.name
+  );
+
+
+  useEffect(() => {
+    if (selectedCourseData) {
+      setKodeKelas(selectedCourseData.code);
+      setKategori(courseKategori);
+      setLevel(selectedCourseData.level);
+      setHarga(selectedCourseData.price);
+      setLinkKelas(selectedCourseData.groupUrl);
+      setTipeKelas(selectedCourseData.isPremium);
+      setNamaKelas(selectedCourseData.title);
+      setMentor(MmentorData);
+      setDescription(selectedCourseData.description);
+
+    }
+  }, [selectedCourseData]);
+
+
+  const { mutate: editCourse } = useEditCourse();
+  
+  const { mutate: uploadImg } = useUploadImage();
+
+
+  const editData = (props) => {
+    
+    console.log(props);
+    if (props.length === 0) {
+      return [];
+    } else {
+      return props.split(",");
+    }
+  };
+
+  const handleKelas = (e) => {
+    e.preventDefault();
+
+    const newKelas = {
+      code: KodeKelas,
+      title: NamaKelas,
+      price: Harga,
+      level: Level,
+      isPremium: TipeKelas,
+      description: Description,
+      groupUrl: LinkKelas,
+      image: Img,
+      mentorEmail: editData(Mentor),
+      courseCategory: editData(Kategori),
+    };
+    editCourse({id: selectedCourseData.id, input: newKelas });
+    uploadImg({id : selectedCourseData.id, input: Img})
+
+    handleClose();
+  };
+
+  const handleOnchange = (e) => {
+    if (e) {
+      if (e.target.id === "KodeKelas") {
+        setKodeKelas(e.target.value);
+      }
+      if (e.target.id === "kategori") {
+        setKategori(e.target.value);
+      }
+      if (e.target.id === "NamaKelas") {
+        setNamaKelas(e.target.value);
+      }
+      if (e.target.id === "TipeKelas") {
+        setTipeKelas(e.target.value);
+      }
+      if (e.target.id === "level") {
+        setLevel(e.target.value);
+      }
+      if (e.target.id === "mentor") {
+        setMentor(e.target.value);
+      }
+      if (e.target.id === "harga") {
+        setHarga(parseInt(e.target.value));
+      }
+      if (e.target.id === "img") {
+        setImg(e.target.value);
+      }
+      if (e.target.id === "LinkKelas") {
+        setLinkKelas(e.target.value);
+      }
+      if (e.target.id === "description") {
+        setDescription(e.target.value);
+      }
+    }
+  };
+  const handleFileChange = (event) => {
+    const files = event.target.files;
+
+    if (files.length > 0) {
+      setFileName(files[0].name);
+      setImg(URL.createObjectURL(files[0]));
+    }
+  };
+
+  const handleDeleteImage = () => {
+    setFileName("");
+    setImg(null);
+  };
+  console.log(Img, "IMGGG")
+
+  return (
+    <div className="w-screen h-screen flex items-center justify-center  fixed t-2 l-[50px] bg-[rgba(0,0,0,0.8)] ">
+      <form
+        onSubmit={handleKelas}
+        className="pop-up overflow-y-auto max-h-[70%] lg:max-h-[95%] rounded-2xl w-11/12 md:w-3/4 xl:w-5/12 bg-white absolute"
+      >
+        <i
+          onClick={props.handleClose}
+          className="ri-close-fill absolute text-[#6148FF] right-3 top-3 font-bold text-3xl"
+        ></i>
+        <div className="flex items-center justify-center flex-col sm:gap-5">
+          <h1 className="font-bold sm:text-xl text-[#6148FF] my-2">
+            Tambah Kelas
+          </h1>
+          <div className="flex flex-col gap-2 w-4/5 sm:w-4/5 ">
+            <div className="flex flex-col">
+              <label htmlFor="">Kode Kelas</label>
+              <input
+                id="KodeKelas"
+                type="text"
+                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
+                onChange={handleOnchange}
+                value={KodeKelas}
+              />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="">Kategori</label>
+              <input
+                id="kategori"
+                type="text"
+                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
+                onChange={handleOnchange}
+                value={Kategori}
+              />
+            </div>
+
+            <div className="flex flex-col ">
+              <label htmlFor="">Nama Kelas</label>
+              <input
+                id="NamaKelas"
+                type="text"
+                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
+                value={NamaKelas}
+                onChange={handleOnchange}
+              />
+            </div>
+
+            <div className="flex flex-col ">
+              <label htmlFor="TipeKelas">Tipe Kelas</label>
+              <select
+                id="TipeKelas"
+                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
+                onChange={handleOnchange}
+                value={TipeKelas}
+              >
+                <option value="0">GRATIS</option>
+                <option value="1">PREMIUM</option>
+              </select>
+            </div>
+
+            <div className="flex flex-col ">
+              <label htmlFor="">Level</label>
+              <select
+                id="level"
+                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
+                value={Level}
+                onChange={handleOnchange}
+              >
+                <option value="BEGINNER">BEGINNER</option>
+                <option value="INTERMEDIATE">INTERMEDIATE</option>
+                <option value="ADVANCED">ADVANCED</option>
+              </select>
+            </div>
+
+            <div className="flex flex-col ">
+              <label htmlFor="">Mentor</label>
+              <input
+                id="mentor"
+                type="email"
+                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
+                value={Mentor}
+                onChange={handleOnchange}
+              />
+            </div>
+
+            <div className="flex flex-col ">
+              <label htmlFor="">Harga</label>
+              <input
+                id="harga"
+                type="text"
+                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
+                value={Harga}
+                onChange={handleOnchange}
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <label htmlFor="img">Images</label>
+              <div className="py-4 bg-[#EBF3FC] flex flex-col gap-4 justify-center items-center border-2 border-dashed- w-full h-[300px] pointer rounded-[5px]">
+                <div className="border-4 border-dashed border-[#D0D0D0] rounded-lg h-[70%] w-[90%] flex flex-col items-center justify-center">
+                  <input
+                    className="input-field"
+                    onChange={handleFileChange}
+                    type="file"
+                    accept="image/*"
+                  />
+                  <FaCloudArrowUp size={60} />
+                </div>
+                <div className="flex justify-between px-4 items-center border-4 rounded-lg border-[#D0D0D0] h-[30%] w-[90%]">
+                  <div className="flex items-center">
+                    {Img && (
+                      <>
+                        <img width={70} height={40} alt="" src={Img} />
+                        <p>{fileName}</p>
+                      </>
+                    )}
+                  </div>
+                  {Img && (
+                    <FaTrash
+                      className="bg-red-500 p-2 cursor-pointer"
+                      onClick={handleDeleteImage}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col ">
+              <label htmlFor="">Link Kelas</label>
+              <input
+                id="LinkKelas"
+                type="text"
+                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
+                value={LinkKelas}
+                onChange={handleOnchange}
+              />
+            </div>
+
+            <div className="flex flex-col ">
+              <label htmlFor="">Description</label>
+              <input
+                id="description"
+                type="text"
+                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
+                value={Description}
+                onChange={handleOnchange}
+              />
+            </div>
+
+            <div className="text-white flex gap-2 font-bold text-sm sm:text-base my-4">
+              <button
+                type="w"
+                className="bg-[#FF0000] w-1/2 rounded-[25px] p-3"
+              >
+                Upload Video
+              </button>
+              <button
+                type="submit"
+                onClick={handleKelas}
+                className="bg-[#6148FF] w-1/2 rounded-[25px] p-3"
+              >
+                Simpan
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  );
+};
