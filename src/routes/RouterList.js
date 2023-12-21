@@ -30,9 +30,9 @@ export const RouterList = () => {
         <Route path="/reset" element={<ResetPass />} />
         {/* Route Main */}
         <Route path="/" element={<Beranda />}></Route>
-        <Route path="/kelassaya" element={<BerandaKelasSaya />}></Route>
-        <Route path="/kursus" element={<Kursus />}></Route>
-        <Route path="/detail-kelas" element={<DetailKelas />}></Route>
+        <Route path="/kelassaya/:queryEnrollments" element={<BerandaKelasSaya />}></Route>
+        <Route path="/kursus/:querySearch" element={<Kursus />}></Route>
+        <Route path="/detail-kelas/:courseId" element={<DetailKelas />}></Route>
         <Route path="/premium" element={<KelasPremium />}></Route>
         <Route path="/pembayaran" element={<Pembayaran />}></Route>
         <Route path="/success" element={<Success />}></Route>

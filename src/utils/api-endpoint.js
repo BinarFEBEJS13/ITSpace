@@ -9,10 +9,15 @@ export const API_ENDPOINT = {
   VERIFY_OTP: "/auth/verify-otp",
   RESET_PASSWORD: "/auth/reset-password",
   CHANGE_PASWORD: "/auth/change-password",
+  DECODE: "auth/decode",
   //Categories
   CATEGORIES: "/categories",
   // Users
   USERS: "/users",
   // Enrollments
   MY_ENROLLMENTS: "/my-enrollments",
+  // chapters
+  CHAPTERS: "/courses",
+  // Videos
+  VIDEO: "/courses",
 };

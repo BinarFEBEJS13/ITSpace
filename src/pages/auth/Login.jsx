@@ -43,15 +43,15 @@ export const Login = () => {
 
       await loginUser(loginData);
 
-      console.log("Login berhasil!");
+      // console.log("Login berhasil!");
       navigate("/");
     } catch (error) {
       console.error("Login error:", error);
     }
   };
 
-  console.log(Email, "email");
-  console.log(Password, "Password");
+  // console.log(Email, "email");
+  // console.log(Password, "Password");
 
   return (
     <div className="flex flex-row w-full h-screen">
@@ -63,59 +63,31 @@ export const Login = () => {
           {/* INPUTAN EMAIL */}
           <div className="w-full md:w-[35rem] flex flex-col relative">
             <label className="mb-1">Email/No Telepon</label>
-            <input
-              id="email"
-              type="text"
-              className="h-[3rem] w-full rounded-xl border pl-3"
-              placeholder="Contoh: user1@gmail.com"
-              value={Email}
-              onChange={handleInput}
-            />
+            <input id="email" type="text" className="h-[3rem] w-full rounded-xl border pl-3" placeholder="Contoh: user1@gmail.com" value={Email} onChange={handleInput} />
           </div>
 
           {/* INPUTAN PASSWORD */}
           <div className="w-full md:w-[35rem] flex flex-col">
             <div className="flex justify-between items-center mb-1">
               <label>Password</label>
-              <a
-                href="/logres"
-                className="text-blue-500 hover:underline"
-                onClick={handleForgotPassword}
-              >
+              <a href="/logres" className="text-blue-500 hover:underline" onClick={handleForgotPassword}>
                 Lupa Kata sandi
               </a>
             </div>
             <div className="relative">
-              <input
-              id="password"
-                type={PasswordVisible ? "text" : "password"}
-                onChange={handleInput}
-                className="h-[3rem] w-full md:w-full rounded-xl border pl-3"
-                placeholder="Masukkan Password"
-              />
-              <img
-                src={PasswordVisible ? passClose : pass}
-                alt={PasswordVisible ? "passClose" : "pass"}
-                className="top-3 right-5 absolute cursor-pointer"
-                onClick={togglePasswordVisibility}
-              />
+              <input id="password" type={PasswordVisible ? "text" : "password"} onChange={handleInput} className="h-[3rem] w-full md:w-full rounded-xl border pl-3" placeholder="Masukkan Password" />
+              <img src={PasswordVisible ? passClose : pass} alt={PasswordVisible ? "passClose" : "pass"} className="top-3 right-5 absolute cursor-pointer" onClick={togglePasswordVisibility} />
             </div>
           </div>
 
           {/* BUTTON LOGIN */}
-          <button
-            className="h-[3rem] w-full md:w-[35rem] rounded-xl bg-gradientkanan text-white"
-            onClick={handleLogin}
-          >
+          <button className="h-[3rem] w-full md:w-[35rem] rounded-xl bg-gradientkanan text-white" onClick={handleLogin}>
             Masuk
           </button>
 
           <span>
             Belum punya akun?{" "}
-            <a
-              className="text-purple-800 font-semibold hover:underline"
-              href="/register"
-            >
+            <a className="text-purple-800 font-semibold hover:underline" href="/register">
               Daftar di sini
             </a>
           </span>

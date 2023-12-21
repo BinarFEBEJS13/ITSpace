@@ -12,17 +12,29 @@ import user from "../svg/user.svg";
 import kursus from "../svg/course.svg";
 import { Pencarian } from "./Pencarian";
 import { NavbarMobile } from "./NavbarMobile";
+import { CookieKeys, CookieStorage } from "../../utils/cookies";
+import { useDispatch, useSelector } from "react-redux";
+import { actGetDataDecode } from "../../redux/actions/actGetDataDecode";
 
 export const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [dataToggle, setDataToggle] = useState(false);
+  const [dataToggle, setDataToggle] = useState(true);
   const [activeSearch, setActiveSearch] = useState(false);
   const [activeNavbarMobile, setActiveNavbarMobile] = useState(false);
   const [activeItem, setActiveItem] = useState("");
+  const [querySearch, setQuerySearch] = useState([]);
+  const dispatch = useDispatch();
+  const decode = useSelector((state) => state.getDataDecode?.decode);
+  const [loading, setLoading] = useState(true);
 
-  const handleToggle = () => {
-    setDataToggle(!dataToggle);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!querySearch || querySearch.trim() === "") return;
+    if (/^[!@#$%^&*()_+={}|[\]:;"'<>,.?/\\|~`]+$/.test(querySearch)) return;
+
+    navigate(`/kursus/${querySearch}`);
+    setQuerySearch("");
   };
 
   const handleSearch = () => {
@@ -38,9 +50,9 @@ export const Navbar = () => {
     if (item === "beranda") {
       navigate("/");
     } else if (item === "kursus") {
-      navigate("/kursus");
+      window.location.href = "/kursus/all";
     } else if (item === "kelas") {
-      navigate("/kelassaya");
+      window.location.href = "/kelassaya/all";
     } else if (item === "notifikasi") {
       navigate("/notifikasi");
     } else if (item === "akun") {
@@ -49,22 +61,37 @@ export const Navbar = () => {
   };
 
   useEffect(() => {
+    // const getDataDecode = async () => {
+    //   await dispatch(actGetDataDecode());
+    // };
+    // getDataDecode();
+
+    // if (!loading && decode && decode.email) {
+    //   setDataToggle(true);
+    // }
+
     // Mendapatkan path dari lokasi saat ini
     const path = location.pathname;
 
     // Mengatur activeItem sesuai dengan path
     if (path === "/") {
       setActiveItem("beranda");
-    } else if (path === "/kursus") {
+    } else if (path === "/kursus/all") {
       setActiveItem("kursus");
-    } else if (path === "/kelassaya") {
+    } else if (path === "/kelassaya/all") {
       setActiveItem("kelas");
     } else if (path === "/notifikasi") {
       setActiveItem("notifikasi");
     } else if (path === "/akun") {
       setActiveItem("akun");
     }
-  }, [location.pathname]);
+  }, [location.pathname, dispatch, decode, loading]);
+
+  // useEffect(() => {
+  //   if (!loading && decode && decode.email) {
+  //     setDataToggle(true);
+  //   }
+  // }, [decode, loading]);
 
   return (
     <>
@@ -78,8 +105,10 @@ export const Navbar = () => {
             {/* Search Ukuran diatas sm */}
             <div className="flex items-center justify-center w-2/3 sm:w-2/6">
               <div className="relative w-full">
-                <input placeholder="cari kursus terbaik.." className="hidden sm:block pl-4 pr-14 w-full py-3 rounded-2xl"></input>
-                <img src={searchnav} alt="" className="hidden sm:block bg-biru-0 absolute top-1/2 transform -translate-y-1/2 right-3 rounded-md cursor-pointer p-1" />
+                <form onSubmit={handleSubmit}>
+                  <input value={querySearch} onChange={(e) => setQuerySearch(e.target.value)} placeholder="cari kursus terbaik.." className="hidden sm:block pl-4 pr-14 w-full py-3 rounded-2xl"></input>
+                </form>
+                <img onClick={handleSubmit} src={searchnav} alt="" className="hidden sm:block bg-biru-0 absolute top-1/2 transform -translate-y-1/2 right-3 rounded-md cursor-pointer p-1" />
                 {/* Pencarian untuk mobile */}
                 <img src={searchnav} alt="" onClick={handleSearch} className="block w-8 sm:hidden absolute top-1/2 transform -translate-y-1/2 right-3 rounded-md cursor-pointer mr-6" />
                 <img src={hamburgermenu} alt="" onClick={handleNavbarMobile} className="block w-8 sm:hidden absolute top-1/2 transform -translate-y-1/2 right-0 rounded-md cursor-pointer " />
