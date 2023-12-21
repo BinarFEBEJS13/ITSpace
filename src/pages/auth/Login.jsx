@@ -3,11 +3,11 @@ import LogoBg from "../../assets/img/LogoBg.jpg";
 import pass from "../../assets/svg/pass.svg";
 import passClose from "../../assets/svg/passClose.svg";
 import { useNavigate } from "react-router-dom";
-import { UseLoginUser } from "../../services/auth/login_user";
+import { LoginUser } from "../../services/auth/login_user";
 
 export const Login = () => {
   const navigate = useNavigate();
-  const { mutate: loginUser } = UseLoginUser();
+  const [errorNotification, setErrorNotification] = useState("");
 
   //EMAIL
   const [Email, setEmail] = useState("");
@@ -20,6 +20,8 @@ export const Login = () => {
   };
 
   const handleInput = (e) => {
+    setErrorNotification("");
+    
     if (e.target.id === "email") {
       setEmail(e.target.value);
     }
@@ -30,7 +32,7 @@ export const Login = () => {
 
   // UNTUK LINK LUPA KATA SANDI
   const handleForgotPassword = () => {
-    navigate("/logres");
+    navigate("/email");
   };
 
   //FUNGSI BUTTON MASUK
@@ -41,12 +43,18 @@ export const Login = () => {
         password: Password,
       };
 
-      await loginUser(loginData);
-
-      console.log("Login berhasil!");
-      navigate("/");
+      const response = await LoginUser(loginData);
+      console.log (response, "error")
+      if (response && response.success) {
+        console.log("Login berhasil!");
+        navigate("/");
+      } else {
+        console.error("Login gagal:", response?.message || "Unknown error");
+        setErrorNotification("Email atau password salah!");
+      }
     } catch (error) {
-      console.error("Login error:", error);
+      console.error(error.message);
+      setErrorNotification("Email atau Password salah!");
     }
   };
 
@@ -87,7 +95,7 @@ export const Login = () => {
             </div>
             <div className="relative">
               <input
-              id="password"
+                id="password"
                 type={PasswordVisible ? "text" : "password"}
                 onChange={handleInput}
                 className="h-[3rem] w-full md:w-full rounded-xl border pl-3"
@@ -119,6 +127,11 @@ export const Login = () => {
               Daftar di sini
             </a>
           </span>
+          {errorNotification && (
+            <div className="absolute bottom-8 mb-4 h-[3rem] w-[20rem] md:w-[20rem] bg-merah-0 text-white rounded-xl flex justify-center items-center">
+              {errorNotification}
+            </div>
+          )}
           {/* {!isEmailTerdaftar && (
             <div className="absolute bottom-8 mb-4 h-[3rem] w-[20rem] md:w-[20rem] bg-merah-0 text-white rounded-xl flex justify-center items-center">
               Email tidak terdaftar

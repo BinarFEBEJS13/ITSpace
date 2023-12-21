@@ -1,15 +1,18 @@
-import { useMutation } from "@tanstack/react-query";
-import { API_ENDPOINT } from "../../utils/api-endpoint"
-import http from "../../utils/http"
+import { API_ENDPOINT } from "../../utils/api-endpoint";
+import http from "../../utils/http";
 
 const LoginUser = async (input) => {
-    return await http.post(API_ENDPOINT.LOGIN, input)
-}
+  try {
+    const response = await http.post(API_ENDPOINT.LOGIN, input);
 
-const UseLoginUser = () => {
-    return useMutation({
-        mutationFn: LoginUser
-    });
-}
+    if (response.data.success) {
+      return response.data;
+    } else {
+      throw new Error(response.data.message);
+    }
+  } catch (error) {
+    throw new Error("Terjadi kesalahan dalam melakukan login.");
+  }
+};
 
-export {LoginUser, UseLoginUser}
+export { LoginUser };

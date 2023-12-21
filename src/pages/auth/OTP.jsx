@@ -15,6 +15,7 @@ export const OTP = () => {
   const emailFromState = location.state?.email || "";
   const emailFromCookies = CookieStorage.get(CookieKeys.email) || "";
   const email = emailFromState || emailFromCookies;
+  const [errorNotification, setErrorNotification] = useState("");
 
   // INPUT OTP
   const handleInputOtp = (e, index) => {
@@ -23,6 +24,7 @@ export const OTP = () => {
       newOtp[index] = e.target.value;
       setOtp(newOtp);
     }
+    setErrorNotification("");
   };
 
   // TIMER
@@ -51,6 +53,8 @@ export const OTP = () => {
       await resendOtpMutation({ email });
       setResendTimer(60);
       setResendOTP(true);
+  
+      // Reset status verifikasi
     } catch (error) {
       console.error("Gagal mengirim ulang OTP", error);
     }
@@ -59,19 +63,26 @@ export const OTP = () => {
   // BUTTON SIMPAN
   const handleSimpan = async () => {
     try {
-      const verifyData = {
-        email: email,
-        otp: OTP.join(""),
-      };
+        const verifyData = {
+            email: email,
+            otp: OTP.join(""),
+        };
 
-      await veryOtp(verifyData);
+        const response = await veryOtp(verifyData);
 
-      console.log("Verifikasi Berhasil");
-      navigate("/");
+        if (response && response.success === true) {
+            console.log("Verifikasi Berhasil");
+            navigate("/login"); // Pastikan perpindahan halaman ini berfungsi
+        } else {
+            console.error("Verifikasi gagal:", response?.message || "Unknown error");
+            setErrorNotification("Kode OTP salah!!!");
+        }
     } catch (error) {
-      console.error("Verifikasi Gagal", error);
+        console.error(error.message);
+        setErrorNotification("Kode OTP salah!!!");
     }
-  };
+};
+  
   console.log(OTP, "otp");
   console.log(email, "email");
 
@@ -136,6 +147,11 @@ export const OTP = () => {
           >
             Simpan
           </button>
+          {errorNotification && (
+            <div className="absolute bottom-8 mb-4 h-[3rem] w-[20rem] md:w-[20rem] bg-merah-0 text-white rounded-xl flex justify-center items-center">
+              {errorNotification}
+            </div>
+          )}
 
           {/* {showWrongOtpNotification && <div className="absolute bottom-[5rem] mb-4 h-[3rem] w-[20rem] md:w-[20rem] bg-merah-0 text-white rounded-xl flex justify-center items-center">Maaf, Kode OTP salah!</div>}
           {showSuccessNotification && <div className="absolute bottom-[5rem] mb-4 h-[3rem] w-[20rem] md:w-[20rem] bg-hijau-0 text-white rounded-xl flex justify-center items-center">Registrasi Berhasil!</div>} */}

@@ -15,7 +15,9 @@ export const Register = () => {
   const [Password, setPassword] = useState("");
   const [validPass, setValidPass] = useState("");
   const navigate = useNavigate();
-  const { mutate: register, data: registrationData } = UseRegister();
+  const { mutate: register } = UseRegister();
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isPhoneValid, setIsPhoneValid] = useState(false);
 
   const handleInput = (e) => {
     if (e) {
@@ -23,10 +25,18 @@ export const Register = () => {
         setUsername(e.target.value);
       }
       if (e.target.id === "email") {
-        setEmail(e.target.value);
+        const emailValue = e.target.value;
+        const isValidEmail = isValidSimpleEmail(emailValue);
+
+        setIsEmailValid(isValidEmail);
+        setEmail(emailValue);
       }
       if (e.target.id === "telp") {
-        setTelp(e.target.value);
+        const phoneValue = e.target.value;
+        const isValidPhone = isValidPhoneNumber(phoneValue);
+
+        setIsPhoneValid(isValidPhone);
+        setTelp(phoneValue);
       }
       if (e.target.id === "password") {
         setPassword(e.target.value);
@@ -36,7 +46,17 @@ export const Register = () => {
       }
     }
   };
-  const isEmailValid = registrationData && registrationData.isEmailValid;
+
+  // EMAIL
+  const isValidSimpleEmail = (email) => {
+    return email.includes("@") && email.includes(".");
+  };
+
+  // TELEPON
+  const isValidPhoneNumber = (phone) => {
+    const numericPhone = phone.replace(/\D/g, "");
+    return numericPhone.length >= 10 && !isNaN(numericPhone);
+  };
 
   //PASSWORD
   const [PasswordVisible, setPasswordVisible] = useState(false);
@@ -102,15 +122,17 @@ export const Register = () => {
               <input
                 id="email"
                 type="email"
-                className="h-[3rem] w-full rounded-xl border border-gray-300 pl-3"
+                className={`h-[3rem] w-full rounded-xl border ${
+                  isEmailValid ? "border-green-500" : "border-gray-300"
+                } pl-3`}
                 placeholder="Contoh:sayahuman@gmail.com"
                 onChange={handleInput}
               />
               {isEmailValid && (
                 <img
                   src={check}
-                  alt="cek"
-                  className="w-6 h-6 top-3 right-5 absolute"
+                  alt="check"
+                  className="top-3 right-5 absolute"
                 />
               )}
             </div>
@@ -124,9 +146,16 @@ export const Register = () => {
                 id="telp"
                 type="text"
                 className="h-[3rem] w-full rounded-xl border border-gray-300 pl-3"
-                placeholder="Masukan Nomor Telepon"
+                placeholder="+62"
                 onChange={handleInput}
               />
+              {isPhoneValid && (
+                <img
+                  src={check}
+                  alt="check"
+                  className="top-10 right-5 absolute"
+                />
+              )}
             </div>
           </div>
 

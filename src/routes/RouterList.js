@@ -18,6 +18,7 @@ import { Notifikasi } from "../pages/Notifikasi";
 import { Success } from "../pages/Success";
 import { Kursus } from "../pages/Kursus";
 import AdminLogin from "../pages/Admin/Login";
+import { EmailResetPass } from "../pages/auth/EmailResetPass";
 
 export const RouterList = () => {
   return (
@@ -28,6 +29,7 @@ export const RouterList = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/otp" element={<OTP />} />
         <Route path="/reset" element={<ResetPass />} />
+        <Route path="/email" element={<EmailResetPass/>}/>
         {/* Route Main */}
         <Route path="/" element={<Beranda />}></Route>
         <Route path="/kelassaya" element={<BerandaKelasSaya />}></Route>
