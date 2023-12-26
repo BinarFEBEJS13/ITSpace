@@ -5,7 +5,6 @@ const http = axios.create({
   baseURL: process.env.REACT_APP_SERVER,
   withCredentials: true,
   timeout: 30000,
-  withCredentials: true,
   headers: {
     accept: "application/json",
     "Content-Type": "application/json",
@@ -23,5 +22,21 @@ http.interceptors.request.use((config) => {
   };
   return config;
 });
+
+http.interceptors.response.use(
+  (response) => {
+    // Do something with the successful response
+    return response;
+  },
+  (error) => {
+    // Handle 401 errors
+    if (error.response.status === 401) {
+      // Perform actions like redirecting to login page or displaying an error message
+      window.location.href = "/login";
+    }
+    // Return the error for further handling
+    return Promise.reject(error);
+  }
+);
 
 export default http;

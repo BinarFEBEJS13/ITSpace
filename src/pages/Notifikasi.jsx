@@ -1,15 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import { Navbar } from "../assets/components/Navbar";
 import { useNavigate } from "react-router-dom";
+import { useGetMyNotifications } from "../services/notifications/get-my-notifications";
+
+// svg
+import bell_notifikasi from '../assets/svg/bell-notifikasi.svg'
+import { usePutNotif } from "../services/notifications/put-my-notifications";
 
 export const Notifikasi = () => {
   const navigate = useNavigate()
+
+  const {data: getMyNotifications} = useGetMyNotifications()
+  if (getMyNotifications?.data) {
+    getMyNotifications.data.forEach((notification, index) => {
+      console.log(notification.id, `ini notifikasi ke-${index}`);
+    });
+  }
+
+  const getNotif = getMyNotifications?.data
+
+  const {mutate: putNotif} = usePutNotif()
+  console.log(putNotif, "notif put")
+
+  const [clickedNotifications, setClickedNotifications] = useState([]);
+
+  const handleNotificationClick = (id, index) => {
+    // Check if the notification has already been clicked
+    if (!clickedNotifications.includes(index)) {
+      // Update the state to indicate that this notification has been clicked
+      setClickedNotifications([...clickedNotifications, index]);
+
+      // Call the putNotif function with the notification ID
+      putNotif(id);
+    }
+  };
+
+  const jumlahNotifikasi = getNotif ? getNotif.length - clickedNotifications.length : 0;
+
+  console.log(getNotif, "fernandes")
+
   return (
-    <div className="flex flex-col w-full h-screen">
+    <div className="flex flex-col w-full h-screen overflow-x-hidden">
       <Navbar></Navbar>
-      <div className="hidden sm:flex justify-start sm:justify-center cursor-pointer" onClick={() => navigate("/")}>
+      <div className="hidden sm:flex justify-start sm:justify-center" >
         <div className="flex justify-start w-[55%] px-0 mt-5">
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 cursor-pointer" onClick={() => navigate("/")}>
             <div className="text-[#6148FF]">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -21,78 +56,30 @@ export const Notifikasi = () => {
       </div>
       <div className="flex flex-col sm:flex-row sm:justify-center">
         <div className="flex px-0 sm:w-[50%] mt-5">
-          <div className="flex flex-col bg-transparent sm:bg-white w-full h-[300px] rounded-xl z-10 sm:border-[1.5px] sm:border-[#6148FF]">
-            <div className="hidden w-full h-[15%] justify-center items-center rounded-t-xl bg-biru-0 text-white font-semibold tracking-[1px] z-0 sm:flex">Notifikasi</div>
+          <div className="flex flex-col bg-transparent sm:bg-white w-full h-[550px] sm:h-[300px] rounded-xl z-10 sm:border-[1.5px] sm:border-[#6148FF]">
+            <div className="hidden w-full min-h-[40px] justify-center items-center rounded-t-xl bg-gradientkanan text-white font-semibold tracking-[1px] z-0 sm:flex">Notifikasi <span className="ml-1 bg-white text-center items-center rounded-md w-5 h-6 text-[#6148FF] font-bold">{jumlahNotifikasi}</span></div>
             <div className="flex justify-center sm:hidden">
               <h1 className="flex w-[90%] sm:hidden text-[1.5rem] font-extrabold">Notifikasi</h1>
             </div>
-            <div className="relative flex flex-col mx-auto w-[90%]">
-              <div className="relative flex w-full justify-start sm:justify-around">
-                <div className="flex flex-row space-x-2 mt-5">
-                  <div className="flex justify-center items-center w-5 h-5 sm:w-4 sm:h-4 rounded-full bg-[#6148FF] text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4 sm:w-3 sm:h-3">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
-                      />
-                    </svg>
-                  </div>
-                  <div className="flex text-[12px] flex-col sm:text-[10px]">
-                    <p className="text-[#6148FF] font-semibold">Promosi</p>
-                    <p className="font-bold">Dapatkan potongan 50% selama bulan Maret!</p>
-                    <p className="text-gray-400">Syarat dan Ketentuan berlaku!</p>
-                  </div>
-                </div>
-                <div className="absolute flex flex-row mt-5 space-x-1 sm:relative right-5">
-                  <p className="text-[10px] font-medium text-gray-400">2 Maret, 12.00</p>
-                  <div className="w-2 h-2 bg-green-300 rounded-full mt-[3px]"></div>
-                </div>
-              </div>
-              <hr className="flex mt-3 border-[1px] sm:hidden"></hr>
-              <div className="relative flex w-full justify-start sm:justify-around space-x-[6.5rem]">
-                <div className="flex flex-row space-x-2 mt-5">
-                  <div className="flex justify-center items-center w-5 h-5 sm:w-4 sm:h-4 rounded-full bg-[#6148FF] text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4 sm:w-3 sm:h-3">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
-                      />
-                    </svg>
-                  </div>
-                  <div className="flex text-[12px] flex-col sm:text-[10px]">
-                    <p className="text-[#6148FF] font-semibold">Notifikasi</p>
-                    <p className="font-bold">Password berhasil diubah</p>
+            <hr className="flex mt-3 border-[1px] sm:hidden"></hr>
+            <div className="relative flex flex-col mx-auto w-[90%] h-[100%] gap-[5.5rem] sm:gap-0 md:gap-[3rem] lg:gap-[2rem] notif sm:overflow-y-auto custom-scrollbar mt-3 mb-3">
+              {getNotif && getNotif.map((notif, index) => (
+                <div key={index} className={`relative min-h-[100px] p-1 rounded-lg flex w-full justify-start gap-8 sm:gap-0 ${clickedNotifications.includes(index) ? '' : 'bg-purple-100'}`}>
+                  <div className="flex flex-row space-x-4 mt-4" onClick={() => handleNotificationClick(notif?.id, index)}>
+                    <div className="flex justify-start items-center w-8 h-8 ml-1">
+                      <img src={bell_notifikasi} alt=""/>
+                    </div>
+                    <div className="absolute flex text-[12px] flex-col sm:text-[10px] left-5 cursor-pointer">
+                      <p className="text-[#6148FF] font-semibold ">{notif?.type}</p>
+                      <p className="font-bold w-[95%]">{notif?.message}</p>
+                      <div className="flex flex-row items-center">
+                        <p className="text-biru-0 mt-1">{new Date(notif?.created_at).toLocaleString()}</p>
+                        {/* <span className="w-2 h-2 rounded-full bg-red-500 mt-1 ml-2"></span> */}
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className="absolute sm:relative right-5 flex flex-row mt-5 space-x-1">
-                  <p className="text-[10px] font-medium text-gray-400">1 Maret, 10.00</p>
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-[3px]"></div>
-                </div>
-              </div>
-              <div className="hidden w-full justify-start sm:justify-around sm:flex sm:relative md:top-0">
-                <div className="flex flex-row space-x-2 mt-5">
-                  <div className="flex justify-center items-center w-4 h-4 rounded-full bg-[#6148FF] text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-3 h-3">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
-                      />
-                    </svg>
-                  </div>
-                  <div className="flex text-[12px] flex-col sm:text-[10px]">
-                    <p className="text-[#6148FF] font-semibold">Promosi</p>
-                    <p className="font-bold">Dapatkan potongan 50% selama bulan Maret!</p>
-                    <p className="text-gray-400">Syarat dan Ketentuan berlaku!</p>
-                  </div>
-                </div>
-                <div className="absolute sm:relative right-5 flex flex-row mt-5 space-x-1">
-                  <p className="text-[10px] font-medium text-gray-400">1 Maret, 09.00</p>
-                  <div className="w-2 h-2 bg-green-300 rounded-full mt-[3px]"></div>
-                </div>
-              </div>
+                ))}
             </div>
           </div>
         </div>

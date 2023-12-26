@@ -9,6 +9,8 @@ import { Profile } from "../assets/components/Profile";
 import { Pembayaran } from "../assets/components/Pembayaran";
 import { UbahPassword } from "../assets/components/UbahPassword";
 import { Link, useNavigate } from "react-router-dom";
+import { useLogoutUser } from "../services/auth/logout_user";
+import { CookieKeys, CookieStorage } from "../utils/cookies";
 
 export const AkunPassword = () => {
   const [Akun, setAkun] = useState("changepass");
@@ -18,12 +20,23 @@ export const AkunPassword = () => {
     setAkun(item);
   };
 
+  const {mutate: logoutUser} = useLogoutUser()
+
+  const handleLogout = () => {
+    logoutUser()
+    CookieStorage.remove(CookieKeys.AccessToken)
+    CookieStorage.remove(CookieKeys.RefreshToken);
+    navigate("/login");
+  }
+
+  console.log(logoutUser, "ini logout")
+
   return (
-    <div className="flex flex-col w-full overflow-x-hidden sm:bg-white overflow-x-hidden">
+    <div className="flex flex-col w-full sm:bg-white overflow-x-hidden">
       <Navbar></Navbar>
-      <div className="hidden sm:flex justify-start sm:justify-center cursor-pointer" onClick={() => navigate("/")}>
+      <div className="hidden sm:flex justify-start sm:justify-center">
         <div className="flex justify-start w-[55%] sm:w-[60%] md:w-[85%] lg:w-[60%] px-0 mt-5">
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 cursor-pointer" onClick={() => navigate("/")}>
             <div className="text-[#6148FF]">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -36,7 +49,7 @@ export const AkunPassword = () => {
       <div className="flex flex-col sm:flex-row sm:justify-center">
         <div className="flex px-0 sm:w-[80%] md:w-[80%] lg:w-[55%] mt-8">
           <div className="relative flex flex-col bg-transparent sm:bg-white sm:border-[1.5px] sm:border-[#6148FF] w-full h-[550px] bottom-5 rounded-xl z-0">
-            <div className="hidden sm:flex sm:static w-full min-h-[40px] justify-center items-center rounded-tl-xl rounded-tr-xl bg-[#6148FF] text-white font-semibold tracking-[1px] z-10">Akun</div>
+            <div className="hidden sm:flex sm:static w-full min-h-[40px] justify-center items-center rounded-tl-xl rounded-tr-xl bg-gradientkanan text-white font-semibold tracking-[1px] z-10">Akun</div>
             <div className="hidden sm:flex justify-center">
               <h1 className="flex w-[90%] sm:hidden text-[1.5rem] font-extrabold">Akun</h1>
             </div>
@@ -86,16 +99,16 @@ export const AkunPassword = () => {
                     )}
                   </div>
                   <hr className="border-[1px]"></hr>
-                  <div className="flex items-center space-x-3 ">
+                  <div onClick={handleLogout} className="flex items-center space-x-3 cursor-pointer">
                     <img className="w-7 h-7 sm:w-5 sm:h-5" src={logout} alt=""></img>
-                    <p className="text-[12px] font-semibold">Keluar</p>
+                    <p className="text-[12px] font-semibold hover:text-[#6148FF]">Keluar</p>
                   </div>
                   <hr className="border-[1px]"></hr>
                   <p className="text-center text-[12px] text-gray-400 my-4 sm:mt-4">Version 1.1.0</p>
                 </div>
               </div>
               {/* Bagian Kanan */}
-              <div className="overflow-y-auto">
+              <div className="overflow-y-auto custom-scrollbar">
                 {Akun === "profile" ? (
                   <div className="hidden sm:flex">
                     <Profile></Profile>

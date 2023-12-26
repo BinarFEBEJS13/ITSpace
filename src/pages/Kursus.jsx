@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Navbar } from "../assets/components/Navbar";
 import searchkelas from "../assets/svg/search.svg";
 // png kategori belajar

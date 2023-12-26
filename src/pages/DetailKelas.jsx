@@ -15,8 +15,6 @@ import tele from "../assets/svg/chat.svg";
 import playhijau from "../assets/svg/play-hijau.svg";
 import playungu from "../assets/svg/play-ungu.svg";
 import gembok from "../assets/svg/gembok.svg";
-import { KelasPremium } from "../assets/components/KelasPremium";
-import { Onboarding } from "../assets/components/Onboarding";
 import { useNavigate } from "react-router-dom";
 
 export const DetailKelas = () => {
