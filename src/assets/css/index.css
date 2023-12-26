@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+html::-webkit-scrollbar {
+    width: 0.3rem;
+    background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+    background: linear-gradient(#073A75, #7805A1);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
 @layer base {
   @font-face {
     font-family: "Poppins";
@@ -16,6 +29,30 @@
   @apply bg-white text-gray-700
         w-full min-h-[8.5rem]
         shadow-lg shadow-gray-200 rounded-md overflow-hidden;
+}
+
+@media (max-width: 320px) {
+  .card {
+    @apply rounded-2xl
+  }
+}
+
+@media (max-width: 320px) {
+  .mobile {
+    @apply w-[19rem]
+  }
+
+  .picture {
+    @apply left-[140px]
+  }
+
+  .notif {
+    @apply gap-[5rem]
+  }
+
+  .transaction {
+    @apply space-x-[10rem]
+  }
 }
 
 td {

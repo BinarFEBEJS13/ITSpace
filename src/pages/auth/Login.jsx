@@ -36,12 +36,10 @@ export const Login = () => {
   //FUNGSI BUTTON MASUK
   const handleLogin = async () => {
     try {
-      const loginData = {
+      await loginUser ({
         email: Email,
         password: Password,
-      };
-
-      await loginUser(loginData);
+      });
 
       console.log("Login berhasil!");
       navigate("/");

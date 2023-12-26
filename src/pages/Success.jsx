@@ -3,7 +3,6 @@ import { Navbar } from "../assets/components/Navbar";
 // png success
 import selamat from "../assets/img/payment-success.png";
 // svg detail kelas
-import arrow from "../assets/svg/arrow-left-black.svg";
 import { useNavigate } from "react-router-dom";
 
 export const Success = () => {
