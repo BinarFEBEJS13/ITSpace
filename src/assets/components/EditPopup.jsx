@@ -3,8 +3,7 @@ import { useEditCourse } from "../../services/Admin/courses/put-data-courses";
 import { FaCloudArrowUp } from "react-icons/fa6";
 import { useGetCourseBYID } from "../../services/Admin/courses/get-data-coursesID";
 import { FaTrash } from "react-icons/fa6";
-import { useParams } from "react-router-dom";
-import { useUploadImage } from "../../services/Admin/courses/post-image-course";
+import { useToast } from "@chakra-ui/react";
 
 
 export const EditPopup = (props) => {
@@ -16,22 +15,21 @@ export const EditPopup = (props) => {
   const [Harga, setHarga] = useState(0);
   const [Mentor, setMentor] = useState([]);
   const [Description, setDescription] = useState("");
-  const [Img, setImg] = useState(null);
   const [LinkKelas, setLinkKelas] = useState("");
-  const [EditMode, setEditMode] = useState("");
-  
   const [fileName, setFileName] = useState("No selected file");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [Img, setImg] = useState(null);
+  const toast = useToast()
 
   const { handleClose, selectedCourseData } = props;
   
-
   const {
     data: Edit,
     refetch: refetchData,
   } = useGetCourseBYID({
     courseId: selectedCourseData.id
   });
-  console.log(selectedCourseData.id, "INI ID KATA ");
+
   const courseKategori = selectedCourseData.courseCategory.map(
     (kategori) => kategori.category.name
   );
@@ -41,54 +39,66 @@ export const EditPopup = (props) => {
 
 
   useEffect(() => {
-    if (selectedCourseData) {
+    if (selectedCourseData.id) {
       setKodeKelas(selectedCourseData.code);
       setKategori(courseKategori);
       setLevel(selectedCourseData.level);
       setHarga(selectedCourseData.price);
       setLinkKelas(selectedCourseData.groupUrl);
-      setTipeKelas(selectedCourseData.isPremium);
+      setSelectedFile(selectedCourseData.thumbnailUrl)
+      setTipeKelas(selectedCourseData.isPremium === true ? "1" : "0");
       setNamaKelas(selectedCourseData.title);
       setMentor(MmentorData);
       setDescription(selectedCourseData.description);
+      setFileName(selectedCourseData.fileName)
 
     }
   }, [selectedCourseData]);
 
-
-  const { mutate: editCourse } = useEditCourse();
-  
-  const { mutate: uploadImg } = useUploadImage();
-
-
-  const editData = (props) => {
-    
-    console.log(props);
-    if (props.length === 0) {
-      return [];
-    } else {
-      return props.split(",");
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(URL.createObjectURL(file));
+      setFileName(file.name);
+      setImg(file);
     }
   };
+  const { mutate: editCourse } = useEditCourse();
+
 
   const handleKelas = (e) => {
     e.preventDefault();
+    const formData = new FormData();
 
-    const newKelas = {
-      code: KodeKelas,
-      title: NamaKelas,
-      price: Harga,
-      level: Level,
-      isPremium: TipeKelas,
-      description: Description,
-      groupUrl: LinkKelas,
-      image: Img,
-      mentorEmail: editData(Mentor),
-      courseCategory: editData(Kategori),
-    };
-    editCourse({id: selectedCourseData.id, input: newKelas });
-    uploadImg({id : selectedCourseData.id, input: Img})
+    formData.append("code", KodeKelas);
+    formData.append("title", NamaKelas);
+    formData.append("price", Harga);
+    formData.append("level", Level);
+    formData.append("isPremium", TipeKelas);
+    formData.append("description", Description);
+    formData.append("image", Img);
+    formData.append("groupUrl", LinkKelas);
+      const mentorArray = typeof Mentor === "string" ? Mentor.split(",") : [];
+    mentorArray.forEach((email, index) => {
+      formData.append(`mentorEmail[${index}]`, email);
+    });
+  
+    const kategoriArray = typeof Kategori === "string" ? Kategori.split(",") : [];
+    kategoriArray.forEach((category, index) => {
+      formData.append(`courseCategory[${index}]`, category);
+    });
+   
+    editCourse({id: selectedCourseData.id, input: formData });
+    toast({
+      title : "Successfully update course",
+      status: "info",
+      colorScheme : "orange",
+      position : "top-right",
+      duration : 9000,
+      isClosable : true,
+      size : "sm"
 
+    })
     handleClose();
   };
 
@@ -126,23 +136,16 @@ export const EditPopup = (props) => {
       }
     }
   };
-  const handleFileChange = (event) => {
-    const files = event.target.files;
 
-    if (files.length > 0) {
-      setFileName(files[0].name);
-      setImg(URL.createObjectURL(files[0]));
-    }
-  };
+ 
 
   const handleDeleteImage = () => {
     setFileName("");
     setImg(null);
   };
-  console.log(Img, "IMGGG")
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center  fixed t-2 l-[50px] bg-[rgba(0,0,0,0.8)] ">
+    <div className="w-screen h-screen flex items-center justify-center  fixed t-2 l-[50px] bg-[rgba(0,0,0,0.4)] ">
       <form
         onSubmit={handleKelas}
         className="pop-up overflow-y-auto max-h-[70%] lg:max-h-[95%] rounded-2xl w-11/12 md:w-3/4 xl:w-5/12 bg-white absolute"
@@ -153,7 +156,7 @@ export const EditPopup = (props) => {
         ></i>
         <div className="flex items-center justify-center flex-col sm:gap-5">
           <h1 className="font-bold sm:text-xl text-[#6148FF] my-2">
-            Tambah Kelas
+            Edit Kelas
           </h1>
           <div className="flex flex-col gap-2 w-4/5 sm:w-4/5 ">
             <div className="flex flex-col">
@@ -239,30 +242,32 @@ export const EditPopup = (props) => {
 
             <div className="flex flex-col">
               <label htmlFor="img">Images</label>
-              <div className="py-4 bg-[#EBF3FC] flex flex-col gap-4 justify-center items-center border-2 border-dashed- w-full h-[300px] pointer rounded-[5px]">
+              <div
+                className="py-4 bg-[#ebf3fc63] flex flex-col gap-4 justify-center items-center border-2 border-dashed- w-full h-[300px] pointer rounded-lg"
+              >
                 <div className="border-4 border-dashed border-[#D0D0D0] rounded-lg h-[70%] w-[90%] flex flex-col items-center justify-center">
                   <input
-                    className="input-field"
+                    className="opacity-0 translate-y-[3rem] translate-x-8"
                     onChange={handleFileChange}
                     type="file"
                     accept="image/*"
                   />
                   <FaCloudArrowUp size={60} />
+                  <p>Upload Your Image Here</p>
                 </div>
-                <div className="flex justify-between px-4 items-center border-4 rounded-lg border-[#D0D0D0] h-[30%] w-[90%]">
-                  <div className="flex items-center">
-                    {Img && (
+                <div className="flex justify-between items-center border-4 rounded-lg border-[#D0D0D0] h-[30%] w-[90%]">
+                  <div className="px-4 flex items-center text-xl gap-4">
+                    {selectedFile && (
                       <>
-                        <img width={70} height={40} alt="" src={Img} />
+                        <img width={70} height={40} alt="" src={selectedFile} />
                         <p>{fileName}</p>
                       </>
                     )}
                   </div>
-                  {Img && (
-                    <FaTrash
-                      className="bg-red-500 p-2 cursor-pointer"
-                      onClick={handleDeleteImage}
-                    />
+                  {selectedFile && (
+                    <div className="bg-red-500 p-2 mx-5 rounded-lg  cursor-pointer">
+                      <FaTrash onClick={handleDeleteImage} />
+                    </div>
                   )}
                 </div>
               </div>
@@ -292,17 +297,18 @@ export const EditPopup = (props) => {
 
             <div className="text-white flex gap-2 font-bold text-sm sm:text-base my-4">
               <button
-                type="w"
-                className="bg-[#FF0000] w-1/2 rounded-[25px] p-3"
-              >
-                Upload Video
-              </button>
-              <button
                 type="submit"
                 onClick={handleKelas}
                 className="bg-[#6148FF] w-1/2 rounded-[25px] p-3"
               >
                 Simpan
+              </button>
+              <button
+                type="submit"
+                onClick={handleKelas}
+                className="bg-gray-200 w-1/2 text-black rounded-lg p-3"
+              >
+                Cancel
               </button>
             </div>
           </div>

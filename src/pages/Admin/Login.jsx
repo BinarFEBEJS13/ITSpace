@@ -41,10 +41,24 @@ const Login = () => {
           status : "success",
           position : "top-right",
           isClosable : true,
-          duration : 3000
+          duration : 3000,
+          size: "lg"
         })
         setTimeout(() => {
-          window.location.href = "/admin/dashboard"
+          navigate("/admin/dashboard/transaksi")
+        }, 3000);
+      }
+      else if (!data?.data?.data?.profile?.role === "ADMIN") {
+        toast({
+          title: "Your Account is not an Admin",
+          status : "error",
+          position : "top-right",
+          isClosable : true,
+          duration : 3000,
+          size: "lg"
+        })
+        setTimeout(() => {
+          navigate("/admin/dashboard/transaksi")
         }, 3000);
       }
       else if (data?.response?.status === 400){
@@ -54,7 +68,7 @@ const Login = () => {
           position : "top-right",
           duration : 4000,
           isClosable : true,
-          size : "50"
+          size: "lg"
         })
       }
       else if (data?.response?.status === 401){
@@ -64,11 +78,21 @@ const Login = () => {
           duration : 4000,
           position : "top-right",
           isClosable : true,
-          size : "50"
+          size : "lg"
+        })
+      }
+      else if (data?.response?.status === 403){
+        toast({
+          title : "Unauthorized Account",
+          status: "error",
+          duration : 4000,
+          position : "top-right",
+          isClosable : true,
+          size : "lg"
         })
       }
 
-  }, [data, loginAdmin]);
+  }, [data, loginAdmin, navigate]);
 
 
   const handleLogin = () => {

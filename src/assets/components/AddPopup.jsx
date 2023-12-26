@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { FaCloudArrowUp } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa6";
 import { usePostDataQuery } from "../../services/Admin/courses/post-data-course";
-import { useUploadImage } from "../../services/Admin/courses/post-image-course";
+import { useToast } from "@chakra-ui/react";
+
 
 export const AddPopup = (props) => {
   const [NamaKelas, setNamaKelas] = useState("");
@@ -16,26 +17,26 @@ export const AddPopup = (props) => {
   const [LinkKelas, setLinkKelas] = useState("");
   const [fileName, setFileName] = useState("No selected file");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [Img, setImg] = useState(null);
+  const toast = useToast();
 
   const { handleClose } = props;
 
-const {mutate: addKelas} = usePostDataQuery({
-  onSuccess: () => {
-    props.refetch()
-  }
-})
-
-
+  const { mutate: addKelas } = usePostDataQuery({
+    onSuccess: () => {
+      props.refetch();
+    },
+  });
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // setSelectedFile(URL.createObjectURL(file));
-      setFileName(file);
-
-      // setSelectedFile(file);
+      setSelectedFile(URL.createObjectURL(file));
+      setFileName(file.name);
+      setImg(file);
     }
   };
+
   const editData = (props) => {
     console.log(props);
     if (props.length === 0) {
@@ -45,7 +46,7 @@ const {mutate: addKelas} = usePostDataQuery({
     }
   };
 
-  const handleKelas =  (e) => {
+  const handleKelas = (e) => {
     e.preventDefault();
     const formData = new FormData();
 
@@ -55,20 +56,27 @@ const {mutate: addKelas} = usePostDataQuery({
     formData.append("level", Level);
     formData.append("isPremium", TipeKelas);
     formData.append("description", Description);
-    formData.append("image", fileName);
+    formData.append("image", Img);
     formData.append("groupUrl", LinkKelas);
-    formData.append(`mentorEmail[0]`, Mentor);
-    formData.append(`courseCategory[0]`, Kategori);
-    // Mentor.mentorEmail.forEach((email, index) => {
-    //   formData.append(`mentorEmail[${index}]`, email);
-    // });
+    const mentorArray = typeof Mentor === "string" ? Mentor.split(",") : [];
+    mentorArray.forEach((email, index) => {
+      formData.append(`mentorEmail[${index}]`, email);
+    });
   
-    // Kategori.courseCategory.forEach((category, index) => {
-    //   formData.append(`courseCategory[${index}]`, category);
-    // });
-   
+    const kategoriArray = typeof Kategori === "string" ? Kategori.split(",") : [];
+    kategoriArray.forEach((category, index) => {
+      formData.append(`courseCategory[${index}]`, category);
+    });
 
     addKelas(formData);
+    toast({
+      title: "successfully add a new course",
+      status: "success",   
+      position: "bottom-right",
+      duration: 9000,
+      isClosable: true,
+      size: "lg",
+    });
     handleClose();
   };
 
@@ -110,11 +118,11 @@ const {mutate: addKelas} = usePostDataQuery({
   };
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center  fixed t-2 l-[50px] bg-[rgba(0,0,0,0.8)] ">
+    <div className="w-screen h-screen flex items-center justify-center fixed t-2 l-[50px] bg-[rgba(0,0,0,0.4)] ">
       <form
-      encType="multipart/form-data"
+        encType="multipart/form-data"
         onSubmit={handleKelas}
-        className="pop-up overflow-y-auto max-h-[70%] lg:max-h-[95%] rounded-2xl w-11/12 md:w-3/4 xl:w-5/12 bg-white absolute"
+        className="pop-up overflow-y-auto max-h-[70%] lg:max-h-[95%] rounded-2xl w-11/12 md:w-3/4 xl:w-[30%] bg-white absolute"
       >
         <i
           onClick={props.handleClose}
@@ -208,9 +216,7 @@ const {mutate: addKelas} = usePostDataQuery({
 
             <div className="flex flex-col">
               <label htmlFor="img">Images</label>
-              <div
-                className="py-4 bg-[#ebf3fc63] flex flex-col gap-4 justify-center items-center border-2 border-dashed- w-full h-[300px] pointer rounded-lg"
-              >
+              <div className="py-4 bg-[#ebf3fc63] flex flex-col gap-4 justify-center items-center border-2 border-dashed- w-full h-[300px] pointer rounded-lg">
                 <div className="border-4 border-dashed border-[#D0D0D0] rounded-lg h-[70%] w-[90%] flex flex-col items-center justify-center">
                   <input
                     className="opacity-0 translate-y-[3rem] translate-x-8"
@@ -261,18 +267,15 @@ const {mutate: addKelas} = usePostDataQuery({
               />
             </div>
 
-            <div className="text-white flex gap-2 font-bold text-sm sm:text-base my-4">
+            <div className="text-white flex gap-4 font-bold text-sm sm:text-base my-4">
               <button
                 type="submit"
-                className="bg-[#FF0000] w-1/2 rounded-[25px] p-3"
-              >
-                Upload Video
-              </button>
-              <button
-                type="submit"
-                className="bg-[#6148FF] w-1/2 rounded-[25px] p-3"
+                className="bg-[#6148FF] w-1/2 rounded-lg p-3"
               >
                 Simpan
+              </button>
+              <button onClick={() => handleClose()} className="bg-gray-200 w-1/2 text-black rounded-lg p-3">
+                Cancel
               </button>
             </div>
           </div>
