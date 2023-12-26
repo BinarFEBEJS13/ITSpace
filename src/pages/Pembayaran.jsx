@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Navbar } from "../assets/components/Navbar";
 // svg detail kelas
 import arrow from "../assets/svg/arrow-left-black.svg";

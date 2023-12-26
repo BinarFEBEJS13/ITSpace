@@ -23,6 +23,8 @@ import { TableUser } from "../assets/components/Admin/TableUser";
 import TabelTransaksi from "../assets/components/Admin/TabelTransaksi";
 import { Chapters } from "../assets/components/Admin/Chapters";
 
+import ImageUploadForm from "../services/users/user-photo-profile";
+import TokenProtected from "../assets/components/TokenProtected";
 
 export const RouterList = () => {
   return (
@@ -42,11 +44,12 @@ export const RouterList = () => {
         <Route path="/premium" element={<KelasPremium />}></Route>
         <Route path="/pembayaran" element={<Pembayaran />}></Route>
         <Route path="/success" element={<Success />}></Route>
-        <Route path="/akun" element={<Akun />}></Route>
-        <Route path="/akun/profile" element={<AkunProfile />}></Route>
-        <Route path="/akun/change-password" element={<AkunPassword />}></Route>
-        <Route path="/akun/transaction" element={<AkunPembayaran />}></Route>
-        <Route path="/notifikasi" element={<Notifikasi />}></Route>
+        <Route path="/akun" element={<TokenProtected><Akun /></TokenProtected>}></Route>
+        <Route path="/akun/profile" element={<TokenProtected><AkunProfile /></TokenProtected>}></Route>
+        <Route path="/akun/change-password" element={<TokenProtected><AkunPassword /></TokenProtected>}></Route>
+        <Route path="/akun/transaction" element={<TokenProtected><AkunPembayaran /></TokenProtected>}></Route>
+        <Route path="/notifikasi" element={<TokenProtected><Notifikasi /></TokenProtected>}></Route>
+        <Route path="/contoh" element={<ImageUploadForm />}></Route>
         {/* Route Admin */}
         <Route path="/admin/login" element={<AdminLogin />}></Route>
         <Route path="/admin/dashboard" element={<Dashboard />}></Route>
