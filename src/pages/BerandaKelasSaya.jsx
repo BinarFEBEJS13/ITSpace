@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Navbar } from "../assets/components/Navbar";
 // svg card
+import nexticon from "../assets/svg/next.svg";
+import previcon from "../assets/svg/previous.svg";
 import star from "../assets/svg/star.svg";
 import level from "../assets/svg/kategori-level.svg";
 import modul from "../assets/svg/book.svg";
@@ -9,22 +11,19 @@ import complete from "../assets/svg/progress.svg";
 import { FilterMobile } from "../assets/components/FilterMobile";
 import { BelumLoginKelas } from "../assets/components/HandleErrorPage/BelumLoginKelas";
 import { BelumAdaKelas } from "../assets/components/HandleErrorPage/BelumAdaKelas";
-import { useDispatch, useSelector } from "react-redux";
-import { actGetDataMyEnrollments } from "../redux/actions/actGetDataMyEnrollments";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetSearchMyEnrollments } from "../services/get-search-my-enrollments";
 import { PencarianPageKelasSaya } from "../assets/components/PencarianPageKelasSaya";
 import { Footer } from "../assets/components/Footer";
+// Import Chakra UI
+import { Spinner } from "@chakra-ui/react";
 
 export const BerandaKelasSaya = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [sortDataMyEnrollments, setSortDataMyEnrollments] = useState([]);
-  const courses = useSelector((state) => state.getDataMyEnrollments?.courses);
   const [activeProgress, setActiveProgress] = useState("all");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [activeInputSearch, setActiveInputSearch] = useState(false);
-  const [progress, setProgress] = useState(100);
   const { queryEnrollments } = useParams();
 
   // console.log(sortDataMyEnrollments);
@@ -99,7 +98,6 @@ export const BerandaKelasSaya = () => {
   //  Handle Clear Item ALL Filter
   const baruCheckboxRef = useRef(null);
   const populerCheckboxRef = useRef(null);
-  const promoCheckboxRef = useRef(null);
   const kategoriCheckboxRef = useRef([]);
   const levelCheckboxRef = useRef([]);
 
@@ -122,9 +120,6 @@ export const BerandaKelasSaya = () => {
     }
     if (populerCheckboxRef.current) {
       populerCheckboxRef.current.checked = false;
-    }
-    if (promoCheckboxRef.current) {
-      promoCheckboxRef.current.checked = false;
     }
 
     if (kategoriCheckboxRef.current && kategoriCheckboxRef.current.length > 0) {
@@ -156,11 +151,26 @@ export const BerandaKelasSaya = () => {
     // Filter by Active Difficulty
     let filteredCourses = dataKursus;
 
-    // if (activeProgress === "inprogress") {
-    //   filteredCourses = dataKursus?.filter((course) => course?.isPremium === true);
-    // } else if (activeProgress === "selesai") {
-    //   filteredCourses = dataKursus?.filter((course) => course?.isPremium === false);
-    // }
+    // Handle Progress
+    if (activeProgress === "inprogress") {
+      filteredCourses = filteredCourses?.filter((course) => {
+        const totalVideos = course?.chapter?.reduce((acc, chapter) => acc + chapter?.video?.length, 0);
+        const completedVideos = course?.chapter?.reduce((acc, chapter) => {
+          return acc + chapter?.video?.filter((video) => video?._count?.progress === 1).length;
+        }, 0);
+        const progressPercentage = (completedVideos / totalVideos) * 100;
+        return progressPercentage < 100;
+      });
+    } else if (activeProgress === "selesai") {
+      filteredCourses = filteredCourses?.filter((course) => {
+        const totalVideos = course?.chapter?.reduce((acc, chapter) => acc + chapter?.video?.length, 0);
+        const completedVideos = course?.chapter?.reduce((acc, chapter) => {
+          return acc + chapter?.video?.filter((video) => video?._count?.progress === 1).length;
+        }, 0);
+        const progressPercentage = (completedVideos / totalVideos) * 100;
+        return progressPercentage === 100;
+      });
+    }
 
     // Filter by Sipaling
     if (sortSipaling.length > 0) {
@@ -170,9 +180,6 @@ export const BerandaKelasSaya = () => {
           break;
         case "populer":
           filteredCourses = filteredCourses?.slice().sort((a, b) => b.rate - a.rate); // Urutkan berdasarkan rate dari besar ke kecil
-          break;
-        case "promo":
-          // Logika sorting untuk "Promo"
           break;
         default:
           break;
@@ -190,7 +197,7 @@ export const BerandaKelasSaya = () => {
     }
 
     setSortDataMyEnrollments(filteredCourses);
-  }, [activeProgress, sortLevel, courses, sortKategori, sortSipaling, coursesSearchMyEnrollments?.data?.courses, queryEnrollments]);
+  }, [activeProgress, sortLevel, sortKategori, sortSipaling, coursesSearchMyEnrollments?.data?.courses, queryEnrollments]);
 
   // Handle Filter Mobile
   const [activeFilter, setActiveFilter] = useState(false);
@@ -204,13 +211,6 @@ export const BerandaKelasSaya = () => {
     setSortKategori(filters.kategori);
     setSortLevel(filters.level);
   };
-
-  useEffect(() => {
-    const getDataCourses = async () => {
-      await dispatch(actGetDataMyEnrollments());
-    };
-    getDataCourses();
-  }, [dispatch, queryEnrollments]);
 
   return (
     <>
@@ -240,10 +240,6 @@ export const BerandaKelasSaya = () => {
                         <div className="flex gap-2">
                           <input ref={populerCheckboxRef} onChange={handleChangeSipaling} value={"populer"} type="checkbox" className="accent-biru-0 w-4"></input>
                           <p className="text-sm">Paling Populer</p>
-                        </div>
-                        <div className="flex gap-2">
-                          <input ref={promoCheckboxRef} onChange={handleChangeSipaling} value={"promo"} type="checkbox" className="accent-biru-0 w-4"></input>
-                          <p className="text-sm">Promo</p>
                         </div>
                       </div>
 
@@ -326,50 +322,59 @@ export const BerandaKelasSaya = () => {
                     {isLoading ? (
                       // Display a loading indicator while the search is in progress
                       <div className="w-full flex justify-center items-center">
-                        <p>SABAR CUKK LOADING...</p>
+                        <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
                       </div>
                     ) : sortDataMyEnrollments?.length > 0 ? (
                       <div className=" w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                         {/* Card Beli */}
                         {dataKelas?.map((value) => {
+                          const totalVideos = value?.chapter?.reduce((acc, chapter) => acc + chapter.video.length, 0);
+                          const completedVideos = value?.chapter?.reduce((acc, chapter) => {
+                            return acc + chapter?.video?.filter((video) => video?._count?.progress === 1).length;
+                          }, 0);
+                          const progressPercentage = totalVideos !== 0 ? (completedVideos / totalVideos) * 100 : 0;
                           return (
-                            <div key={value.id} className="w-full shadow-sm-button rounded-2xl">
-                              <div className="relative w-full h-32 lg:h-48 overflow-hidden">
-                                <img src={value.thumbnailUrl} alt="" className="w-full h-full object-cover rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
-                              </div>
-                              <div className="px-2 sm:px-4 py-4 flex flex-col gap-2 rounded-2xl">
-                                <div className="flex justify-between items-center">
-                                  <h6 className="text-ungu-0 text-xs sm:text-sm overflow-x-hidden">{value?.courseCategory[0]?.category?.name}</h6>
-                                  <span className="flex items-center text-sm">
-                                    <img src={star} alt="" className="w-4" />
-                                    {value?.rate !== null ? value.rate?.toFixed(1) : "0.0"}
-                                  </span>
+                            <div key={value.id} className="w-full ">
+                              <div className="shadow-sm-button rounded-2xl">
+                                <div className="relative w-full h-32 lg:h-48 overflow-hidden">
+                                  <img src={value.thumbnailUrl} alt="" className="w-full h-full object-cover rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
                                 </div>
-                                <div>
-                                  <h2 onClick={() => navigate(`/detail-kelas/${value.id}`)} className="font-bold cursor-pointer text-xs sm:text-sm">
-                                    {value.title}
-                                  </h2>
-                                  <span className="opacity-50 text-xs sm:text-sm">by {value?.mentor[0]?.author?.profile?.name}</span>
-                                </div>
-                                <div className="flex flex-wrap w-full gap-2 text-xs sm:text-sm">
-                                  <span className="flex gap-2 items-center">
-                                    <img src={level} alt="" className="w-4" />
-                                    {value.level} Level
-                                  </span>
-                                  <span className="flex gap-2 items-center">
-                                    <img src={modul} alt="" className="w-4" />
-                                    {value?._count?.chapter} Modul
-                                  </span>
-                                  <span className="flex gap-2 items-center">
-                                    <img src={clock} alt="" className="w-4" />
-                                    {value.duration} Menit
-                                  </span>
-                                </div>
-                                <div className="text-sm flex gap-2">
-                                  <img src={complete} alt="" className="w-5" />
-                                  <div className="w-full xl:w-5/6 bg-birumuda-0 rounded-md">
-                                    <div className=" text-white text-center bg-biru-0 rounded-md text-xs sm:text-sm py-1 flex pl-2 max-w-full" style={{ width: `${progress}%` }}>
-                                      {progress}%<span className="pl-1">Complete</span>
+                                <div className="px-2 sm:px-4 py-4 flex flex-col gap-2 rounded-2xl">
+                                  <div className="flex justify-between items-center">
+                                    <h6 className="text-ungu-0 text-xs sm:text-sm overflow-x-hidden">{value?.courseCategory[0]?.category?.name}</h6>
+                                    <span className="flex items-center text-sm">
+                                      <img src={star} alt="" className="w-4" />
+                                      {value?.rate !== null ? value.rate?.toFixed(1) : "0.0"}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <h2 onClick={() => navigate(`/detail-kelas/${value.id}`)} className="font-bold cursor-pointer text-xs sm:text-sm">
+                                      {value.title}
+                                    </h2>
+                                    <span className="opacity-50 text-xs sm:text-sm">by {value?.mentor[0]?.author?.profile?.name}</span>
+                                  </div>
+                                  <div className="flex flex-wrap w-full gap-2 text-xs sm:text-sm">
+                                    <span className="flex gap-2 items-center">
+                                      <img src={level} alt="" className="w-4" />
+                                      {value.level} Level
+                                    </span>
+                                    <span className="flex gap-2 items-center">
+                                      <img src={modul} alt="" className="w-4" />
+                                      {value?._count?.chapter} Modul
+                                    </span>
+                                    <span className="flex gap-2 items-center">
+                                      <img src={clock} alt="" className="w-4" />
+                                      {value.duration !== null ? value.duration : 0} Menit
+                                    </span>
+                                  </div>
+                                  <div className="text-sm flex gap-2">
+                                    <img src={complete} alt="" className="w-5" />
+                                    <div className="w-full xl:w-5/6 bg-birumuda-0 rounded-md">
+                                      <div className=" text-white text-center bg-biru-0 rounded-md text-xs sm:text-sm py-1 flex max-w-full" style={{ width: `${progressPercentage}%` }}>
+                                        <h6 className="pl-2">
+                                          {progressPercentage}%<span className="pl-1 ">Complete</span>
+                                        </h6>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -388,8 +393,8 @@ export const BerandaKelasSaya = () => {
                   <div className="flex w-full justify-center py-4">
                     <ul className="">
                       <li className="flex gap-2 justify-center items-center">
-                        <button onClick={handlePrePage} disabled={currentPage === 1} className={`border text-black px-2 rounded-md ${currentPage === 1 ? "text-opacity-20" : ""} ${currentPage === 1 ? "cursor-not-allowed" : ""} `}>
-                          Prev
+                        <button onClick={handlePrePage} disabled={currentPage === 1} className={` text-black px-2 ${currentPage === 1 ? "opacity-20" : ""} ${currentPage === 1 ? "cursor-not-allowed" : ""} `}>
+                          <img src={previcon} alt="previcon" />
                         </button>
                         {numbers.map((n, i) => (
                           <div key={i} className={`${currentPage === n ? "block bg-ungu-0 text-white px-2 rounded-md" : ""} `}>
@@ -403,12 +408,8 @@ export const BerandaKelasSaya = () => {
                             </button>
                           </div>
                         ))}
-                        <button
-                          onClick={handleNextPage}
-                          disabled={currentPage === npage}
-                          className={`border text-black px-2 rounded-md ${currentPage === npage ? "text-opacity-20" : ""} ${currentPage === npage ? "cursor-not-allowed" : ""} `}
-                        >
-                          Next
+                        <button onClick={handleNextPage} disabled={currentPage === npage} className={` text-black px-2 ${currentPage === npage ? "opacity-20" : ""} ${currentPage === npage ? "cursor-not-allowed" : ""} `}>
+                          <img src={nexticon} alt="nexticon" />
                         </button>
                       </li>
                     </ul>
@@ -424,8 +425,3 @@ export const BerandaKelasSaya = () => {
     </>
   );
 };
-
-/* Handle Error Belum Login*/
-<div className="hidden w-full py-4">
-  <BelumLoginKelas />
-</div>;

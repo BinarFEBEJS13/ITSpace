@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export const Pencarian = ({ onClose }) => {
   const navigate = useNavigate();
-  const [querySearch, setQuerySearch] = useState([]);
+  const [querySearch, setQuerySearch] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();

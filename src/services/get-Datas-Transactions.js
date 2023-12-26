@@ -2,9 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { API_ENDPOINT } from "../utils/api-endpoint";
 import http from "../utils/http";
 
-const getDataChaptersId = async ({ query }) => {
+const getDataTransactionsId = async ({ query }) => {
   const { data } = await http
-    .get(`${API_ENDPOINT.COURSES}/${query}/chapters/${query}`)
+    .get(`${API_ENDPOINT.TRANSACTIONS}/${query}`)
     .then((result) => {
       return result;
     })
@@ -14,11 +14,11 @@ const getDataChaptersId = async ({ query }) => {
   return data;
 };
 
-const useGetDataChaptersId = (options) => {
+const useGetDataTransactionsId = (options) => {
   return useQuery({
-    queryKey: ["dataChaptersId", options],
-    queryFn: () => getDataChaptersId(options),
+    queryKey: ["dataDataTransactionsId", options],
+    queryFn: () => getDataTransactionsId(options),
   });
 };
 
-export { getDataChaptersId, useGetDataChaptersId };
+export { getDataTransactionsId, useGetDataTransactionsId };

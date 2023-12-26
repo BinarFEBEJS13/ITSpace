@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Navbar } from "../assets/components/Navbar";
 // svg card
+import nexticon from "../assets/svg/next.svg";
+import previcon from "../assets/svg/previous.svg";
 import star from "../assets/svg/star.svg";
 import level from "../assets/svg/kategori-level.svg";
 import modul from "../assets/svg/book.svg";
@@ -14,6 +16,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Footer } from "../assets/components/Footer";
 import { useGetSearchCourses } from "../services/get-search-courses";
 import { PencarianPageKursus } from "../assets/components/PencarianPageKursus";
+// Import Chakra UI
+import { Spinner } from "@chakra-ui/react";
 
 export const Kursus = () => {
   const navigate = useNavigate();
@@ -95,7 +99,6 @@ export const Kursus = () => {
   //  Handle Clear Item ALL Filter
   const baruCheckboxRef = useRef(null);
   const populerCheckboxRef = useRef(null);
-  const promoCheckboxRef = useRef(null);
   const kategoriCheckboxRef = useRef([]);
   const levelCheckboxRef = useRef([]);
 
@@ -118,9 +121,6 @@ export const Kursus = () => {
     }
     if (populerCheckboxRef.current) {
       populerCheckboxRef.current.checked = false;
-    }
-    if (promoCheckboxRef.current) {
-      promoCheckboxRef.current.checked = false;
     }
 
     if (kategoriCheckboxRef.current && kategoriCheckboxRef.current.length > 0) {
@@ -206,7 +206,7 @@ export const Kursus = () => {
       await dispatch(actGetDataCourses());
     };
     getDataCourses();
-  }, [dispatch, querySearch]);
+  }, [dispatch]);
 
   return (
     <>
@@ -236,10 +236,6 @@ export const Kursus = () => {
                         <div className="flex gap-2">
                           <input ref={populerCheckboxRef} onChange={handleChangeSipaling} value={"populer"} type="checkbox" className="accent-biru-0 w-4"></input>
                           <p className="text-sm">Paling Populer</p>
-                        </div>
-                        <div className="flex gap-2">
-                          <input ref={promoCheckboxRef} onChange={handleChangeSipaling} value={"promo"} type="checkbox" className="accent-biru-0 w-4"></input>
-                          <p className="text-sm">Promo</p>
                         </div>
                       </div>
                       {/* Berdasarkan Kategori */}
@@ -310,14 +306,14 @@ export const Kursus = () => {
                       className={`${activeKursus === "premium" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
                       onClick={() => handleActivePopular("premium")}
                     >
-                      Kelas Premium
+                      Kursus Premium
                     </button>
                     <button
                       value={"gratis"}
                       className={`${activeKursus === "gratis" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
                       onClick={() => handleActivePopular("gratis")}
                     >
-                      Kelas Gratis
+                      Kursus Gratis
                     </button>
                   </div>
                   {/* Tampilin State Hasil pencarian dari search */}
@@ -327,65 +323,67 @@ export const Kursus = () => {
                     {isLoading ? (
                       // Display a loading indicator while the search is in progress
                       <div className="w-full flex justify-center items-center">
-                        <p>SABAR CUKK LOADING...</p>
+                        <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
                       </div>
                     ) : sortDataCourse?.length > 0 ? (
                       <div className=" w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                         {/* Card Beli */}
                         {dataKursus?.map((value) => {
                           return (
-                            <div key={value.id} className="w-full shadow-sm-button rounded-2xl">
-                              <div className="relative w-full h-32 lg:h-48 overflow-hidden">
-                                <img src={value.thumbnailUrl} alt="" className="w-full h-full object-cover rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
-                              </div>
-                              <div className="px-2 sm:px-4 py-4 flex flex-col gap-2 rounded-2xl">
-                                <div className="flex justify-between items-center">
-                                  <h6 className="text-ungu-0 text-xs sm:text-sm overflow-x-hidden">{value?.courseCategory[0]?.category?.name}</h6>
-                                  <span className="flex items-center text-sm">
-                                    <img src={star} alt="" className="w-4" />
-                                    {value?.rate !== null ? value.rate?.toFixed(1) : "0.0"}
-                                  </span>
+                            <div key={value.id} className="w-full">
+                              <div className="shadow-sm-button rounded-2xl">
+                                <div className="relative w-full h-32 lg:h-48 overflow-hidden">
+                                  <img src={value.thumbnailUrl} alt="" className="w-full h-full object-cover rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
                                 </div>
-                                <div>
-                                  <h2 onClick={() => navigate(`/detail-kelas/${value.id}`)} className="font-bold cursor-pointer text-xs sm:text-sm">
-                                    {value.title}
-                                  </h2>
-                                  <span className="opacity-50 text-xs sm:text-sm">by {value?.mentor[0]?.author?.profile?.name}</span>
-                                </div>
-                                <div className="flex flex-wrap w-full gap-2 text-xs sm:text-sm">
-                                  <span className="flex gap-2 items-center">
-                                    <img src={level} alt="" className="w-4" />
-                                    {value.level} Level
-                                  </span>
-                                  <span className="flex gap-2 items-center">
-                                    <img src={modul} alt="" className="w-4" />
-                                    {value._count.chapter} Modul
-                                  </span>
-                                  <span className="flex gap-2 items-center">
-                                    <img src={clock} alt="" className="w-4" />
-                                    {value.duration !== null ? value.duration : 0} Menit
-                                  </span>
-                                </div>
-                                <div className="text-xs sm:text-sm">
-                                  <div className="flex text-white items-center">
-                                    {value?.isPremium === true ? (
-                                      <div className="flex gap-1 sm:gap-2 bg-ungu-0 px-4 py-1 rounded-md">
-                                        <img src={diamond} alt="" className="hidden sm:block w-4" />
-                                        <span className="text-xs sm:text-sm">
-                                          {value?.price &&
-                                            Number(value.price).toLocaleString("id-ID", {
-                                              style: "currency",
-                                              currency: "IDR",
-                                              minimumFractionDigits: 0,
-                                              maximumFractionDigits: 0,
-                                            })}
-                                        </span>
-                                      </div>
-                                    ) : (
-                                      <div className="flex gap-2 bg-hijau-0 px-4 py-1 rounded-md">
-                                        <span className="text-xs sm:text-sm">Mulai Kelas</span>
-                                      </div>
-                                    )}
+                                <div className="px-2 sm:px-4 py-4 flex flex-col gap-2 rounded-2xl">
+                                  <div className="flex justify-between items-center">
+                                    <h6 className="text-ungu-0 text-xs sm:text-sm overflow-x-hidden">{value?.courseCategory[0]?.category?.name}</h6>
+                                    <span className="flex items-center text-sm">
+                                      <img src={star} alt="" className="w-4" />
+                                      {value?.rate !== null ? value.rate?.toFixed(1) : "0.0"}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <h2 onClick={() => navigate(`/detail-kelas/${value.id}`)} className="font-bold cursor-pointer text-xs sm:text-sm">
+                                      {value.title}
+                                    </h2>
+                                    <span className="opacity-50 text-xs sm:text-sm">by {value?.mentor[0]?.author?.profile?.name}</span>
+                                  </div>
+                                  <div className="flex flex-wrap w-full gap-2 text-xs sm:text-sm">
+                                    <span className="flex gap-2 items-center">
+                                      <img src={level} alt="" className="w-4" />
+                                      {value.level} Level
+                                    </span>
+                                    <span className="flex gap-2 items-center">
+                                      <img src={modul} alt="" className="w-4" />
+                                      {value._count.chapter} Modul
+                                    </span>
+                                    <span className="flex gap-2 items-center">
+                                      <img src={clock} alt="" className="w-4" />
+                                      {value.duration !== null ? value.duration : 0} Menit
+                                    </span>
+                                  </div>
+                                  <div className="text-xs sm:text-sm">
+                                    <div className="flex text-white items-center">
+                                      {value?.isPremium === true ? (
+                                        <div className="flex gap-1 sm:gap-2 bg-ungu-0 px-4 py-1 rounded-md">
+                                          <img src={diamond} alt="" className="hidden sm:block w-4" />
+                                          <span className="text-xs sm:text-sm">
+                                            {value?.price &&
+                                              Number(value.price).toLocaleString("id-ID", {
+                                                style: "currency",
+                                                currency: "IDR",
+                                                minimumFractionDigits: 0,
+                                                maximumFractionDigits: 0,
+                                              })}
+                                          </span>
+                                        </div>
+                                      ) : (
+                                        <div className="flex gap-2 bg-hijau-0 px-4 py-1 rounded-md">
+                                          <span className="text-xs sm:text-sm">Mulai Kelas</span>
+                                        </div>
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -403,8 +401,8 @@ export const Kursus = () => {
                   <div className="flex w-full justify-center py-4">
                     <ul className="">
                       <li className="flex gap-2 justify-center items-center">
-                        <button onClick={handlePrePage} disabled={currentPage === 1} className={`border text-black px-2 rounded-md ${currentPage === 1 ? "text-opacity-20" : ""} ${currentPage === 1 ? "cursor-not-allowed" : ""} `}>
-                          Prev
+                        <button onClick={handlePrePage} disabled={currentPage === 1} className={` text-black px-2 ${currentPage === 1 ? "opacity-20" : ""} ${currentPage === 1 ? "cursor-not-allowed" : ""} `}>
+                          <img src={previcon} alt="previcon" />
                         </button>
                         {numbers.map((n, i) => (
                           <div key={i} className={`${currentPage === n ? "block bg-ungu-0 text-white px-2 rounded-md" : ""} `}>
@@ -418,12 +416,8 @@ export const Kursus = () => {
                             </button>
                           </div>
                         ))}
-                        <button
-                          onClick={handleNextPage}
-                          disabled={currentPage === npage}
-                          className={`border text-black px-2 rounded-md ${currentPage === npage ? "text-opacity-20" : ""} ${currentPage === npage ? "cursor-not-allowed" : ""} `}
-                        >
-                          Next
+                        <button onClick={handleNextPage} disabled={currentPage === npage} className={` text-black px-2 ${currentPage === npage ? "opacity-20" : ""} ${currentPage === npage ? "cursor-not-allowed" : ""} `}>
+                          <img src={nexticon} alt="nexticon" />
                         </button>
                       </li>
                     </ul>

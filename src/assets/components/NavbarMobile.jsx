@@ -1,12 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import masuk from "../svg/log-in.svg";
+import keluar from "../svg/log-out-white.svg";
+import { useAuthLogout } from "../../services/post-auth-logout";
 
-export const NavbarMobile = ({ onClose }) => {
+export const NavbarMobile = ({ onClose, isSuccessDecode }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [dataToggle, setDataToggle] = useState(false);
   const [activeItem, setActiveItem] = useState("");
+
+  const { mutate: logoutUser, data: dataLogout } = useAuthLogout();
+
+  console.log(dataLogout);
+
+  const handleLogoutUser = () => {
+    logoutUser();
+  };
+
+  useEffect(() => {
+    if (dataLogout?.data?.success === true) {
+      window.location.href = "/login";
+    }
+  }, [dataLogout]);
 
   const handleActiveItem = (item) => {
     const cleanedPathname = location.pathname.slice(1);
@@ -23,16 +39,22 @@ export const NavbarMobile = ({ onClose }) => {
       if (item === "beranda") {
         navigate("/");
       } else if (item === "kursus") {
-        navigate("/kursus");
+        window.location.href = "/kursus/all";
       } else if (item === "kelas") {
-        navigate("/kelassaya");
+        window.location.href = "/kelassaya/all";
       } else if (item === "notifikasi") {
-        navigate("/notifikasi");
+        window.location.href = "/notifikasi";
       } else if (item === "akun") {
-        navigate("/akun");
+        window.location.href = "/akun";
       }
     }
   };
+
+  useEffect(() => {
+    if (isSuccessDecode) {
+      setDataToggle(!dataToggle);
+    }
+  }, [isSuccessDecode]);
 
   return (
     <>
@@ -48,18 +70,36 @@ export const NavbarMobile = ({ onClose }) => {
               {/* <div className="flex flex-col gap-4 items-start"> */}
               {dataToggle ? (
                 <div className="flex flex-col gap-4 items-start">
-                  <button onClick={() => handleActiveItem("beranda")}>Beranda</button>
-                  <button onClick={() => handleActiveItem("kursus")}>Kursus</button>
-                  <button onClick={() => handleActiveItem("kelas")}>Kelas</button>
-                  <button onClick={() => handleActiveItem("notifikasi")}>Notifikasi</button>
-                  <button onClick={() => handleActiveItem("akun")}>Akun</button>
+                  <button onClick={() => handleActiveItem("beranda")} className="border-b border-biru-0 text-sm">
+                    Beranda
+                  </button>
+                  <button onClick={() => handleActiveItem("kursus")} className="border-b border-biru-0 text-sm">
+                    Kursus
+                  </button>
+                  <button onClick={() => handleActiveItem("kelas")} className="border-b border-biru-0 text-sm">
+                    Kelas
+                  </button>
+                  <button onClick={() => handleActiveItem("notifikasi")} className="border-b border-biru-0 text-sm">
+                    Notifikasi
+                  </button>
+                  <button onClick={() => handleActiveItem("akun")} className="border-b border-biru-0 text-sm">
+                    Akun
+                  </button>
+                  <div onClick={() => handleLogoutUser()} className="flex gap-1 bg-merah-0 px-2 py-2 rounded-md text-sm">
+                    <img src={keluar} alt="keluar" />
+                    <button className="text-white">Keluar</button>
+                  </div>
                 </div>
               ) : (
                 <div className="flex flex-col gap-4 items-start">
-                  <button onClick={() => handleActiveItem("beranda")}>Beranda</button>
-                  <button onClick={() => handleActiveItem("kursus")}>Kursus</button>
-                  <div onClick={() => navigate("/login")} className="flex gap-1 bg-gradientkanan px-4 py-2 rounded-md">
-                    <img src={masuk} alt="" />
+                  <button onClick={() => handleActiveItem("beranda")} className="border-b border-biru-0 text-sm">
+                    Beranda
+                  </button>
+                  <button onClick={() => handleActiveItem("kursus")} className="border-b border-biru-0 text-sm">
+                    Kursus
+                  </button>
+                  <div onClick={() => navigate("/login")} className="flex gap-1 bg-gradientkanan px-4 py-2 rounded-md text-sm">
+                    <img src={masuk} alt="masuk" />
                     <button className="text-white">Masuk</button>
                   </div>
                 </div>

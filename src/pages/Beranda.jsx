@@ -3,8 +3,8 @@ import { Navbar } from "../assets/components/Navbar";
 // png main section
 import course from "../assets/img/course.png";
 import uiuxdesign from "../assets/img/uiux.jpeg";
-import frontend from "../assets/img/webdev.jpeg";
-import database from "../assets/img/android.jpeg";
+import database from "../assets/img/webdev.jpeg";
+import frontend from "../assets/img/android.jpeg";
 import backend from "../assets/img/ios.jpeg";
 import machinelearning from "../assets/img/datascience.jpeg";
 // svg card
@@ -22,26 +22,24 @@ import "swiper/css/navigation";
 // import required modules
 import { Pagination, Navigation } from "swiper/modules";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { actGetDataCourses } from "../redux/actions/actGetDataCourses";
 import { Footer } from "../assets/components/Footer";
 import { NotFoundCourse } from "../assets/components/HandleErrorPage/NotFoundCourse";
 import { useGetDataCourses } from "../services/get-data-noreduxcourse";
+// IMPORT CHAKRA UI
+import { Spinner } from "@chakra-ui/react";
 
 export const Beranda = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [activePopular, setActivePopular] = useState("all");
   const [sortDataCourse, setSortDataCourse] = useState([]);
-  const courses = useSelector((state) => state.getDataCourses?.courses);
-
-  // console.log(courses, "courses");
 
   const handleActivePopular = (item) => {
     setActivePopular(item);
   };
 
-  const { data: dataCourses, isLoading } = useGetDataCourses();
+  const { data: dataCourses, isLoading } = useGetDataCourses({
+    category: "",
+  });
 
   // Handle Sort Data Course
   useEffect(() => {
@@ -66,14 +64,7 @@ export const Beranda = () => {
     if (activePopular === "machinelearning") {
       setSortDataCourse(dataKursus?.filter((course) => course?.courseCategory[0]?.category?.name?.toLowerCase() === "machine learning"));
     }
-  }, [activePopular, courses, dataCourses?.data?.courses]);
-
-  useEffect(() => {
-    const getDataCourses = async () => {
-      await dispatch(actGetDataCourses());
-    };
-    getDataCourses();
-  }, [dispatch]);
+  }, [activePopular, dataCourses?.data?.courses]);
 
   return (
     <>
@@ -100,8 +91,8 @@ export const Beranda = () => {
                     Dengan kursus yang berkualitas dan fasilitas pembelajaran yang mendukung, membuka peluang untuk mengasah kemampuan dan meraih kesuksesan di dunia teknologi.
                   </p>
                 </div>
-                <div className="w-full">
-                  <button onClick={() => (window.location.href = "/kursus/all")} className="w-full sm:w-3/4 md:w-1/2 bg-gradientbutton text-white px-8 py-2 rounded-md shadow-sm-button">
+                <div className="w-full flex justify-center sm:justify-start">
+                  <button onClick={() => (window.location.href = "/kursus/all")} className="w-5/6 sm:w-3/4 md:w-3/4 lg:w-1/2 bg-gradientbutton text-white px-8 py-2 rounded-md shadow-sm-button">
                     Ikuti Kelas Sekarang
                   </button>
                 </div>
@@ -125,23 +116,23 @@ export const Beranda = () => {
               </div>
               <div className="flex flex-wrap justify-center sm:flex-nowrap sm:gap-2">
                 <div className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
-                  <img src={uiuxdesign} alt="" className="w-44 rounded-md" />
+                  <img src={uiuxdesign} alt="uiuxdesign" className="w-44 rounded-md" />
                   <h2 className="items-center text-xs sm:text-sm font-semibold text-center">UI/UX Design</h2>
                 </div>
                 <div className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
-                  <img src={frontend} alt="" className="w-44 rounded-md" />
+                  <img src={frontend} alt="frontend" className="w-44 rounded-md" />
                   <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Frontend</h2>
                 </div>
                 <div className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
-                  <img src={database} alt="" className="w-44 rounded-md" />
+                  <img src={database} alt="database" className="w-44 rounded-md" />
                   <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Database</h2>
                 </div>
                 <div className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
-                  <img src={backend} alt="" className="w-44 rounded-md" />
+                  <img src={backend} alt="backend" className="w-44 rounded-md" />
                   <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Backend</h2>
                 </div>
                 <div className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
-                  <img src={machinelearning} alt="" className="w-44 rounded-md" />
+                  <img src={machinelearning} alt="machinelearning" className="w-44 rounded-md" />
                   <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Machine Learning</h2>
                 </div>
               </div>
@@ -206,8 +197,8 @@ export const Beranda = () => {
                 <div className="hidden sm:flex gap-4 w-full">
                   {isLoading ? (
                     // Display a loading indicator while the search is in progress
-                    <div className="w-full flex justify-center items-center">
-                      <p>SABAR CUKK LOADING...</p>
+                    <div className="w-full h-56 flex justify-center items-center">
+                      <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
                     </div>
                   ) : sortDataCourse?.length > 0 ? (
                     <Swiper
@@ -311,66 +302,68 @@ export const Beranda = () => {
                 {/* Untuk Mobile */}
                 <div className="w-full sm:hidden pt-2 pb-6 ">
                   {isLoading ? (
-                    <div className="w-full flex justify-center items-center">
-                      <p>SABAR CUKK LOADING...</p>
+                    <div className="w-full h-48 flex justify-center items-center">
+                      <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
                     </div>
                   ) : sortDataCourse?.length > 0 ? (
                     <div className="w-full sm:hidden grid grid-cols-2 gap-4">
                       {/* Card Premium */}
                       {sortDataCourse?.slice(0, 10).map((value) => {
                         return (
-                          <div key={value.id} className="w-full shadow-sm-button rounded-2xl">
-                            <div className="relative w-full h-32 overflow-hidden">
-                              <img src={value.thumbnailUrl} alt="" className="w-full h-full object-cover rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
-                            </div>
-                            <div className="px-2 sm:px-4 py-4 flex flex-col gap-2 rounded-2xl">
-                              <div className="flex justify-between items-center">
-                                <h6 className="text-ungu-0 text-xs sm:text-sm overflow-x-hidden">{value?.courseCategory[0]?.category?.name}</h6>
-                                <span className="flex items-center text-sm">
-                                  <img src={star} alt="" className="w-4" />
-                                  {value?.rate?.toFixed(1)}
-                                </span>
+                          <div key={value.id}>
+                            <div className="w-full shadow-sm-button rounded-2xl">
+                              <div className="relative w-full h-32 overflow-hidden">
+                                <img src={value.thumbnailUrl} alt="" className="w-full h-full object-cover rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
                               </div>
-                              <div>
-                                <h2 onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="font-bold cursor-pointer text-xs sm:text-base">
-                                  {value.title}
-                                </h2>
-                                <span className="opacity-50 text-xs sm:text-sm">by {value?.mentor[0]?.author?.profile?.name}</span>
-                              </div>
-                              <div className="flex flex-wrap w-full gap-2 text-xs sm:text-sm">
-                                <span className="flex gap-2 items-center">
-                                  <img src={level} alt="" className="w-4" />
-                                  {value.level} Level
-                                </span>
-                                <span className="flex gap-2 items-center">
-                                  <img src={modul} alt="" className="w-4" />
-                                  {value._count.chapter} Modul
-                                </span>
-                                <span className="flex gap-2 items-center">
-                                  <img src={clock} alt="" className="w-4" />
-                                  {value.duration !== null ? value.duration : 0} Menit
-                                </span>
-                              </div>
-                              <div className="text-sm">
-                                <div className="flex text-white items-center">
-                                  {value?.isPremium === true ? (
-                                    <div className="flex gap-2 bg-ungu-0 px-4 py-1 rounded-md">
-                                      <img src={diamond} alt="" className="w-[0.9rem] sm:w-4" />
-                                      <span className="text-xs sm:text-sm">
-                                        {value?.price &&
-                                          Number(value.price).toLocaleString("id-ID", {
-                                            style: "currency",
-                                            currency: "IDR",
-                                            minimumFractionDigits: 0,
-                                            maximumFractionDigits: 0,
-                                          })}
-                                      </span>
-                                    </div>
-                                  ) : (
-                                    <div className="flex gap-2 bg-hijau-0 px-4 py-1 rounded-md">
-                                      <span className="text-xs sm:text-sm">Mulai Kelas</span>
-                                    </div>
-                                  )}
+                              <div className="px-2 sm:px-4 py-4 flex flex-col gap-2 rounded-2xl">
+                                <div className="flex justify-between items-center">
+                                  <h6 className="text-ungu-0 text-xs sm:text-sm overflow-x-hidden">{value?.courseCategory[0]?.category?.name}</h6>
+                                  <span className="flex items-center text-sm">
+                                    <img src={star} alt="" className="w-4" />
+                                    {value?.rate !== null ? value.rate?.toFixed(1) : "0.0"}
+                                  </span>
+                                </div>
+                                <div>
+                                  <h2 onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="font-bold cursor-pointer text-xs sm:text-base">
+                                    {value.title}
+                                  </h2>
+                                  <span className="opacity-50 text-xs sm:text-sm">by {value?.mentor[0]?.author?.profile?.name}</span>
+                                </div>
+                                <div className="flex flex-wrap w-full gap-2 text-xs sm:text-sm">
+                                  <span className="flex gap-2 items-center">
+                                    <img src={level} alt="" className="w-4" />
+                                    {value.level} Level
+                                  </span>
+                                  <span className="flex gap-2 items-center">
+                                    <img src={modul} alt="" className="w-4" />
+                                    {value._count.chapter} Modul
+                                  </span>
+                                  <span className="flex gap-2 items-center">
+                                    <img src={clock} alt="" className="w-4" />
+                                    {value.duration !== null ? value.duration : 0} Menit
+                                  </span>
+                                </div>
+                                <div className="text-sm">
+                                  <div className="flex text-white items-center">
+                                    {value?.isPremium === true ? (
+                                      <div className="flex gap-2 bg-ungu-0 px-4 py-1 rounded-md">
+                                        <img src={diamond} alt="" className="w-[0.9rem] sm:w-4" />
+                                        <span className="text-xs sm:text-sm">
+                                          {value?.price &&
+                                            Number(value.price).toLocaleString("id-ID", {
+                                              style: "currency",
+                                              currency: "IDR",
+                                              minimumFractionDigits: 0,
+                                              maximumFractionDigits: 0,
+                                            })}
+                                        </span>
+                                      </div>
+                                    ) : (
+                                      <div className="flex gap-2 bg-hijau-0 px-4 py-1 rounded-md">
+                                        <span className="text-xs sm:text-sm">Mulai Kelas</span>
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
                               </div>
                             </div>

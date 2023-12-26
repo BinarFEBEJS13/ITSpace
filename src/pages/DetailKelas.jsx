@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Navbar } from "../assets/components/Navbar";
-
-// png kategori belajar
-
 // svg card
 import star from "../assets/svg/star.svg";
 import level from "../assets/svg/kategori-level.svg";
@@ -11,106 +8,122 @@ import clock from "../assets/svg/clock.svg";
 import complete from "../assets/svg/progress.svg";
 // svg detail kelas
 import arrow from "../assets/svg/arrow-left-black.svg";
-import tele from "../assets/svg/chat.svg";
-import playhijau from "../assets/svg/play-hijau.svg";
-import playungu from "../assets/svg/play-ungu.svg";
+import tele from "../assets/svg/telegram.svg";
+import simpankelas from "../assets/svg/tambah-putih.svg";
+import rating from "../assets/svg/bintang-putih.svg";
+import playgredient from "../assets/svg/play-gredient.svg";
+import successgreen from "../assets/svg/success-green.svg";
 import gembok from "../assets/svg/gembok.svg";
 import { KelasPremium } from "../assets/components/KelasPremium";
 import { Onboarding } from "../assets/components/Onboarding";
 import { useNavigate, useParams } from "react-router-dom";
 import { Footer } from "../assets/components/Footer";
-import { useDispatch, useSelector } from "react-redux";
-import { actGetDataDecode } from "../redux/actions/actGetDataDecode";
-import { actGetDataChapters } from "../redux/actions/actGetDataChapters";
-import { actGetDataCoursesId } from "../redux/actions/actGetDataCoursesId";
 import ReactPlayer from "react-player";
-import { actGetDataVideos } from "../redux/actions/actGetDataVideos";
+import { useGetDataChapters } from "../services/get-Datas-Chapters";
+import { useGetDataCoursesId } from "../services/get-Datas-CoursesId";
+import { useGetDataVideos } from "../services/get-Datas-Videos";
+import { useGetDataCheckEnrollment } from "../services/get-Datas-CheckEnrollments";
+import { useDataProgress } from "../services/post-Datas-progress";
+import { useGetDecode } from "../services/get-Datas-Decode";
+import { useDataEnrollments } from "../services/post-Datas-enrollments";
+// Chakra UI
+import { useToast } from "@chakra-ui/react";
+import { Rating } from "../assets/components/Rating";
 
 export const DetailKelas = () => {
+  const toast = useToast();
   const { courseId } = useParams();
-  const [chaptersId, setchaptersId] = useState(2);
+  const [chaptersId, setchaptersId] = useState(1);
   const [videoId, setVideoId] = useState(1);
   const [UrlVideos, setUrlVideos] = useState("");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [activeKelas, setActiveKelas] = useState("all");
+  const [ActiveKelas, setActiveKelas] = useState(null);
+  const [ActivePremium, setActivePremium] = useState(false);
   const [toggleKelas, setToggleKelas] = useState("tentang");
-  // const userId = useSelector((state) => state?.getDataDecode?.decode?.id);
-  const dataChapters = useSelector((state) => state?.getDataChapters?.chapters);
-  const dataCoursesId = useSelector((state) => state?.getDataCoursesId?.coursesId);
-  const datavideoId = useSelector((state) => state?.getDataVideos?.videos);
 
-  // console.log(dataCoursesId, "data course Id");
-  // console.log(dataChapters, "data chapters");
-  // console.log(datavideoId.url, "data video");
+  // GET API ALL
+  const { data: dataChptrs } = useGetDataChapters({ query: courseId });
+  const dataChapters = dataChptrs?.data;
 
-  const mapDataVideos = dataChapters?.map((value) => value.video.map((values) => values));
+  const { data: dataCrsId } = useGetDataCoursesId({ query: courseId });
+  const dataCoursesId = dataCrsId?.data;
 
-  // console.log(mapDataVideos, "data vid");
-  // console.log(datavideoId, "data video ID");
-  console.log(datavideoId?.chapter?.id);
-  console.log(chaptersId, "id chapt");
-  // console.log(videoId);
-  // console.log(UrlVideos);
+  const { data: dataVid } = useGetDataVideos({ courseId, chaptersId, videoId });
+  const datavideoId = dataVid?.data;
+
+  const { data: dataCheckEnrollment } = useGetDataCheckEnrollment({ query: courseId });
+
+  const { mutate: postProgress } = useDataProgress();
+  const { mutate: postEnrollments, data: dataPostEnrollments } = useDataEnrollments();
+
+  const { data: dataDecode } = useGetDecode();
 
   // Hitung data total duration chapters
-  const totalDuration = dataChapters.reduce((acc, chapter) => acc + chapter.duration, 0);
+  const totalDuration = dataChapters?.reduce((acc, chapter) => acc + chapter.duration, 0);
   // Hitung data total modul chapters
-  const totalModul = dataChapters.length;
+  const totalModul = dataChapters?.length;
 
   // Menghitung total progress
   // Step 1: Extract _count from each video
-  const countArray = dataChapters.map((chapter) => chapter.video.map((video) => video._count));
+  const countArray = dataChapters?.map((chapter) => chapter?.video?.map((video) => video._count));
   // Step 2: Calculate total watched and total videos
   let totalWatched = 0;
   let totalVideos = 0;
-  countArray.forEach((videoCount) => {
-    videoCount.forEach((count) => {
+  countArray?.forEach((videoCount) => {
+    videoCount?.forEach((count) => {
       totalVideos++;
       totalWatched += count.progress === 1 ? 1 : 0;
     });
   });
   // Step 3: Calculate percentage
-  const completionPercentage = (totalWatched / totalVideos) * 100;
+  const completionPercentage = totalVideos !== 0 ? (totalWatched / totalVideos) * 100 : 0;
 
-  // console.log(`Total Watched: ${totalWatched}`);
-  // console.log(`Total Videos: ${totalVideos}`);
-  // console.log(`Completion Percentage: ${completionPercentage}%`);
-
-  const handleActivePopular = (item) => {
-    setActiveKelas(item);
-  };
+  // Function Handle ALL
   const handleToggleKelas = (item) => {
     setToggleKelas(item);
   };
-  const handleKirimIdVideo = (vidId) => {
-    // console.log(vidId);
-    setVideoId(vidId);
-    // console.log(chptId);
-    // setchaptersId(chptId);
+
+  const handleKirimIdVideo = (vidId, chptId, cekPremium) => {
+    if (dataCheckEnrollment?.data === true || cekPremium === false) {
+      setVideoId(vidId);
+      setchaptersId(chptId);
+      setActiveKelas(vidId);
+      postProgress({
+        videoId: vidId,
+      });
+    } else {
+      setActivePremium(!ActivePremium);
+    }
+  };
+
+  const handleSimpanKelas = () => {
+    postEnrollments({ courseId });
+    toast({
+      title: "Berhasil",
+      description: "Kursus telah disimpan ke dalam kelas",
+      duration: 3000,
+      status: "success",
+      position: "top-right",
+    });
+  };
+
+  const handleClosePremium = () => {
+    setActivePremium(!ActivePremium);
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      await dispatch(actGetDataDecode());
-    };
-    const getDataChapters = async () => {
-      await dispatch(actGetDataChapters(courseId));
-    };
-    const getDataCoursesId = async () => {
-      await dispatch(actGetDataCoursesId(courseId));
-    };
-    const getDataVideos = async () => {
-      await dispatch(actGetDataVideos(courseId, chaptersId, videoId));
-    };
-
     setUrlVideos(datavideoId?.url);
-    setchaptersId(datavideoId?.chapter?.id);
-    fetchData();
-    getDataChapters();
-    getDataCoursesId();
-    getDataVideos();
-  }, [dispatch, courseId, chaptersId, videoId, datavideoId?.url, datavideoId?.chapter?.id]);
+
+    if (dataPostEnrollments?.data?.success) {
+      toast({
+        title: "Berhasil",
+        description: "Kursus telah disimpan ke dalam kelas",
+        duration: 3000,
+        status: "success",
+        position: "top-right",
+      });
+    }
+  }, [datavideoId?.url, dataPostEnrollments, toast]);
 
   return (
     <>
@@ -157,12 +170,12 @@ export const DetailKelas = () => {
                         </span>
                       </div>
                       <div className="flex flex-col gap-2">
-                        <h2 className="font-bold cursor-pointer">{dataCoursesId.title}</h2>
+                        <h2 className="font-bold cursor-pointer">{dataCoursesId?.title}</h2>
                         <div className="flex items-center">
                           {dataCoursesId?.mentor?.map((mentor, index) => (
                             <React.Fragment key={index}>
                               <span className="opacity-50 text-sm">by {mentor?.author?.profile?.name}</span>
-                              {index < dataCoursesId.mentor.length - 1 && <span className="opacity-50 text-sm pr-2">,</span>}
+                              {index < dataCoursesId?.mentor.length - 1 && <span className="opacity-50 text-sm pr-2">,</span>}
                             </React.Fragment>
                           ))}
                         </div>
@@ -170,7 +183,7 @@ export const DetailKelas = () => {
                       <div className="flex flex-wrap w-full gap-2 text-xs xl:text-sm">
                         <span className="flex gap-2 items-center">
                           <img src={level} alt="" className="w-5" />
-                          {dataCoursesId.level} Level
+                          {dataCoursesId?.level} Level
                         </span>
                         <span className="flex gap-2 items-center">
                           <img src={modul} alt="" className="w-5" />
@@ -181,15 +194,23 @@ export const DetailKelas = () => {
                           {totalDuration !== null ? totalDuration : "0"} Menit
                         </span>
                       </div>
-                    </div>
-                    {/* Button Join Kelas */}
-                    <div className="w-full flex justify-center sm:justify-start">
-                      <button className="bg-hijau-0 rounded-md px-4 py-1 text-white flex gap-2 items-center">
-                        <a href="https://t.me/+lWAndrPmRvdlZWY1" target="_blank" rel="noopener noreferrer" className="flex items-center">
-                          Join Grup Telegram
-                          <img src={tele} alt="" />
-                        </a>
-                      </button>
+                      {/* Button Grup Tele, Join Kelas, Rating*/}
+                      <div className={`${dataDecode?.message === "jwt verify succes" ? "flex flex-wrap w-full gap-2 text-xs xl:text-sm" : "hidden"}  `}>
+                        <button className="bg-[#2AABEE] rounded-md px-4 py-1 text-white text-xs xl:text-sm flex gap-2 items-center">
+                          <a href={"https://t.me/+lWAndrPmRvdlZWY1"} target="_blank" rel="noopener noreferrer" className="flex gap-1  items-center">
+                            Gabung Grup Telegram
+                            <img src={tele} alt="telegram" className="w-5" />
+                          </a>
+                        </button>
+                        <button onClick={() => handleSimpanKelas()} className={`${dataCoursesId?.isPremium === true ? "hidden" : "bg-hijau-0 rounded-md px-4 py-1 text-white text-xs xl:text-sm flex gap-1 items-center"} `}>
+                          Simpan Kelas
+                          <img src={simpankelas} alt="simpankelas" />
+                        </button>
+                        <button className="bg-yellow-500 rounded-md px-4 py-1 text-white text-xs xl:text-sm flex gap-1 items-center">
+                          <Rating courseId={courseId} />
+                          <img src={rating} alt="rating" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                   {/*/////////////////////////// Toggle Tentang & Materi Kelas Pada Mobile ////////////////////////////////*/}
@@ -214,7 +235,7 @@ export const DetailKelas = () => {
                       <div className="flex flex-col gap-2">
                         <h2 className="font-bold">Tentang Kelas</h2>
                         <div className="">
-                          <p className="text-xs xl:text-sm text-justify indent-12">{dataCoursesId.description}</p>
+                          <p className="text-xs xl:text-sm text-justify indent-12">{dataCoursesId?.description}</p>
                         </div>
                       </div>
                     </div>
@@ -224,7 +245,7 @@ export const DetailKelas = () => {
                         <div className="flex flex-col gap-2">
                           <h2 className="font-bold">Tentang Kelas</h2>
                           <div className="">
-                            <p className="text-xs xl:text-sm text-justify indent-12">{dataCoursesId.description}</p>
+                            <p className="text-xs xl:text-sm text-justify indent-12">{dataCoursesId?.description}</p>
                           </div>
                         </div>
                       </div>
@@ -237,7 +258,7 @@ export const DetailKelas = () => {
                           <div className="text-sm flex gap-1 w-full lg:w-2/3 xl:w-2/3">
                             <img src={complete} alt="" className="w-6" />
                             <div className="w-full bg-birumuda-0 rounded-md">
-                              <div className="flex text-white text-center bg-biru-0 rounded-md text-sm py-1 px-2 max-w-full" style={{ width: `${completionPercentage}%` }}>
+                              <div className="flex text-white text-center bg-biru-0 rounded-md text-sm py-1 max-w-full" style={{ width: `${completionPercentage}%` }}>
                                 <h6 className="pl-2">
                                   {Math.round(completionPercentage)}%<span className="pl-1">Complete</span>
                                 </h6>
@@ -248,55 +269,39 @@ export const DetailKelas = () => {
                         {/* Materi Per chapter */}
                         <div className="flex flex-col gap-4">
                           {/* Chapter 1 */}
-                          <div className="w-full">
-                            <div className="flex flex-col gap-2">
-                              <div className="text-xs flex justify-between text-biru-0 font-semibold">
-                                <h3>Chapter 1 - Pendahuluan</h3>
-                                <span>60 Menit</span>
-                              </div>
-                              {/* Materi 1 */}
-                              <div className="text-xs flex flex-col gap-1">
-                                <div className="flex items-center justify-between py-2">
-                                  1. Tujuan Mengikuti Kelas Design System
-                                  <img src={playhijau} alt="" />
+                          {dataChapters?.map((valuedata) => (
+                            <div key={valuedata.id} className="w-full">
+                              <div className="flex flex-col gap-2">
+                                <div className="text-xs flex gap-2 justify-between text-biru-0 font-semibold">
+                                  <h3>
+                                    Chapter {valuedata.number} - {valuedata.title}
+                                  </h3>
+                                  <span>{valuedata.duration} Menit</span>
                                 </div>
-                                <div className="bg-biru-0 h-[0.1rem] w-full"></div>
-                              </div>
-                              {/* Materi 2 */}
-                              <div className="text-xs flex flex-col gap-1">
-                                <div className="flex items-center justify-between py-2">
-                                  2. Tujuan Mengikuti Kelas Design System
-                                  <img src={playungu} alt="" />
-                                </div>
-                                <div className="bg-biru-0 h-[0.1rem] w-full"></div>
+                                {/* Materi 1 */}
+                                {valuedata?.video.map((value) => (
+                                  <div key={value.id} onClick={() => handleKirimIdVideo(value?.id, valuedata.id, valuedata?.isPremium)} className={`text-xs flex flex-col gap-1 cursor-pointer `}>
+                                    <div className={`flex gap-2 items-center justify-between py-2 px-2 hover:bg-birumuda-0 rounded-md ${ActiveKelas === value.id ? "bg-birumuda-0 rounded-md" : ""}`}>
+                                      <div className="flex w-full justify-start items-center gap-2">
+                                        <h6 className="">{value.number}.</h6>
+                                        <div className="flex items-start truncate-3-lines w-full ">{value.title}</div>
+                                        {dataCheckEnrollment?.data === true || valuedata?.isPremium === false ? (
+                                          value._count.progress === 0 ? (
+                                            <img src={playgredient} alt="w-5" />
+                                          ) : (
+                                            <img src={successgreen} alt="w-5" />
+                                          )
+                                        ) : (
+                                          <img src={gembok} alt="" className="w-5"></img>
+                                        )}
+                                      </div>
+                                    </div>
+                                    <div className="border-b border-biru-0"></div>
+                                  </div>
+                                ))}
                               </div>
                             </div>
-                          </div>
-                          {/* Chapter 2 */}
-                          <div className="w-full">
-                            <div className="flex flex-col gap-2">
-                              <div className="text-xs flex justify-between text-biru-0 font-semibold">
-                                <h3>Chapter 2 - Memulai Desain</h3>
-                                <span>160 Menit</span>
-                              </div>
-                              {/* Materi 1 */}
-                              <div className="text-xs flex flex-col gap-1">
-                                <div className="flex items-center justify-between py-2">
-                                  3. Tujuan Mengikuti Kelas Design System
-                                  <img src={gembok} alt="" />
-                                </div>
-                                <div className="bg-biru-0 h-[0.1rem] w-full"></div>
-                              </div>
-                              {/* Materi 2 */}
-                              <div className="text-xs flex flex-col gap-1">
-                                <div className="flex items-center justify-between py-2">
-                                  4. Tujuan Mengikuti Kelas Design System
-                                  <img src={gembok} alt="" />
-                                </div>
-                                <div className="bg-biru-0 h-[0.1rem] w-full"></div>
-                              </div>
-                            </div>
-                          </div>
+                          ))}
                         </div>
                       </div>
                     )}
@@ -322,23 +327,35 @@ export const DetailKelas = () => {
                     {/* Materi Per chapter */}
                     <div className="flex flex-col gap-4">
                       {/* Chapter 1 */}
-                      {dataChapters.map((value) => (
-                        <div key={value.id} className="w-full ">
+                      {dataChapters?.map((valuedata) => (
+                        <div key={valuedata.id} className="w-full ">
                           <div className="flex flex-col gap-2">
                             <div className="text-xs flex gap-2 justify-between text-biru-0 font-semibold">
-                              <h3 className="">
-                                Chapter {value.number} - {value.title}
+                              <h3 className="truncate-3-lines">
+                                Chapter {valuedata.number} - {valuedata.title}
                               </h3>
-                              <span className="">{value.duration} Menit</span>
+                              <span className="">{valuedata.duration} Menit</span>
                             </div>
                             {/* Materi 1 */}
-                            {value?.video.map((value) => (
-                              <div key={value.id} onClick={() => handleKirimIdVideo(value?.id)} className="text-xs flex flex-col gap-1 cursor-pointer hover:bg-birumuda-0">
-                                <div className="flex gap-2 items-center justify-between py-2 ">
-                                  {value.id}. {value.title}
-                                  {value._count.progress === 0 ? <img src={playungu} alt="" /> : <img src={playhijau} alt="" />}
+                            {valuedata?.video.map((value) => (
+                              <div key={value.id} onClick={() => handleKirimIdVideo(value?.id, valuedata.id, valuedata?.isPremium)} className={`text-xs flex flex-col gap-1 cursor-pointer `}>
+                                <div className={`flex gap-2 items-center justify-between py-2 px-2 hover:bg-birumuda-0 rounded-md ${ActiveKelas === value.id ? "bg-birumuda-0 rounded-md" : ""}`}>
+                                  <div className="flex w-full justify-start items-center gap-2">
+                                    <h6 className="">{value.number}.</h6>
+                                    <div className="flex items-start truncate-3-lines w-full ">{value.title}</div>
+
+                                    {dataCheckEnrollment?.data === true || valuedata?.isPremium === false ? (
+                                      value._count.progress === 0 ? (
+                                        <img src={playgredient} alt="w-5" />
+                                      ) : (
+                                        <img src={successgreen} alt="w-5" />
+                                      )
+                                    ) : (
+                                      <img src={gembok} alt="" className="w-5"></img>
+                                    )}
+                                  </div>
                                 </div>
-                                <div className="bg-biru-0 h-[0.1rem] w-full"></div>
+                                <div className="border-b border-biru-0"></div>
                               </div>
                             ))}
                           </div>
@@ -351,7 +368,7 @@ export const DetailKelas = () => {
             </div>
           </div>
         </div>
-        {/* <KelasPremium /> */}
+        {ActivePremium ? <KelasPremium onClose={handleClosePremium} values={dataCoursesId} totalModul={totalModul} totalDuration={totalDuration} /> : ""}
         {/* <Onboarding /> */}
         <Footer />
       </div>

@@ -54,3 +54,19 @@ th {
 .animate-slide-up {
   animation: slide-up 0.5s ease-out;
 }
+
+/* style judul detail-kelas */
+.truncate-3-lines {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; /* Atur jumlah maksimal baris yang ingin ditampilkan */
+}
+
+/* Rating */
+input[type="radio"] {
+  display: none;
+}
+.star {
+  cursor: pointer;
+}

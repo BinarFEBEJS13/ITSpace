@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export const PencarianPageKelasSaya = () => {
   const navigate = useNavigate();
-  const [queryEnrollments, setQueryEnrollments] = useState([]);
+  const [queryEnrollments, setQueryEnrollments] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();

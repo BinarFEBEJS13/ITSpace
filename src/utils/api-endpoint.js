@@ -16,8 +16,17 @@ export const API_ENDPOINT = {
   USERS: "/users",
   // Enrollments
   MY_ENROLLMENTS: "/my-enrollments",
+  ENROLLMENTS: "/enrollments",
   // chapters
   CHAPTERS: "/courses",
   // Videos
   VIDEO: "/courses",
+  // Progress
+  PROGRESS: "/progress",
+  // Ratings
+  RATINGS: "/ratings",
+  // CHECK ENROLLMENTS
+  AUTH_CHECK_ENROLLMENT: "/auth/check-enrollment",
+  // Transactions
+  TRANSACTIONS: "/transactions",
 };

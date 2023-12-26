@@ -12,21 +12,20 @@ import user from "../svg/user.svg";
 import kursus from "../svg/course.svg";
 import { Pencarian } from "./Pencarian";
 import { NavbarMobile } from "./NavbarMobile";
-import { CookieKeys, CookieStorage } from "../../utils/cookies";
-import { useDispatch, useSelector } from "react-redux";
-import { actGetDataDecode } from "../../redux/actions/actGetDataDecode";
+import { useGetDecode } from "../../services/get-Datas-Decode";
 
 export const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [dataToggle, setDataToggle] = useState(true);
+  const [dataToggle, setDataToggle] = useState(false);
   const [activeSearch, setActiveSearch] = useState(false);
   const [activeNavbarMobile, setActiveNavbarMobile] = useState(false);
   const [activeItem, setActiveItem] = useState("");
-  const [querySearch, setQuerySearch] = useState([]);
-  const dispatch = useDispatch();
-  const decode = useSelector((state) => state.getDataDecode?.decode);
-  const [loading, setLoading] = useState(true);
+  const [querySearch, setQuerySearch] = useState("");
+
+  // console.log(CookieStorage.get(CookieKeys.RefreshToken));
+
+  const { isSuccess } = useGetDecode();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -61,15 +60,12 @@ export const Navbar = () => {
   };
 
   useEffect(() => {
-    // const getDataDecode = async () => {
-    //   await dispatch(actGetDataDecode());
-    // };
-    // getDataDecode();
+    if (isSuccess) {
+      setDataToggle(true);
+    }
+  }, [isSuccess, setDataToggle]);
 
-    // if (!loading && decode && decode.email) {
-    //   setDataToggle(true);
-    // }
-
+  useEffect(() => {
     // Mendapatkan path dari lokasi saat ini
     const path = location.pathname;
 
@@ -85,13 +81,7 @@ export const Navbar = () => {
     } else if (path === "/akun") {
       setActiveItem("akun");
     }
-  }, [location.pathname, dispatch, decode, loading]);
-
-  // useEffect(() => {
-  //   if (!loading && decode && decode.email) {
-  //     setDataToggle(true);
-  //   }
-  // }, [decode, loading]);
+  }, [location.pathname]);
 
   return (
     <>
@@ -99,8 +89,8 @@ export const Navbar = () => {
         <div className="container mx-auto h-full">
           <div className="flex h-full">
             {/* Logo ITSpace */}
-            <div className="flex sm:flex items-center w-2/6 sm:w-1/6 md:w-2/6">
-              <img src={logo} alt="" className="w-[12rem] cursor-pointer" onClick={() => navigate("/")} />
+            <div className="flex sm:flex items-center w-2/6 sm:w-1/6  md:w-2/6">
+              <img src={logo} alt="" className="w-[12rem] sm:w-5/6 md:w-5/6 lg:w-[12rem] cursor-pointer" onClick={() => navigate("/")} />
             </div>
             {/* Search Ukuran diatas sm */}
             <div className="flex items-center justify-center w-2/3 sm:w-2/6">
@@ -119,7 +109,7 @@ export const Navbar = () => {
               {/* Apbila user belum login */}
               {dataToggle ? (
                 // Kalo user sudah login
-                <div className="flex gap-4 items-center">
+                <div className="flex sm:gap-3 lg:gap-4 items-center">
                   {/* Beranda */}
                   <div className="cursor-pointer" onClick={() => handleActiveItem("beranda")}>
                     {activeItem === "beranda" ? (
@@ -212,7 +202,7 @@ export const Navbar = () => {
         </div>
       </div>
       {activeSearch ? <Pencarian onClose={handleSearch} /> : ""}
-      {activeNavbarMobile ? <NavbarMobile onClose={handleNavbarMobile} /> : ""}
+      {activeNavbarMobile ? <NavbarMobile onClose={handleNavbarMobile} isSuccessDecode={isSuccess} /> : ""}
     </>
   );
 };

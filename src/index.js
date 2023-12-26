@@ -1,11 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./assets/css/index.css";
 import "remixicon/fonts/remixicon.css";
 import { RouterList } from "./routes/RouterList";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider } from "react-redux";
 import store from "./redux/store/store";
+import { ChakraProvider } from "@chakra-ui/react";
+import "./assets/css/index.css";
 
 const queryITSpace = new QueryClient();
 
@@ -14,7 +15,9 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <QueryClientProvider client={queryITSpace}>
-        <RouterList />
+        <ChakraProvider>
+          <RouterList />
+        </ChakraProvider>
       </QueryClientProvider>
     </Provider>
   </React.StrictMode>
