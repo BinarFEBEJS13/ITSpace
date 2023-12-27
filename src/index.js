@@ -14,7 +14,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <QueryClientProvider client={queryITSpace}>
-        <RouterList />
+          <RouterList />
       </QueryClientProvider>
     </Provider>
   </React.StrictMode>

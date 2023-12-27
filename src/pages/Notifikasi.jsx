@@ -11,31 +11,21 @@ export const Notifikasi = () => {
   const navigate = useNavigate()
 
   const {data: getMyNotifications} = useGetMyNotifications()
-  if (getMyNotifications?.data) {
-    getMyNotifications.data.forEach((notification, index) => {
-      console.log(notification.id, `ini notifikasi ke-${index}`);
-    });
-  }
 
   const getNotif = getMyNotifications?.data
 
   const {mutate: putNotif} = usePutNotif()
-  console.log(putNotif, "notif put")
 
   const [clickedNotifications, setClickedNotifications] = useState([]);
 
   const handleNotificationClick = (id, index) => {
-    // Check if the notification has already been clicked
     if (!clickedNotifications.includes(index)) {
-      // Update the state to indicate that this notification has been clicked
       setClickedNotifications([...clickedNotifications, index]);
-
-      // Call the putNotif function with the notification ID
       putNotif(id);
     }
   };
 
-  const jumlahNotifikasi = getNotif ? getNotif.length - clickedNotifications.length : 0;
+  const jumlahNotifikasi = getNotif ? getNotif.filter(notif => !notif.is_read).length - clickedNotifications.length : 0;
 
   console.log(getNotif, "fernandes")
 
@@ -62,9 +52,9 @@ export const Notifikasi = () => {
               <h1 className="flex w-[90%] sm:hidden text-[1.5rem] font-extrabold">Notifikasi</h1>
             </div>
             <hr className="flex mt-3 border-[1px] sm:hidden"></hr>
-            <div className="relative flex flex-col mx-auto w-[90%] h-[100%] gap-[5.5rem] sm:gap-0 md:gap-[3rem] lg:gap-[2rem] notif sm:overflow-y-auto custom-scrollbar mt-3 mb-3">
-              {getNotif && getNotif.map((notif, index) => (
-                <div key={index} className={`relative min-h-[100px] p-1 rounded-lg flex w-full justify-start gap-8 sm:gap-0 ${clickedNotifications.includes(index) ? '' : 'bg-purple-100'}`}>
+            <div className="relative flex flex-col mx-auto w-[90%] h-[100%] gap-[2rem] sm:gap-0 md:gap-[1.5rem] lg:gap-[1rem] notif sm:overflow-y-auto custom-scrollbar mt-3 mb-3">
+              {getNotif && getNotif.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map((notif, index) => (
+                 <div key={index} className={`relative notif sm:min-h-[100px] md:min-h-[115px] min-h-[140px] p-1 rounded-lg flex w-full justify-start gap-8 sm:gap-0 ${clickedNotifications.includes(index) ? '' : `${notif?.is_read === true ? '' : 'bg-purple-100'}`}`}>
                   <div className="flex flex-row space-x-4 mt-4" onClick={() => handleNotificationClick(notif?.id, index)}>
                     <div className="flex justify-start items-center w-8 h-8 ml-1">
                       <img src={bell_notifikasi} alt=""/>
@@ -74,7 +64,6 @@ export const Notifikasi = () => {
                       <p className="font-bold w-[95%]">{notif?.message}</p>
                       <div className="flex flex-row items-center">
                         <p className="text-biru-0 mt-1">{new Date(notif?.created_at).toLocaleString()}</p>
-                        {/* <span className="w-2 h-2 rounded-full bg-red-500 mt-1 ml-2"></span> */}
                       </div>
                     </div>
                   </div>

@@ -113,23 +113,23 @@ export const Profile = () => {
         <div className="flex flex-col justify-center gap-2">
           <div className="">
             <span className="text-[12px] font-semibold">Nama</span>
-            <input id="nama" onChange={handlePutProfile} value={Nama} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan nama Anda"></input>
+            <input id="nama" onChange={handlePutProfile} value={Nama} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan nama Anda"/>
           </div>
           <div>
             <span className="text-[12px] font-semibold">Email</span>
-            <input id="email" onChange={handlePutProfile} value={Email} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan email Anda"></input>
+            <input id="email" onChange={handlePutProfile} value={Email} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan email Anda"/>
           </div>
           <div>
             <span className="text-[12px] font-semibold">Nomor Telepon</span>
-            <input id="telepon" onChange={handlePutProfile} value={Telepon} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan nomor telepon"></input>
+            <input id="telepon" onChange={handlePutProfile} value={Telepon} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan nomor telepon"/>
           </div>
           <div>
             <span className="text-[12px] font-semibold">Negara</span>
-            <input id="negara" onChange={handlePutProfile} value={Negara} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan negara Anda"></input>
+            <input id="negara" onChange={handlePutProfile} value={Negara} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan negara Anda"/>
           </div>
           <div>
             <span className="text-[12px] font-semibold">Kota</span>
-            <input id="kota" onChange={handlePutProfile} value={Kota} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan kota tempat tinggal"></input>
+            <input id="kota" onChange={handlePutProfile} value={Kota} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan kota tempat tinggal"/>
           </div>
           <div className="my-4 sm:mt-2">
             <button onClick={handleSubmit} className="w-full p-3 sm:p-2 bg-gradientkanan rounded-3xl sm:rounded-2xl text-white font-semibold text-sm tracking-[1px] hover:scale-110 transition-transform duration-300">Simpan profil saya</button>
