@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { GetUsers } from "../../redux/actions/getUsers";
 import { useGetUsersProfile } from "../../services/users/get-user-profile";
 import { useToast } from "@chakra-ui/react";
 // img
 import picture from "../img/picture.png";
-import { usePutDataUser } from "../../services/users/put-data-user";
+
 import { API_ENDPOINT } from "../../utils/api-endpoint";
 import http from "../../utils/http";
+import { useGetDataUser } from "../../services/users/get-data-user";
 
 export const Profile = () => {
-  const dispatch = useDispatch()
   const [Nama, setNama] = useState("")
   const [Email, setEmail] = useState("");
   const [Telepon, setTelepon] = useState("");
@@ -25,31 +23,23 @@ export const Profile = () => {
     setImage(file);
     setShowImage(URL.createObjectURL(file))
   }
-
-  const users = useSelector((state) => state.users.dataUsers)
-
-  // console.log(Nama, "ini nama")
-  const {data: GetUserProfile} = useGetUsersProfile()
+  
+  const { data: GetUserProfile } = useGetUsersProfile()
+  const { data: getDataUser } = useGetDataUser({ query: GetUserProfile?.data?.id })
+  console.log(getDataUser, "ini nandez")
 
   console.log(GetUserProfile?.data?.id, "coba");
 
-  const getDataUsers = async () => {
-    const userDatas = await dispatch(GetUsers(GetUserProfile?.data?.id));
-  }
-  
   useEffect(() => {
-    getDataUsers()
-    setShowImage(users?.profile?.profilePicture);
-    setNama(users?.profile?.name);
-    setEmail(users?.email);
-    setTelepon(users?.profile?.phoneNumber);
-    setNegara(users?.profile?.country);
-    setKota(users?.profile?.city);
-  }, [dispatch])
+    setShowImage(getDataUser?.data?.profile?.profilePicture);
+    setNama(getDataUser?.data?.profile?.name);
+    setEmail(getDataUser?.data?.email);
+    setTelepon(getDataUser?.data?.profile?.phoneNumber);
+    setNegara(getDataUser?.data?.profile?.country);
+    setKota(getDataUser?.data.profile?.city);
+  }, [getDataUser])
 
-  // console.log(users?.profile?.location, "kota apa");
-
-  const { mutate: PutDataUser } = usePutDataUser(GetUserProfile?.data?.id);
+  console.log(getDataUser?.data?.profile?.name, "bang nandez");
 
   const handlePutProfile = (e) => {
     if (e) {
@@ -83,7 +73,7 @@ export const Profile = () => {
     formData.append('city', Kota);
 
     try {
-      const response = await http.put(`${API_ENDPOINT.PUT_USER}/${GetUserProfile?.data?.id}`, formData, {
+      const response = await http.put(`${API_ENDPOINT.PUT_USER}/${getDataUser?.data?.id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -118,23 +108,23 @@ export const Profile = () => {
         <div className="flex flex-col justify-center gap-2">
           <div className="">
             <span className="text-[12px] font-semibold">Nama</span>
-            <input id="nama" onChange={handlePutProfile} value={Nama} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan nama Anda"/>
+            <input id="nama" onChange={handlePutProfile} value={Nama || ""} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan nama Anda"/>
           </div>
           <div>
             <span className="text-[12px] font-semibold">Email</span>
-            <input id="email" onChange={handlePutProfile} value={Email} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan email Anda"/>
+            <input id="email" onChange={handlePutProfile} value={Email || ""} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan email Anda"/>
           </div>
           <div>
             <span className="text-[12px] font-semibold">Nomor Telepon</span>
-            <input id="telepon" onChange={handlePutProfile} value={Telepon} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan nomor telepon"/>
+            <input id="telepon" onChange={handlePutProfile} value={Telepon || ""} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan nomor telepon"/>
           </div>
           <div>
             <span className="text-[12px] font-semibold">Negara</span>
-            <input id="negara" onChange={handlePutProfile} value={Negara} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan negara Anda"/>
+            <input id="negara" onChange={handlePutProfile} value={Negara || ""} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan negara Anda"/>
           </div>
           <div>
             <span className="text-[12px] font-semibold">Kota</span>
-            <input id="kota" onChange={handlePutProfile} value={Kota} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan kota tempat tinggal"/>
+            <input id="kota" onChange={handlePutProfile} value={Kota || ""} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan kota tempat tinggal"/>
           </div>
           <div className="my-4 sm:mt-2">
             <button onClick={handleSubmit} className="w-full p-3 sm:p-2 bg-gradientkanan rounded-3xl sm:rounded-2xl text-white font-semibold text-sm tracking-[1px] hover:scale-110 transition-transform duration-300">Simpan profil saya</button>
