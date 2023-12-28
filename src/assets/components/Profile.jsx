@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GetUsers } from "../../redux/actions/getUsers";
 import { useGetUsersProfile } from "../../services/users/get-user-profile";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useToast } from "@chakra-ui/react";
 // img
 import picture from "../img/picture.png";
 import { usePutDataUser } from "../../services/users/put-data-user";
@@ -19,6 +18,7 @@ export const Profile = () => {
   const [Kota, setKota] = useState("");
   const [Image, setImage] = useState(null);
   const [showImage, setShowImage] = useState();
+  const toast =useToast()
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -91,7 +91,12 @@ export const Profile = () => {
 
       if (response.status === 201) {
         console.log('Image uploaded successfully!');
-        // Reset the form or do any other necessary actions
+        toast({
+          title: "Profil Berhasil Diperbarui",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
       } else {
         console.error('Image upload failed.');
       }
@@ -103,9 +108,9 @@ export const Profile = () => {
   return (
     <div className="flex justify-center">
       <div className="flex flex-col justify-center ml-0 sm:ml-4 mt-[1rem] mobile sm:mt-4 w-[23rem] sm:w-[18rem] px-5">
-        <div class="w-[90px] h-[90px] mt-auto mx-auto relative bg-white rounded-full outline-ungu-0">
+        <div className="w-[90px] h-[90px] mt-auto mx-auto relative bg-white rounded-full outline-ungu-0">
           <img className="rounded-full object-cover object-center" src={showImage} alt=""/>
-          <div class="absolute bottom-0 right-0 bg-white w-6 h-6 flex items-center justify-center rounded-md overflow-hidden cursor-pointer">
+          <div className="absolute bottom-0 right-0 bg-white w-6 h-6 flex items-center justify-center rounded-md overflow-hidden cursor-pointer">
               <input id="image" type="file" onChange={handleImageChange} accept="image/*" className="absolute transform scale-200 opacity-0 cursor-pointer"/>
               <img className="w-4 h-4 fill-white" src={picture} alt=""></img>
           </div>
@@ -136,7 +141,6 @@ export const Profile = () => {
           </div>
         </div>
       </div>
-      <ToastContainer/>
     </div>
   );
 };

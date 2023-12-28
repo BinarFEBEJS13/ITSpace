@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { useChangePassword } from "../../services/auth/change_password";
+import { useToast } from "@chakra-ui/react";
 
 export const UbahPassword = () => {
   const [oldPassword, setOldPassword] = useState("");
@@ -10,6 +11,8 @@ export const UbahPassword = () => {
   const [oldPass, setOldPass] = useState("");
   const [newPass, setNewPass] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
+
+  const toast = useToast()
 
   const toggleOldPassword = () => {
     setOldPass(!oldPass);
@@ -21,7 +24,7 @@ export const UbahPassword = () => {
     setConfirmPass(!confirmPass);
   };
 
-  const { mutate: changePassword } = useChangePassword();
+  const { mutate: changePassword, isSuccess, error } = useChangePassword();
 
   const handleChangePass = (e) => {
     if (e) {
@@ -41,15 +44,42 @@ export const UbahPassword = () => {
   console.log(newPassword, "New Password");
   console.log(confirmPassword, "Confirm Password");
 
-  const changePass = async () => {
-    try {
-      await changePassword({
+  useEffect(() => {
+    if (isSuccess) {
+    toast({
+      title: "Berhasil",
+      description: "Password berhasil diubah.",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+  } else if (error) {
+    if (error.response && error.response.status === 400) {
+      toast({
+        title: "Error",
+        description: "Harap isi semua kolom.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }
+  }, [isSuccess, error, toast]);
+
+  const changePass =  () => {
+    changePassword({
         oldPassword: oldPassword,
         newPassword: newPassword,
         newPasswordValidation: confirmPassword,
       });
-    } catch (error) {
-    }
   };
 
   return (
@@ -60,17 +90,9 @@ export const UbahPassword = () => {
         </h2>
         <div className="flex flex-col justify-center gap-2 mt-3">
           <div className="space-y-1">
-            <span className="text-[12px] sm:text-[11px] font-semibold">
-              Masukkan Password Lama
-            </span>
+            <span className="text-[12px] sm:text-[11px] font-semibold">Masukkan Password Lama</span>
             <div className="flex items-center justify-end">
-              <input
-                id="oldPassword"
-                onChange={handleChangePass}
-                type={oldPass === false ? "text" : "password"}
-                className="w-full bg-white p-3 sm:p-2 text-[12px] rounded-xl shadow-lg shadow-gray-200 outline outline-none outline-[1.5px] placeholder:text-[12px] sm:placeholder:text-[10px]"
-                placeholder="Masukkan Password Lama"
-              ></input>
+              <input id="oldPassword" onChange={handleChangePass} type={oldPass === false ? "text" : "password"} className="w-full bg-white p-3 sm:p-2 text-[12px] rounded-xl shadow-lg shadow-gray-200 outline outline-none outline-[1.5px] placeholder:text-[12px] sm:placeholder:text-[10px]" placeholder="Masukkan Password Lama"></input>
               <span className="absolute mr-3 text-ungu-0 text-[20px]">
                 {oldPass === false ? (
                   <AiFillEyeInvisible onClick={toggleOldPassword} />
@@ -81,17 +103,9 @@ export const UbahPassword = () => {
             </div>
           </div>
           <div className="space-y-1">
-            <span className="text-[12px] sm:text-[11px] font-semibold">
-              Masukkan Password Baru
-            </span>
+            <span className="text-[12px] sm:text-[11px] font-semibold">Masukkan Password Baru</span>
             <div className="flex items-center justify-end">
-              <input
-                id="newPassword"
-                onChange={handleChangePass}
-                type={newPass === false ? "text" : "password"}
-                className="w-full bg-white p-3 sm:p-2 text-[12px] rounded-xl shadow-lg shadow-gray-200 outline outline-none outline-[1.5px] placeholder:text-[12px] sm:placeholder:text-[10px]"
-                placeholder="Masukkan Password Baru"
-              ></input>
+              <input id="newPassword" onChange={handleChangePass} type={newPass === false ? "text" : "password"} className="w-full bg-white p-3 sm:p-2 text-[12px] rounded-xl shadow-lg shadow-gray-200 outline outline-none outline-[1.5px] placeholder:text-[12px] sm:placeholder:text-[10px]" placeholder="Masukkan Password Baru"></input>
               <span className="absolute mr-3 text-ungu-0 text-[20px]">
                 {newPass === false ? (
                   <AiFillEyeInvisible onClick={toggleNewPassword} />
@@ -102,17 +116,9 @@ export const UbahPassword = () => {
             </div>
           </div>
           <div className="space-y-1">
-            <span className="text-[12px] sm:text-[11px] font-semibold">
-              Ulangi Password Baru
-            </span>
+            <span className="text-[12px] sm:text-[11px] font-semibold">Ulangi Password Baru</span>
             <div className="flex items-center justify-end">
-              <input
-                id="newPasswordValidation"
-                onChange={handleChangePass}
-                type={confirmPass === false ? "text" : "password"}
-                className="w-full bg-white p-3 sm:p-2 text-[12px] rounded-xl shadow-lg shadow-gray-200 outline outline-none outline-[1.5px] placeholder:text-[12px] sm:placeholder:text-[10px]"
-                placeholder="Ulangi Password Baru"
-              ></input>
+              <input id="newPasswordValidation" onChange={handleChangePass} type={confirmPass === false ? "text" : "password"} className="w-full bg-white p-3 sm:p-2 text-[12px] rounded-xl shadow-lg shadow-gray-200 outline outline-none outline-[1.5px] placeholder:text-[12px] sm:placeholder:text-[10px]" placeholder="Ulangi Password Baru"></input>
               <span className="absolute mr-3 text-ungu-0 text-[20px]">
                 {confirmPass === false ? (
                   <AiFillEyeInvisible onClick={toggleConfirmPassword} />
@@ -123,12 +129,7 @@ export const UbahPassword = () => {
             </div>
           </div>
           <div className="mt-[2rem] sm:mt-4">
-            <button
-              onClick={() => {
-                changePass();
-              }}
-              className="w-full p-3 sm:p-2 bg-gradientkanan rounded-2xl text-white font-semibold text-[12px] tracking-[1px] shadow-lg shadow-gray-200 hover:scale-110 transition-transform duration-300"
-            >
+            <button onClick={() => {changePass()}} className="w-full p-3 sm:p-2 bg-gradientkanan rounded-2xl text-white font-semibold text-[12px] tracking-[1px] shadow-lg shadow-gray-200 hover:scale-110 transition-transform duration-300">
               Ubah Password
             </button>
           </div>

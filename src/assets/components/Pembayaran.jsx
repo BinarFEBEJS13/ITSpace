@@ -1,5 +1,4 @@
 import React from "react";
-import imagepayment from "../img/image_payment.png";
 
 // svg
 import star from "../svg/star.svg";
@@ -18,14 +17,12 @@ export const Pembayaran = () => {
   const getNewTransactions = getTransactions ? getTransactions.map((transaction) => transaction.id) : [];
   console.log(getNewTransactions, "new trans")
 
-  const susuMurniNasional = (idCOurse, idTransaksi, isDone) => {
+  const sendDataTransactions = (idCourse, idTransaksi, isDone) => {
     if (isDone === true) {
       console.log(isDone, "fernandes")
     } else {
-      window.location.href = `/payment/${idCOurse}/${idTransaksi}`;
+      window.location.href = `/payment/${idCourse}/${idTransaksi}`;
     }
-    // console.log(idCOurse, "idcourse")
-    // console.log(idTransaksi, "idTransaksi");
   }
 
   console.log(getTransactions, "ini pembayaran")
@@ -43,7 +40,7 @@ export const Pembayaran = () => {
                   <p>{transactions?.course?.courseCategory[0]?.category?.name}</p>
                   <div className="flex justify-center items-center w-10 h-4 bg-[#6148FF] rounded-lg">
                     <img src={star} alt=""></img>
-                    <p className="text-white">{transactions?.course?.rate !== null ? transactions?.course?.rate: '0.0'}</p>
+                    <p className="text-white">{transactions?.course?.rate !== null ? transactions?.course?.rate.toFixed(1) : '0.0'}</p>
                   </div>
                 </div>
                 <p className="text-[10px] font-bold">
@@ -66,7 +63,7 @@ export const Pembayaran = () => {
                 </div>
               </div>
                 <div className="flex justify-center">
-                  <div onClick={() => susuMurniNasional(transactions?.courseId, transactions?.id, transactions?.payDone)} className={`flex justify-center space-x-1 rounded-md items-center w-[16rem] h-4 sm:w-[14rem] sm:h-3 ${transactions?.payDone ? 'bg-green-400' : 'bg-merah-0'} text-white my-2 sm:mt-1 cursor-pointer`}>
+                  <div onClick={() => sendDataTransactions(transactions?.courseId, transactions?.id, transactions?.payDone)} className={`flex justify-center space-x-1 rounded-md items-center w-[16rem] h-4 sm:w-[14rem] sm:h-3 ${transactions?.payDone ? 'bg-green-400' : 'bg-merah-0'} text-white my-2 sm:mt-1 cursor-pointer`}>
                     <img className="w-2 h-2" src={diamond} alt="" />
                     <p className="text-[8px]">
                       {transactions?.payDone ? "Paid" : "Waiting for payment"}
