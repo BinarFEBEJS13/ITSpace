@@ -3,7 +3,6 @@ import { API_ENDPOINT } from "../../utils/api-endpoint";
 import http from "../../utils/http";
 
 const getDataUser = async ({ query }) => {
-    console.log(query, "ini query nandez")
   const { data } = await http.get(`${API_ENDPOINT.USERS_ID}/${query}`).then((result) => {
       return result;
     })

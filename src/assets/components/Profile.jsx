@@ -26,9 +26,6 @@ export const Profile = () => {
   
   const { data: GetUserProfile } = useGetUsersProfile()
   const { data: getDataUser } = useGetDataUser({ query: GetUserProfile?.data?.id })
-  console.log(getDataUser, "ini nandez")
-
-  console.log(GetUserProfile?.data?.id, "coba");
 
   useEffect(() => {
     setShowImage(getDataUser?.data?.profile?.profilePicture);
@@ -38,8 +35,6 @@ export const Profile = () => {
     setNegara(getDataUser?.data?.profile?.country);
     setKota(getDataUser?.data.profile?.city);
   }, [getDataUser])
-
-  console.log(getDataUser?.data?.profile?.name, "bang nandez");
 
   const handlePutProfile = (e) => {
     if (e) {
