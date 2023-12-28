@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GetUsers } from "../../redux/actions/getUsers";
 import { useGetUsersProfile } from "../../services/users/get-user-profile";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useToast } from "@chakra-ui/react";
 // img
 import picture from "../img/picture.png";
 import { usePutDataUser } from "../../services/users/put-data-user";
@@ -19,6 +18,7 @@ export const Profile = () => {
   const [Kota, setKota] = useState("");
   const [Image, setImage] = useState(null);
   const [showImage, setShowImage] = useState();
+  const toast =useToast()
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -91,7 +91,12 @@ export const Profile = () => {
 
       if (response.status === 201) {
         console.log('Image uploaded successfully!');
-        // Reset the form or do any other necessary actions
+        toast({
+          title: "Profil Berhasil Diperbarui",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
       } else {
         console.error('Image upload failed.');
       }
@@ -103,9 +108,9 @@ export const Profile = () => {
   return (
     <div className="flex justify-center">
       <div className="flex flex-col justify-center ml-0 sm:ml-4 mt-[1rem] mobile sm:mt-4 w-[23rem] sm:w-[18rem] px-5">
-        <div class="w-[90px] h-[90px] mt-auto mx-auto relative bg-white rounded-full outline-ungu-0">
+        <div className="w-[90px] h-[90px] mt-auto mx-auto relative bg-white rounded-full outline-ungu-0">
           <img className="rounded-full object-cover object-center" src={showImage} alt=""/>
-          <div class="absolute bottom-0 right-0 bg-white w-6 h-6 flex items-center justify-center rounded-md overflow-hidden cursor-pointer">
+          <div className="absolute bottom-0 right-0 bg-white w-6 h-6 flex items-center justify-center rounded-md overflow-hidden cursor-pointer">
               <input id="image" type="file" onChange={handleImageChange} accept="image/*" className="absolute transform scale-200 opacity-0 cursor-pointer"/>
               <img className="w-4 h-4 fill-white" src={picture} alt=""></img>
           </div>
@@ -113,30 +118,29 @@ export const Profile = () => {
         <div className="flex flex-col justify-center gap-2">
           <div className="">
             <span className="text-[12px] font-semibold">Nama</span>
-            <input id="nama" onChange={handlePutProfile} value={Nama} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan nama Anda"></input>
+            <input id="nama" onChange={handlePutProfile} value={Nama} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan nama Anda"/>
           </div>
           <div>
             <span className="text-[12px] font-semibold">Email</span>
-            <input id="email" onChange={handlePutProfile} value={Email} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan email Anda"></input>
+            <input id="email" onChange={handlePutProfile} value={Email} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan email Anda"/>
           </div>
           <div>
             <span className="text-[12px] font-semibold">Nomor Telepon</span>
-            <input id="telepon" onChange={handlePutProfile} value={Telepon} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan nomor telepon"></input>
+            <input id="telepon" onChange={handlePutProfile} value={Telepon} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan nomor telepon"/>
           </div>
           <div>
             <span className="text-[12px] font-semibold">Negara</span>
-            <input id="negara" onChange={handlePutProfile} value={Negara} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan negara Anda"></input>
+            <input id="negara" onChange={handlePutProfile} value={Negara} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan negara Anda"/>
           </div>
           <div>
             <span className="text-[12px] font-semibold">Kota</span>
-            <input id="kota" onChange={handlePutProfile} value={Kota} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan kota tempat tinggal"></input>
+            <input id="kota" onChange={handlePutProfile} value={Kota} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan kota tempat tinggal"/>
           </div>
           <div className="my-4 sm:mt-2">
             <button onClick={handleSubmit} className="w-full p-3 sm:p-2 bg-gradientkanan rounded-3xl sm:rounded-2xl text-white font-semibold text-sm tracking-[1px] hover:scale-110 transition-transform duration-300">Simpan profil saya</button>
           </div>
         </div>
       </div>
-      <ToastContainer/>
     </div>
   );
 };

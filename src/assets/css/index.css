@@ -47,7 +47,8 @@ html::-webkit-scrollbar-thumb {
   }
 
   .notif {
-    @apply gap-[5rem]
+    @apply gap-[3rem] 
+    min-h-[150px]
   }
 
   .transaction {
