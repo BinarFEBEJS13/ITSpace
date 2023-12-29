@@ -23,8 +23,6 @@ export const Navbar = () => {
   const [activeItem, setActiveItem] = useState("");
   const [querySearch, setQuerySearch] = useState("");
 
-  // console.log(CookieStorage.get(CookieKeys.RefreshToken));
-
   const { isSuccess } = useGetDecode();
 
   const handleSubmit = (e) => {
@@ -85,9 +83,9 @@ export const Navbar = () => {
 
   return (
     <>
-      <div className="w-screen h-20 bg-gradientkanan px-4 sm:px-12">
+      <div className="w-screen h-20 bg-gradientkanan ">
         <div className="container mx-auto h-full">
-          <div className="flex h-full">
+          <div className="flex h-full px-6 sm:px-12">
             {/* Logo ITSpace */}
             <div className="flex sm:flex items-center w-2/6 sm:w-1/6  md:w-2/6">
               <img src={logo} alt="" className="w-[12rem] sm:w-5/6 md:w-5/6 lg:w-[12rem] cursor-pointer" onClick={() => navigate("/")} />

@@ -33,11 +33,10 @@ import { Rating } from "../assets/components/Rating";
 export const DetailKelas = () => {
   const toast = useToast();
   const { courseId } = useParams();
-  const [chaptersId, setchaptersId] = useState(1);
-  const [videoId, setVideoId] = useState(1);
+  const [chaptersId, setchaptersId] = useState(null);
+  const [videoId, setVideoId] = useState(null);
   const [UrlVideos, setUrlVideos] = useState("");
   const navigate = useNavigate();
-  const [ActiveKelas, setActiveKelas] = useState(null);
   const [ActivePremium, setActivePremium] = useState(false);
   const [toggleKelas, setToggleKelas] = useState("tentang");
 
@@ -54,7 +53,7 @@ export const DetailKelas = () => {
   const { data: dataCheckEnrollment } = useGetDataCheckEnrollment({ query: courseId });
 
   const { mutate: postProgress } = useDataProgress();
-  const { mutate: postEnrollments, data: dataPostEnrollments } = useDataEnrollments();
+  const { mutate: postEnrollments } = useDataEnrollments();
 
   const { data: dataDecode } = useGetDecode();
 
@@ -87,7 +86,6 @@ export const DetailKelas = () => {
     if (dataCheckEnrollment?.data === true || cekPremium === false) {
       setVideoId(vidId);
       setchaptersId(chptId);
-      setActiveKelas(vidId);
       postProgress({
         videoId: vidId,
       });
@@ -113,26 +111,21 @@ export const DetailKelas = () => {
 
   useEffect(() => {
     setUrlVideos(datavideoId?.url);
+  }, [datavideoId]);
 
-    if (dataPostEnrollments?.data?.success) {
-      toast({
-        title: "Berhasil",
-        description: "Kursus telah disimpan ke dalam kelas",
-        duration: 3000,
-        status: "success",
-        position: "top-right",
-      });
-    }
-  }, [datavideoId?.url, dataPostEnrollments, toast]);
+  useEffect(() => {
+    setchaptersId(dataChapters?.map((chpt) => chpt?.id)[0]);
+    setVideoId(dataChapters?.map((chpt) => chpt?.video)[0]?.map((vid) => vid?.id)[0]);
+  }, [dataChapters]);
 
   return (
     <>
       <div className="overflow-x-hidden ">
         <Navbar />
         {/* Button arrow kelas lainnnya */}
-        <div className="w-screen px-6 sm:px-12 pt-4 sm:pt-8">
+        <div className="w-screen ">
           <div className="container mx-auto">
-            <div className="">
+            <div className="px-6 sm:px-12 pt-4 sm:pt-8">
               <button onClick={() => navigate("/kursus/all")} className="flex gap-2 font-semibold items-center">
                 <img src={arrow} alt="" />
                 Kelas Lainnya
@@ -141,9 +134,9 @@ export const DetailKelas = () => {
           </div>
         </div>
         {/* Detail kelas */}
-        <div className="w-screen px-4 sm:px-12 py-4 sm:py-8">
+        <div className="w-screen">
           <div className="container mx-auto">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 px-4 sm:px-12 py-4 sm:py-8">
               <div className="flex gap-8">
                 {/* Kelas*/}
                 <div className="w-full sm:w-4/6 xl:w-8/12 flex flex-col gap-4">
@@ -196,19 +189,30 @@ export const DetailKelas = () => {
                       </div>
                       {/* Button Grup Tele, Join Kelas, Rating*/}
                       <div className={`${dataDecode?.message === "jwt verify succes" ? "flex flex-wrap w-full gap-2 text-xs xl:text-sm" : "hidden"}  `}>
-                        <button className="bg-[#2AABEE] rounded-md px-4 py-1 text-white text-xs xl:text-sm flex gap-2 items-center">
-                          <a href={"https://t.me/+lWAndrPmRvdlZWY1"} target="_blank" rel="noopener noreferrer" className="flex gap-1  items-center">
-                            Gabung Grup Telegram
+                        <button
+                          className={`${dataCoursesId?.groupUrl === undefined ? "opacity-50 cursor-not-allowed" : ""} bg-[#2AABEE] rounded-md px-4 py-1 text-white text-xs xl:text-sm flex gap-2 items-center`}
+                          disabled={dataCoursesId?.groupUrl === undefined}
+                        >
+                          <a href={dataCoursesId?.groupUrl} target="_blank" rel="noopener noreferrer" className="flex gap-1  items-center">
                             <img src={tele} alt="telegram" className="w-5" />
+                            Gabung Grup Telegram
                           </a>
                         </button>
-                        <button onClick={() => handleSimpanKelas()} className={`${dataCoursesId?.isPremium === true ? "hidden" : "bg-hijau-0 rounded-md px-4 py-1 text-white text-xs xl:text-sm flex gap-1 items-center"} `}>
-                          Simpan Kelas
-                          <img src={simpankelas} alt="simpankelas" />
+                        <button
+                          onClick={() => handleSimpanKelas()}
+                          className={`${
+                            dataCoursesId?.isPremium === true ? "hidden" : `${dataCheckEnrollment?.data === true ? "opacity-50 cursor-not-allowed" : ""} bg-hijau-0 rounded-md px-4 py-1 text-white text-xs xl:text-sm flex gap-1 items-center`
+                          } `}
+                          disabled={dataCheckEnrollment?.data === true}
+                        >
+                          <img src={simpankelas} alt="simpankelas" /> Simpan Kelas
                         </button>
-                        <button className="bg-yellow-500 rounded-md px-4 py-1 text-white text-xs xl:text-sm flex gap-1 items-center">
-                          <Rating courseId={courseId} />
+                        <button
+                          className={`${dataCheckEnrollment?.data === false ? "opacity-50 cursor-not-allowed" : ""} bg-yellow-500 rounded-md px-4 py-1 text-white text-xs xl:text-sm flex gap-1 items-center`}
+                          disabled={dataCheckEnrollment?.data === false}
+                        >
                           <img src={rating} alt="rating" />
+                          <Rating courseId={courseId} />
                         </button>
                       </div>
                     </div>
@@ -257,7 +261,7 @@ export const DetailKelas = () => {
                           <h2 className="w-full lg:w-1/2 xl:w-1/3 font-bold">Materi Belajar</h2>
                           <div className="text-sm flex gap-1 w-full lg:w-2/3 xl:w-2/3">
                             <img src={complete} alt="" className="w-6" />
-                            <div className="w-full bg-birumuda-0 rounded-md">
+                            <div className="w-full bg-biru-0 bg-opacity-20 rounded-md">
                               <div className="flex text-white text-center bg-biru-0 rounded-md text-sm py-1 max-w-full" style={{ width: `${completionPercentage}%` }}>
                                 <h6 className="pl-2">
                                   {Math.round(completionPercentage)}%<span className="pl-1">Complete</span>
@@ -281,18 +285,24 @@ export const DetailKelas = () => {
                                 {/* Materi 1 */}
                                 {valuedata?.video.map((value) => (
                                   <div key={value.id} onClick={() => handleKirimIdVideo(value?.id, valuedata.id, valuedata?.isPremium)} className={`text-xs flex flex-col gap-1 cursor-pointer `}>
-                                    <div className={`flex gap-2 items-center justify-between py-2 px-2 hover:bg-birumuda-0 rounded-md ${ActiveKelas === value.id ? "bg-birumuda-0 rounded-md" : ""}`}>
+                                    <div className={`flex gap-2 items-center justify-between py-2 px-2 hover:bg-birumuda-0 rounded-md ${videoId === value.id ? "bg-birumuda-0 rounded-md" : ""}`}>
                                       <div className="flex w-full justify-start items-center gap-2">
                                         <h6 className="">{value.number}.</h6>
                                         <div className="flex items-start truncate-3-lines w-full ">{value.title}</div>
-                                        {dataCheckEnrollment?.data === true || valuedata?.isPremium === false ? (
-                                          value._count.progress === 0 ? (
-                                            <img src={playgredient} alt="w-5" />
+                                        {valuedata?.isPremium === true ? (
+                                          dataCheckEnrollment?.data === true ? (
+                                            value._count.progress === 0 ? (
+                                              <img src={playgredient} alt="w-5" />
+                                            ) : (
+                                              <img src={successgreen} alt="w-5" />
+                                            )
                                           ) : (
-                                            <img src={successgreen} alt="w-5" />
+                                            <img src={gembok} alt="" className="w-5"></img>
                                           )
+                                        ) : value._count.progress === 0 ? (
+                                          <img src={playgredient} alt="w-5" />
                                         ) : (
-                                          <img src={gembok} alt="" className="w-5"></img>
+                                          <img src={successgreen} alt="w-5" />
                                         )}
                                       </div>
                                     </div>
@@ -315,7 +325,7 @@ export const DetailKelas = () => {
                       <h2 className="w-full lg:w-1/2 xl:w-1/3 font-bold">Materi Belajar</h2>
                       <div className="text-sm flex gap-1 w-full lg:w-2/3 xl:w-2/3">
                         <img src={complete} alt="" className="w-6" />
-                        <div className="w-full bg-birumuda-0 rounded-md">
+                        <div className="w-full bg-biru-0 bg-opacity-20 rounded-md">
                           <div className="flex text-white text-center bg-biru-0 rounded-md text-sm py-1 max-w-full" style={{ width: `${completionPercentage}%` }}>
                             <h6 className="pl-2">
                               {Math.round(completionPercentage)}%<span className="pl-1">Complete</span>
@@ -339,19 +349,24 @@ export const DetailKelas = () => {
                             {/* Materi 1 */}
                             {valuedata?.video.map((value) => (
                               <div key={value.id} onClick={() => handleKirimIdVideo(value?.id, valuedata.id, valuedata?.isPremium)} className={`text-xs flex flex-col gap-1 cursor-pointer `}>
-                                <div className={`flex gap-2 items-center justify-between py-2 px-2 hover:bg-birumuda-0 rounded-md ${ActiveKelas === value.id ? "bg-birumuda-0 rounded-md" : ""}`}>
+                                <div className={`flex gap-2 items-center justify-between py-2 px-2 hover:bg-birumuda-0 rounded-md ${videoId === value.id ? "bg-birumuda-0 rounded-md" : ""}`}>
                                   <div className="flex w-full justify-start items-center gap-2">
                                     <h6 className="">{value.number}.</h6>
-                                    <div className="flex items-start truncate-3-lines w-full ">{value.title}</div>
-
-                                    {dataCheckEnrollment?.data === true || valuedata?.isPremium === false ? (
-                                      value._count.progress === 0 ? (
-                                        <img src={playgredient} alt="w-5" />
+                                    <div className="flex items-start truncate-3-lines w-full">{value.title}</div>
+                                    {valuedata?.isPremium === true ? (
+                                      dataCheckEnrollment?.data === true ? (
+                                        value._count.progress === 0 ? (
+                                          <img src={playgredient} alt="w-5" />
+                                        ) : (
+                                          <img src={successgreen} alt="w-5" />
+                                        )
                                       ) : (
-                                        <img src={successgreen} alt="w-5" />
+                                        <img src={gembok} alt="" className="w-5"></img>
                                       )
+                                    ) : value._count.progress === 0 ? (
+                                      <img src={playgredient} alt="w-5" />
                                     ) : (
-                                      <img src={gembok} alt="" className="w-5"></img>
+                                      <img src={successgreen} alt="w-5" />
                                     )}
                                   </div>
                                 </div>

@@ -5,7 +5,7 @@ import { useDataRatings } from "../../services/post-Datas-ratings";
 
 export const Rating = ({ courseId }) => {
   const toast = useToast();
-  const OverlayOne = () => <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />;
+  const OverlayOne = () => <ModalOverlay bg="blackAlpha.800" backdropFilter="blur(10px)" />;
 
   const [Rating, setRating] = useState(null);
   const [Hover, setHover] = useState(null);

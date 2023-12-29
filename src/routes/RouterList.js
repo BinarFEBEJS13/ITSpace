@@ -19,6 +19,12 @@ import { Kursus } from "../pages/Kursus";
 import AdminLogin from "../pages/Admin/Login";
 import { Checkout } from "../pages/Checkout";
 import { Payment } from "../pages/Payment";
+import { Frontend } from "../pages/category/Frontend";
+import { UIUX } from "../pages/category/UIUX";
+import { Backend } from "../pages/category/Backend";
+import { Database } from "../pages/category/Database";
+import { MachineLearning } from "../pages/category/MachineLearning";
+import { DataScience } from "../pages/category/DataScience";
 
 export const RouterList = () => {
   return (
@@ -37,7 +43,7 @@ export const RouterList = () => {
         <Route path="/premium" element={<KelasPremium />}></Route>
         <Route path="/checkout/:courseId" element={<Checkout />}></Route>
         <Route path="/payment/:courseId/:idTransactions" element={<Payment />}></Route>
-        <Route path="/success" element={<Success />}></Route>
+        <Route path="/success/payment/:courseId/:idTransactions" element={<Success />}></Route>
         <Route path="/akun" element={<Akun />}></Route>
         <Route path="/akun/profile" element={<AkunProfile />}></Route>
         <Route path="/akun/change-password" element={<AkunPassword />}></Route>
@@ -46,6 +52,14 @@ export const RouterList = () => {
         {/* Route Admin */}
         <Route path="/admin/login" element={<AdminLogin />}></Route>
         <Route path="/admin/dashboard" element={<Dashboard />}></Route>
+
+        {/* category page */}
+        <Route path="/category/uiux" element={<UIUX />}></Route>
+        <Route path="/category/frontend" element={<Frontend />}></Route>
+        <Route path="/category/backend" element={<Backend />}></Route>
+        <Route path="/category/database" element={<Database />}></Route>
+        <Route path="/category/machinelearning" element={<MachineLearning />}></Route>
+        <Route path="/category/datascience" element={<DataScience />}></Route>
       </Routes>
     </BrowserRouter>
   );

@@ -7,13 +7,8 @@ import clock from "../svg/clock.svg";
 import diamond from "../svg/diamond.svg";
 // svg premium
 import arrow from "../svg/arrow-right-white.svg";
-import { useNavigate } from "react-router-dom";
 
 export const KelasPremium = ({ onClose, values, totalModul, totalDuration }) => {
-  const navigate = useNavigate();
-
-  console.log(values);
-
   return (
     <>
       <div className="fixed inset-0 z-50 bg-black bg-opacity-90 flex justify-center items-center">

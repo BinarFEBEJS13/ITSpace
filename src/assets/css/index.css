@@ -62,6 +62,12 @@ th {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2; /* Atur jumlah maksimal baris yang ingin ditampilkan */
 }
+.truncate-2-lines {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1; /* Atur jumlah maksimal baris yang ingin ditampilkan */
+}
 
 /* Rating */
 input[type="radio"] {

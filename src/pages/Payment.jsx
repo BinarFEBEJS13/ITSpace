@@ -20,6 +20,9 @@ import bri from "../assets/img/payment/virtual-account/bri.png";
 import mandiri from "../assets/img/payment/virtual-account/mandiri.png";
 import { useParams } from "react-router-dom";
 import { useGetDataTransactionsId } from "../services/get-Datas-Transactions";
+import { ExpirationPayment } from "../assets/components/HandleErrorPage/ExpirationPayment";
+import { usePutTransactions } from "../services/put-Datas-transactions";
+import { useGetDecode } from "../services/get-Datas-Decode";
 
 export const Payment = () => {
   const { courseId, idTransactions } = useParams();
@@ -30,6 +33,8 @@ export const Payment = () => {
   const { data: getDataTransactions } = useGetDataTransactionsId({
     query: idTransactions,
   });
+  const { mutate: putTransactions, isSuccess } = usePutTransactions();
+  const { data: getDataDecode } = useGetDecode();
 
   // Convert Tanggal dan Jam
   const timestamp = getDataTransactions?.data?.expirationDate;
@@ -50,8 +55,6 @@ export const Payment = () => {
     return currentDateTime > expirationDateTime;
   };
 
-  console.log(isExpired());
-
   // Handle Total Pembayaran
   const [Ppn, setPpn] = useState(0);
   useEffect(() => {
@@ -64,33 +67,30 @@ export const Payment = () => {
   const totalPembayaran = getDataTransactions?.data?.course?.price ? Number(getDataTransactions?.data?.course?.price) + Ppn : 0;
 
   // Handle Buat Pesanan
-  const handleBuatPesanan = () => {
-    // if (dataCourseId?.isPremium === true) {
-    // } else {
-    //   toast({
-    //     title: "Gagal",
-    //     description: "Silahkan pilih kursus yang lain",
-    //     duration: 3000,
-    //     status: "error",
-    //     position: "top-right",
-    //   });
-    // }
+  const handleBuatPesanan = async () => {
+    await putTransactions(idTransactions);
   };
 
   useEffect(() => {
+    if (isSuccess) {
+      window.location.href = `/success/payment/${courseId}/${idTransactions}`;
+    }
+  }, [isSuccess, courseId, idTransactions]);
+
+  useEffect(() => {
     setPembayaran(getDataTransactions?.data?.paymentMethod);
-    // if (courseIdInteger !== getDataTransactions?.data?.course?.id) {
-    //   window.location.href = "/";
-    // }
-  }, [getDataTransactions, courseIdInteger]);
+    if (getDataTransactions?.data?.payDone === true) {
+      window.location.href = `/success/payment/${courseId}/${idTransactions}`;
+    }
+  }, [getDataTransactions, getDataDecode, courseIdInteger, courseId, idTransactions]);
 
   return (
     <>
       <div className="overflow-x-hidden ">
         {/* Navbar */}
-        <div className="w-screen h-20 bg-gradientkanan px-4 sm:px-20">
+        <div className="w-screen h-20 bg-gradientkanan">
           <div className="container mx-auto h-full">
-            <div className="flex h-full">
+            <div className="flex h-full px-6 sm:px-20">
               {/* Logo ITSpace */}
               <div className="flex sm:flex items-center w-2/6 sm:w-1/6  md:w-2/6">
                 <img src={logo} alt="" className="w-[12rem] sm:w-5/6 md:w-5/6 lg:w-[12rem]" />
@@ -100,17 +100,19 @@ export const Payment = () => {
         </div>
 
         {/* Detail kelas */}
-        <div className="w-screen px-6 sm:px-20 py-4 sm:py-8">
+        <div className="w-screen">
           <div className="container mx-auto">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 px-6 sm:px-20 py-4 sm:py-8">
               <div className="flex flex-col  justify-center items-center sm:flex sm:flex-col gap-4 sm:gap-8">
                 {/* section VIRTUAL_ACCOUNT, gerai retail dan e-wallet Card*/}
                 <div className="bg-merah-0 flex items-center justify-center px-4 py-2 rounded-md">
-                  <p className="text-center text-white">{`Bayar sebelum ${localDate} ${localTime}`}</p>
+                  {isExpired() ? <p className="text-center text-white">Pembayaran Anda terlambat dan waktu pesan sudah berakhir!</p> : <p className="text-center text-white">{`Bayar sebelum ${localDate} ${localTime}`}</p>}
                 </div>
                 <div className="w-full sm:w-4/6 md:w-full lg:w-8/12 flex flex-col gap-4 bg-gray-100">
                   {/* Virtual Account */}
-                  {pembayaran === "VIRTUAL_ACCOUNT" ? (
+                  {isExpired() ? (
+                    <ExpirationPayment courseId={courseId} />
+                  ) : pembayaran === "VIRTUAL_ACCOUNT" ? (
                     <div className={`border rounded-md flex flex-col gap-2`}>
                       <div className="flex text-white bg-black justify-between px-4 py-2 rounded-t-md">
                         <p>Transfer Virtual Account</p>
@@ -156,9 +158,10 @@ export const Payment = () => {
                   ) : (
                     ""
                   )}
-
                   {/* Gerai Retail */}
-                  {pembayaran === "GERAI_RETAIL" ? (
+                  {isExpired() ? (
+                    <ExpirationPayment courseId={courseId} />
+                  ) : pembayaran === "GERAI_RETAIL" ? (
                     <div className={`border rounded-md flex flex-col gap-2`}>
                       <div className="flex text-white bg-biru-0 justify-between px-4 py-2 rounded-t-md">
                         <p>Tunai di Gerai Retail</p>
@@ -204,9 +207,10 @@ export const Payment = () => {
                   ) : (
                     ""
                   )}
-
                   {/* Dompet E_WALLET */}
-                  {pembayaran === "E_WALLET" ? (
+                  {isExpired() ? (
+                    <ExpirationPayment courseId={courseId} />
+                  ) : pembayaran === "E_WALLET" ? (
                     <div className={`border rounded-md flex flex-col gap-2`}>
                       <div className="flex text-white bg-ungu-0 justify-between px-4 py-2 rounded-t-md">
                         <p>Dompet Digital (E_Wallet)</p>

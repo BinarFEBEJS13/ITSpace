@@ -8,66 +8,52 @@ import level from "../assets/svg/kategori-level.svg";
 import modul from "../assets/svg/book.svg";
 import clock from "../assets/svg/clock.svg";
 import diamond from "../assets/svg/diamond.svg";
+import filterungu from "../assets/svg/filterungu.svg";
 import { FilterMobile } from "../assets/components/FilterMobile";
 import { NotFoundCourse } from "../assets/components/HandleErrorPage/NotFoundCourse";
-import { useDispatch, useSelector } from "react-redux";
-import { actGetDataCourses } from "../redux/actions/actGetDataCourses";
 import { useNavigate, useParams } from "react-router-dom";
 import { Footer } from "../assets/components/Footer";
-import { useGetSearchCourses } from "../services/get-search-courses";
 import { PencarianPageKursus } from "../assets/components/PencarianPageKursus";
 // Import Chakra UI
 import { Spinner } from "@chakra-ui/react";
+import { useGetDataFilterKursus } from "../services/get-Datas-FilterKursus";
 
 export const Kursus = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [sortDataCourse, setSortDataCourse] = useState([]);
-  const courses = useSelector((state) => state.getDataCourses?.courses);
-  const [activeKursus, setActiveKursus] = useState("all");
+  const [SortDataMyEnrollment, setSortDataMyEnrollment] = useState([]);
+  const [ActivePremium, setActivePremium] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [activeInputSearch, setActiveInputSearch] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const { querySearch } = useParams();
 
-  const handleActivePopular = (item) => {
-    setActiveKursus(item);
+  const handleActivePremium = (item) => {
+    setActivePremium(item);
   };
-
-  // Handle Pagination Dinamis
-  const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 12;
-  const lastIndex = currentPage * recordsPerPage;
-  const firstIndex = lastIndex - recordsPerPage;
-  const dataKursus = sortDataCourse ? sortDataCourse.slice(firstIndex, lastIndex) : [];
-  const npage = Math.ceil((sortDataCourse ? sortDataCourse.length : 0) / recordsPerPage);
-  const numbers = Array.from({ length: npage }, (_, index) => index + 1);
-
-  const handlePrePage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-  const changePage = (id) => {
-    setCurrentPage(id);
-  };
-  const handleNextPage = () => {
-    if (currentPage < npage) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const { data: coursesSearch, isLoading } = useGetSearchCourses({ query: debouncedQuery });
 
   //Handle Filter SIPALING
-  const [sortSipaling, setSortSipaling] = useState([]);
-  const handleChangeSipaling = (event) => {
+  const [SortPalingDisukai, setSortPalingDisukai] = useState([]);
+  const handleChangePalingDisukai = (event) => {
     const { value, checked } = event.target;
 
     if (checked) {
-      setSortSipaling([value]);
+      setSortPalingDisukai([value]);
     } else {
-      setSortSipaling([]);
+      setSortPalingDisukai([]);
     }
+  };
+
+  //Handle Filter Popularity
+  const [SortPopular, setSortPopular] = useState([]);
+  const handleChangeSortPopular = (event) => {
+    const { value, checked } = event.target;
+
+    if (checked) {
+      setSortPopular([value]);
+    } else {
+      setSortPopular([]);
+    }
+    setCurrentPage(1);
   };
 
   // Handle Filter Kategori
@@ -81,6 +67,7 @@ export const Kursus = () => {
       setSortKategori((kat) => {
         return [...kat.filter((kategori) => kategori !== value)];
       });
+    setCurrentPage(1);
   };
 
   // Handle Filter Level
@@ -94,30 +81,33 @@ export const Kursus = () => {
       setSortLevel((lev) => {
         return [...lev.filter((level) => level !== value)];
       });
+    setCurrentPage(1);
   };
 
   //  Handle Clear Item ALL Filter
-  const baruCheckboxRef = useRef(null);
+  const disukaiCheckboxRef = useRef(null);
   const populerCheckboxRef = useRef(null);
   const kategoriCheckboxRef = useRef([]);
   const levelCheckboxRef = useRef([]);
 
   const handleClearFilter = () => {
     // Reset state filter di halaman Kursus dari Filter Mobile
-    setSortSipaling([]);
+    setSortPalingDisukai([]);
+    setSortPopular([]);
     setSortKategori([]);
     setSortLevel([]);
   };
 
   const handleHapusFilter = () => {
     // Menghapus state
-    setSortSipaling([]);
+    setSortPalingDisukai([]);
+    setSortPopular([]);
     setSortKategori([]);
     setSortLevel([]);
 
     // Menghilangkan centang pada checkbox
-    if (baruCheckboxRef.current) {
-      baruCheckboxRef.current.checked = false;
+    if (disukaiCheckboxRef.current) {
+      disukaiCheckboxRef.current.checked = false;
     }
     if (populerCheckboxRef.current) {
       populerCheckboxRef.current.checked = false;
@@ -146,47 +136,7 @@ export const Kursus = () => {
       setActiveInputSearch(true);
       setDebouncedQuery(querySearch);
     }
-
-    // Handle Sort Data Course
-    const dataKursus = coursesSearch?.data?.courses;
-    // Filter by Active Difficulty
-    let filteredCourses = dataKursus;
-
-    if (activeKursus === "premium") {
-      filteredCourses = dataKursus?.filter((course) => course?.isPremium === true);
-    } else if (activeKursus === "gratis") {
-      filteredCourses = dataKursus?.filter((course) => course?.isPremium === false);
-    }
-
-    // Filter by Sipaling
-    if (sortSipaling.length > 0) {
-      switch (sortSipaling[0]) {
-        case "baru":
-          filteredCourses = filteredCourses?.slice().sort((a, b) => b.id - a.id); // Urutkan berdasarkan ID dari besar ke kecil
-          break;
-        case "populer":
-          filteredCourses = filteredCourses?.slice().sort((a, b) => b.rate - a.rate); // Urutkan berdasarkan rate dari besar ke kecil
-          break;
-        case "promo":
-          // Logika sorting untuk "Promo"
-          break;
-        default:
-          break;
-      }
-    }
-
-    // Filter by Kategori
-    if (sortKategori.length > 0) {
-      filteredCourses = filteredCourses?.filter((course) => sortKategori.includes(course?.courseCategory[0]?.category?.name));
-    }
-
-    // Filter by Level
-    if (sortLevel.length > 0) {
-      filteredCourses = filteredCourses?.filter((course) => sortLevel.includes(course?.level));
-    }
-
-    setSortDataCourse(filteredCourses);
-  }, [activeKursus, sortLevel, courses, sortKategori, sortSipaling, coursesSearch?.data?.courses, querySearch]);
+  }, [querySearch]);
 
   // Handle Filter Mobile
   const [activeFilter, setActiveFilter] = useState(false);
@@ -195,32 +145,86 @@ export const Kursus = () => {
   };
 
   const handleApplyFilter = (filters) => {
-    // Add your logic to update the state based on the applied filters
-    setSortSipaling(filters.sipaling);
+    setSortPalingDisukai(filters.sipaling);
+    setSortPopular(filters.sipopular);
     setSortKategori(filters.kategori);
     setSortLevel(filters.level);
   };
 
+  const { data: dataFilterKursusss, isLoading } = useGetDataFilterKursus({
+    ispremium: ActivePremium,
+    category: sortKategori,
+    level: sortLevel,
+    se: debouncedQuery,
+    order: SortPopular,
+    page: 1,
+    limit: 100,
+  });
+  const dataFilterKursus = dataFilterKursusss?.data?.courses;
+
   useEffect(() => {
-    const getDataCourses = async () => {
-      await dispatch(actGetDataCourses());
-    };
-    getDataCourses();
-  }, [dispatch]);
+    // Handle Sort Data Course
+    const dataKursus = dataFilterKursus;
+    // Filter by Active Difficulty
+    let filteredCourses = dataKursus;
+
+    // Filter by paling disukai
+    if (SortPalingDisukai.length > 0) {
+      switch (SortPalingDisukai[0]) {
+        case "disukai":
+          filteredCourses = filteredCourses?.slice().sort((a, b) => b.rate - a.rate);
+          break;
+        default:
+          break;
+      }
+    }
+
+    setSortDataMyEnrollment(filteredCourses);
+  }, [dataFilterKursus, SortPalingDisukai]);
+
+  // Handle Pagination Dinamis
+  const recordsPerPage = 12;
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const dataKursus = SortDataMyEnrollment ? SortDataMyEnrollment.slice(firstIndex, lastIndex) : [];
+  const npage = Math.ceil((SortDataMyEnrollment ? SortDataMyEnrollment.length : 0) / recordsPerPage);
+  const numbers = Array.from({ length: npage }, (_, index) => index + 1);
+
+  const handlePrePage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+  const changePage = (id) => {
+    setCurrentPage(id);
+  };
+  const handleNextPage = () => {
+    if (currentPage < npage) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  function capitalizeFirstLetter(str) {
+    return str
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  }
 
   return (
     <>
       <div className="overflow-x-hidden">
         <Navbar />
-        <div className="w-screen px-6 sm:px-12 py-4 sm:py-8">
+        <div className="w-screen">
           <div className="container mx-auto">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 px-6 sm:px-12 py-4 sm:py-8">
               <div className="flex justify-between items-center">
                 <h1 className="text-xl sm:text-2xl font-bold">Daftar Kursus</h1>
                 <PencarianPageKursus />
-                <h6 onClick={handleFilter} className="block sm:hidden text-ungu-0">
-                  Filter
-                </h6>
+                <div onClick={handleFilter} className="flex gap-1 border border-ungu-0 rounded-md px-2 sm:hidden">
+                  <img src={filterungu} alt="filter" className="w-4" />
+                  <h6 className=" text-ungu-0">Filter</h6>
+                </div>
               </div>
               <div className="flex flex-col sm:flex-row gap-8">
                 {/* Filter Kelas Berjalan untuk tablet dan Laptop*/}
@@ -230,11 +234,11 @@ export const Kursus = () => {
                     <div className="flex flex-col gap-4">
                       <div className="flex flex-col gap-1">
                         <div className="flex gap-2">
-                          <input ref={baruCheckboxRef} onChange={handleChangeSipaling} value={"baru"} type="checkbox" className="accent-biru-0 w-4"></input>
-                          <p className="text-sm">Paling Baru</p>
+                          <input ref={disukaiCheckboxRef} onChange={handleChangePalingDisukai} value={"disukai"} type="checkbox" className="accent-biru-0 w-4"></input>
+                          <p className="text-sm">Paling Disukai</p>
                         </div>
                         <div className="flex gap-2">
-                          <input ref={populerCheckboxRef} onChange={handleChangeSipaling} value={"populer"} type="checkbox" className="accent-biru-0 w-4"></input>
+                          <input ref={populerCheckboxRef} onChange={handleChangeSortPopular} value={"popularity"} type="checkbox" className="accent-biru-0 w-4"></input>
                           <p className="text-sm">Paling Populer</p>
                         </div>
                       </div>
@@ -261,6 +265,10 @@ export const Kursus = () => {
                           <div className="flex gap-2">
                             <input ref={(el) => kategoriCheckboxRef.current.push(el)} onChange={handleChangeKategori} value={"machine learning"} type="checkbox" className="accent-biru-0 w-4"></input>
                             <p className="text-sm">Machine Learning</p>
+                          </div>
+                          <div className="flex gap-2">
+                            <input ref={(el) => kategoriCheckboxRef.current.push(el)} onChange={handleChangeKategori} value={"data science"} type="checkbox" className="accent-biru-0 w-4"></input>
+                            <p className="text-sm">Data Science</p>
                           </div>
                         </div>
                       </div>
@@ -295,23 +303,23 @@ export const Kursus = () => {
                   {/* Button Filter pilih kursus premium & gratis*/}
                   <div className="flex justify-between gap-4">
                     <button
-                      value={"all"}
-                      className={`${activeKursus === "all" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
-                      onClick={() => handleActivePopular("all")}
+                      value={""}
+                      className={`${ActivePremium === "" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
+                      onClick={() => handleActivePremium("")}
                     >
                       All
                     </button>
                     <button
-                      value={"premium"}
-                      className={`${activeKursus === "premium" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
-                      onClick={() => handleActivePopular("premium")}
+                      value={"1"}
+                      className={`${ActivePremium === "1" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
+                      onClick={() => handleActivePremium("1")}
                     >
                       Kursus Premium
                     </button>
                     <button
-                      value={"gratis"}
-                      className={`${activeKursus === "gratis" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
-                      onClick={() => handleActivePopular("gratis")}
+                      value={"0"}
+                      className={`${ActivePremium === "0" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
+                      onClick={() => handleActivePremium("0")}
                     >
                       Kursus Gratis
                     </button>
@@ -325,7 +333,7 @@ export const Kursus = () => {
                       <div className="w-full flex justify-center items-center">
                         <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
                       </div>
-                    ) : sortDataCourse?.length > 0 ? (
+                    ) : SortDataMyEnrollment?.length > 0 ? (
                       <div className=" w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                         {/* Card Beli */}
                         {dataKursus?.map((value) => {
@@ -344,8 +352,8 @@ export const Kursus = () => {
                                     </span>
                                   </div>
                                   <div>
-                                    <h2 onClick={() => navigate(`/detail-kelas/${value.id}`)} className="font-bold cursor-pointer text-xs sm:text-sm">
-                                      {value.title}
+                                    <h2 onClick={() => navigate(`/detail-kelas/${value.id}`)} className="font-bold truncate-3-lines cursor-pointer text-xs sm:text-sm">
+                                      {capitalizeFirstLetter(value.title)}
                                     </h2>
                                     <span className="opacity-50 text-xs sm:text-sm">by {value?.mentor[0]?.author?.profile?.name}</span>
                                   </div>
@@ -379,7 +387,7 @@ export const Kursus = () => {
                                           </span>
                                         </div>
                                       ) : (
-                                        <div className="flex gap-2 bg-hijau-0 px-4 py-1 rounded-md">
+                                        <div onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="flex gap-2 bg-hijau-0 px-4 py-1 rounded-md cursor-pointer">
                                           <span className="text-xs sm:text-sm">Mulai Kelas</span>
                                         </div>
                                       )}

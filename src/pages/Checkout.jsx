@@ -39,7 +39,7 @@ export const Checkout = () => {
   const { data: dataCrsId } = useGetDataCoursesId({ query: courseId });
   const dataCourseId = dataCrsId?.data;
 
-  const { mutate: postTransactions, data: getDataTransactions } = useDataTransactions();
+  const { mutate: postTransactions, data: getDataTransactions, isSuccess, isError } = useDataTransactions();
 
   // Handle PPN & Total Pembayaran
   const hargaKursus = Number(dataCourseId?.price) || 0;
@@ -54,24 +54,17 @@ export const Checkout = () => {
   const totalPembayaran = dataCourseId?.price ? Number(dataCourseId?.price) + Ppn : 0;
 
   // Handle Buat Pesanan
-  const handleBuatPesanan = () => {
+  const handleBuatPesanan = async () => {
     if (dataCourseId?.isPremium === true) {
-      postTransactions({
+      await postTransactions({
         courseId: courseId,
         paymentMethod: pembayaran,
       });
-      if (getDataTransactions?.status === 201) {
-        window.location.href = `/payment/${courseId}/${getDataTransactions?.data?.data?.id}`;
-      } else {
-        toast({
-          title: "Gagal",
-          description: "Maaf anda tidak bisa membeli course ini",
-          duration: 3000,
-          status: "error",
-          position: "top-right",
-        });
-      }
-    } else {
+    }
+    // else if (){
+    //   console.log();
+    // }
+    else {
       toast({
         title: "Gagal",
         description: "Silahkan pilih kursus yang lain",
@@ -81,6 +74,27 @@ export const Checkout = () => {
       });
     }
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      window.location.href = `/payment/${courseId}/${getDataTransactions?.data?.data?.id}`;
+    }
+    if (isError) {
+      toast({
+        title: "Gagal",
+        description: "Silahkan login terlebih dahulu",
+        duration: 3000,
+        status: "error",
+        position: "top-right",
+      });
+    }
+  }, [isSuccess, isError, courseId, getDataTransactions, toast]);
+
+  useEffect(() => {
+    if (dataCourseId?.isPremium === false) {
+      window.location.href = `/detail-kelas/${courseId}`;
+    }
+  }, [dataCourseId, courseId]);
 
   const handleBayarKelas = (item) => {
     setPembayaran(pembayaran === item ? "" : item);
@@ -94,9 +108,9 @@ export const Checkout = () => {
     <>
       <div className="overflow-x-hidden ">
         {/* Navbar */}
-        <div className="w-screen h-20 bg-gradientkanan px-4 sm:px-20">
+        <div className="w-screen h-20 bg-gradientkanan ">
           <div className="container mx-auto h-full">
-            <div className="flex h-full">
+            <div className="flex h-full px-4 sm:px-20">
               {/* Logo ITSpace */}
               <div className="flex sm:flex items-center w-2/6 sm:w-1/6  md:w-2/6">
                 <img src={logo} alt="" className="w-[12rem] sm:w-5/6 md:w-5/6 lg:w-[12rem]" />
@@ -106,9 +120,9 @@ export const Checkout = () => {
         </div>
 
         {/* Button arrow kelas lainnnya */}
-        <div className="w-screen px-6 sm:px-20 pt-4 sm:pt-8">
+        <div className="w-screen">
           <div className="container mx-auto">
-            <div className="">
+            <div className="px-6 sm:px-20 pt-4 sm:pt-8">
               <button onClick={handleGoBack} className="flex gap-2 font-semibold items-center">
                 <img src={arrow} alt="kembali" />
                 Kembali
@@ -117,9 +131,9 @@ export const Checkout = () => {
           </div>
         </div>
         {/* Detail kelas */}
-        <div className="w-screen px-6 sm:px-20 py-4 sm:py-8">
+        <div className="w-screen">
           <div className="container mx-auto">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 px-6 sm:px-20 py-4 sm:py-8">
               <div className="flex flex-col sm:flex sm:flex-row gap-4 sm:gap-8">
                 {/* section VIRTUAL_ACCOUNT, gerai retail dan e-wallet Card*/}
                 <div className="w-full sm:w-4/6 md:w-7/12 lg:w-8/12 flex flex-col gap-4 order-2 sm:order-1">

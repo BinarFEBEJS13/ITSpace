@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Navbar } from "../assets/components/Navbar";
 // png main section
 import course from "../assets/img/course.png";
-import uiuxdesign from "../assets/img/uiux.jpeg";
-import database from "../assets/img/webdev.jpeg";
-import frontend from "../assets/img/android.jpeg";
-import backend from "../assets/img/ios.jpeg";
-import machinelearning from "../assets/img/datascience.jpeg";
+import uiux from "../assets/img/ui-ux.jpeg";
+import database from "../assets/img/database.jpeg";
+import frontend from "../assets/img/frontend.jpeg";
+import backend from "../assets/img/backend.jpeg";
+import machinelearning from "../assets/img/machinelearning.jpeg";
+import datascience from "../assets/img/datascience.jpeg";
+
 // svg card
 import star from "../assets/svg/star.svg";
 import level from "../assets/svg/kategori-level.svg";
@@ -21,66 +23,49 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 // import required modules
 import { Pagination, Navigation } from "swiper/modules";
-import { useNavigate } from "react-router-dom";
 import { Footer } from "../assets/components/Footer";
 import { NotFoundCourse } from "../assets/components/HandleErrorPage/NotFoundCourse";
-import { useGetDataCourses } from "../services/get-data-noreduxcourse";
 // IMPORT CHAKRA UI
 import { Spinner } from "@chakra-ui/react";
+import { useGetDataKursus } from "../services/get-Datas-Courses";
 
 export const Beranda = () => {
-  const navigate = useNavigate();
-  const [activePopular, setActivePopular] = useState("all");
-  const [sortDataCourse, setSortDataCourse] = useState([]);
+  const [activePopular, setActivePopular] = useState("");
 
   const handleActivePopular = (item) => {
     setActivePopular(item);
   };
 
-  const { data: dataCourses, isLoading } = useGetDataCourses({
-    category: "",
+  const { data: dataKursuss, isLoading } = useGetDataKursus({
+    category: activePopular,
+    order: "popularity",
+    page: 1,
+    limit: 100,
   });
+  const datasCourses = dataKursuss?.data?.courses;
 
-  // Handle Sort Data Course
-  useEffect(() => {
-    // Handle Sort Data Course
-    const dataKursus = dataCourses?.data?.courses;
-
-    if (activePopular === "all") {
-      setSortDataCourse(dataKursus);
-    }
-    if (activePopular === "uiuxdesign") {
-      setSortDataCourse(dataKursus?.filter((course) => course?.courseCategory[0]?.category?.name?.toLowerCase() === "ui/ux"));
-    }
-    if (activePopular === "frontend") {
-      setSortDataCourse(dataKursus?.filter((course) => course?.courseCategory[0]?.category?.name?.toLowerCase() === "frontend"));
-    }
-    if (activePopular === "database") {
-      setSortDataCourse(dataKursus?.filter((course) => course?.courseCategory[0]?.category?.name?.toLowerCase() === "database"));
-    }
-    if (activePopular === "backend") {
-      setSortDataCourse(dataKursus?.filter((course) => course?.courseCategory[0]?.category?.name?.toLowerCase() === "backend"));
-    }
-    if (activePopular === "machinelearning") {
-      setSortDataCourse(dataKursus?.filter((course) => course?.courseCategory[0]?.category?.name?.toLowerCase() === "machine learning"));
-    }
-  }, [activePopular, dataCourses?.data?.courses]);
+  function capitalizeFirstLetter(str) {
+    return str
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  }
 
   return (
     <>
       <div className="overflow-x-hidden">
         <Navbar />
         {/* Section Main Beranda */}
-        <div className="w-screen bg-gradientkanan px-6 sm:px-12 ">
+        <div className="w-screen bg-gradientkanan">
           <div className="container mx-auto">
-            <div className="flex flex-col sm:flex sm:flex-row gap-6">
+            <div className="flex flex-col sm:flex sm:flex-row gap-6 px-6 sm:px-12">
               {/* Ini Judul */}
               <div className="w-full sm:w-1/2 flex flex-col gap-8 justify-center items-center py-8 sm:items-start order-2 sm:order-1">
                 <div className="flex flex-col gap-4">
-                  <h2 className="text-white text-center sm:text-start text-4xl font-bold">
+                  <h2 className="text-white text-center sm:text-start text-3xl sm:text-4xl font-bold">
                     Your{" "}
                     <span
-                      className="text-yellow-300
+                      className="text-[#B285EC]
                     "
                     >
                       Space
@@ -92,8 +77,8 @@ export const Beranda = () => {
                   </p>
                 </div>
                 <div className="w-full flex justify-center sm:justify-start">
-                  <button onClick={() => (window.location.href = "/kursus/all")} className="w-5/6 sm:w-3/4 md:w-3/4 lg:w-1/2 bg-gradientbutton text-white px-8 py-2 rounded-md shadow-sm-button">
-                    Ikuti Kelas Sekarang
+                  <button onClick={() => (window.location.href = "/kursus/all")} className="w-5/6 sm:w-3/4 md:w-3/4 lg:w-2/3 xl:w-1/2 bg-gradientbutton text-white px-8 py-2 rounded-md shadow-sm-button">
+                    Ikuti Kursus Sekarang
                   </button>
                 </div>
               </div>
@@ -105,44 +90,45 @@ export const Beranda = () => {
           </div>
         </div>
         {/* Kategori Belajar */}
-        <div className="w-screen px-6 sm:px-12 py-8 sm:pt-16">
+        <div className="w-screen">
           <div className="container mx-auto">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4  px-6 sm:px-12 py-8 sm:pt-16">
               <div className="flex justify-between items-center">
                 <h1 className="text-xl sm:text-2xl font-bold">Kategori Belajar</h1>
-                <h6 onClick={() => navigate("/kursus/all")} className="text-ungu-0 text-sm cursor-pointer">
-                  Lihat Semua...
-                </h6>
               </div>
               <div className="flex flex-wrap justify-center sm:flex-nowrap sm:gap-2">
-                <div className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
-                  <img src={uiuxdesign} alt="uiuxdesign" className="w-44 rounded-md" />
+                <div onClick={() => (window.location.href = "/category/uiux")} className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
+                  <img src={uiux} alt="ui/ux" className="w-44 rounded-md" />
                   <h2 className="items-center text-xs sm:text-sm font-semibold text-center">UI/UX Design</h2>
                 </div>
-                <div className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
+                <div onClick={() => (window.location.href = "/category/frontend")} className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
                   <img src={frontend} alt="frontend" className="w-44 rounded-md" />
                   <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Frontend</h2>
                 </div>
-                <div className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
+                <div onClick={() => (window.location.href = "/category/database")} className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
                   <img src={database} alt="database" className="w-44 rounded-md" />
                   <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Database</h2>
                 </div>
-                <div className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
+                <div onClick={() => (window.location.href = "/category/backend")} className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
                   <img src={backend} alt="backend" className="w-44 rounded-md" />
                   <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Backend</h2>
                 </div>
-                <div className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
-                  <img src={machinelearning} alt="machinelearning" className="w-44 rounded-md" />
+                <div onClick={() => (window.location.href = "/category/machinelearning")} className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
+                  <img src={machinelearning} alt="machine learning" className="w-44 rounded-md" />
                   <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Machine Learning</h2>
+                </div>
+                <div onClick={() => (window.location.href = "/category/datascience")} className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
+                  <img src={datascience} alt="data science" className="w-44 rounded-md" />
+                  <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Data Science</h2>
                 </div>
               </div>
             </div>
           </div>
         </div>
         {/* Kursus Populer */}
-        <div className="w-screen px-6 sm:px-12 sm:py-8">
+        <div className="w-screen">
           <div className="container mx-auto">
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6 px-6 sm:px-12 sm:py-8">
               {/* Judul Kursus Populer */}
               <div className="flex justify-between items-center">
                 <h1 className="text-xl sm:text-2xl font-bold">Kursus Populer</h1>
@@ -154,14 +140,14 @@ export const Beranda = () => {
               <div className="flex w-full ">
                 <div className="flex flex-wrap lg:flex-nowrap w-full justify-center gap-2 xl:gap-6">
                   <button
-                    className={`${activePopular === "all" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
-                    onClick={() => handleActivePopular("all")}
+                    className={`${activePopular === "" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    onClick={() => handleActivePopular("")}
                   >
                     All
                   </button>
                   <button
-                    className={`${activePopular === "uiuxdesign" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
-                    onClick={() => handleActivePopular("uiuxdesign")}
+                    className={`${activePopular === "ui/ux" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    onClick={() => handleActivePopular("ui/ux")}
                   >
                     UI/UX Design
                   </button>
@@ -184,10 +170,16 @@ export const Beranda = () => {
                     Backend
                   </button>
                   <button
-                    className={`${activePopular === "machinelearning" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
-                    onClick={() => handleActivePopular("machinelearning")}
+                    className={`${activePopular === "machine learning" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    onClick={() => handleActivePopular("machine learning")}
                   >
                     Machine Learning
+                  </button>
+                  <button
+                    className={`${activePopular === "data science" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    onClick={() => handleActivePopular("data science")}
+                  >
+                    Data Science
                   </button>
                 </div>
               </div>
@@ -200,7 +192,7 @@ export const Beranda = () => {
                     <div className="w-full h-56 flex justify-center items-center">
                       <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
                     </div>
-                  ) : sortDataCourse?.length > 0 ? (
+                  ) : datasCourses?.length > 0 ? (
                     <Swiper
                       slidesPerView={4}
                       spaceBetween={10}
@@ -229,7 +221,7 @@ export const Beranda = () => {
                         },
                       }}
                     >
-                      {sortDataCourse?.slice(0, 10).map((value) => {
+                      {datasCourses?.slice(0, 10).map((value) => {
                         return (
                           <SwiperSlide key={value.id} className="p-2 ">
                             <div className="w-full shadow-sm-button rounded-2xl">
@@ -245,8 +237,8 @@ export const Beranda = () => {
                                   </span>
                                 </div>
                                 <div>
-                                  <h2 onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="font-bold cursor-pointer text-xs sm:text-base">
-                                    {value.title}
+                                  <h2 onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="font-bold truncate-3-lines cursor-pointer text-xs sm:text-base">
+                                    {capitalizeFirstLetter(value.title)}
                                   </h2>
                                   <span className="opacity-50 text-xs sm:text-sm">by {value?.mentor[0]?.author?.profile?.name}</span>
                                 </div>
@@ -267,7 +259,7 @@ export const Beranda = () => {
                                 <div className="text-sm">
                                   <div className="flex text-white items-center">
                                     {value?.isPremium === true ? (
-                                      <div className="flex gap-2 bg-ungu-0 px-4 py-1 rounded-md">
+                                      <div className="flex gap-2 items-center justify-center bg-ungu-0 px-4 py-1 rounded-md">
                                         <img src={diamond} alt="" className="w-[0.9rem] sm:w-4" />
                                         <span className="text-xs sm:text-sm">
                                           {value?.price &&
@@ -280,7 +272,7 @@ export const Beranda = () => {
                                         </span>
                                       </div>
                                     ) : (
-                                      <div className="flex gap-2 bg-hijau-0 px-4 py-1 rounded-md">
+                                      <div onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="flex gap-2 items-center justify-center bg-hijau-0 px-4 py-1 rounded-md cursor-pointer">
                                         <span className="text-xs sm:text-sm">Mulai Kelas</span>
                                       </div>
                                     )}
@@ -305,10 +297,10 @@ export const Beranda = () => {
                     <div className="w-full h-48 flex justify-center items-center">
                       <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
                     </div>
-                  ) : sortDataCourse?.length > 0 ? (
+                  ) : datasCourses?.length > 0 ? (
                     <div className="w-full sm:hidden grid grid-cols-2 gap-4">
                       {/* Card Premium */}
-                      {sortDataCourse?.slice(0, 10).map((value) => {
+                      {datasCourses?.slice(0, 10).map((value) => {
                         return (
                           <div key={value.id}>
                             <div className="w-full shadow-sm-button rounded-2xl">
@@ -325,7 +317,7 @@ export const Beranda = () => {
                                 </div>
                                 <div>
                                   <h2 onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="font-bold cursor-pointer text-xs sm:text-base">
-                                    {value.title}
+                                    {capitalizeFirstLetter(value.title)}
                                   </h2>
                                   <span className="opacity-50 text-xs sm:text-sm">by {value?.mentor[0]?.author?.profile?.name}</span>
                                 </div>
@@ -359,7 +351,7 @@ export const Beranda = () => {
                                         </span>
                                       </div>
                                     ) : (
-                                      <div className="flex gap-2 bg-hijau-0 px-4 py-1 rounded-md">
+                                      <div onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="flex gap-2 bg-hijau-0 px-4 py-1 rounded-md cursor-pointer">
                                         <span className="text-xs sm:text-sm">Mulai Kelas</span>
                                       </div>
                                     )}

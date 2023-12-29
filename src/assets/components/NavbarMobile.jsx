@@ -8,11 +8,8 @@ export const NavbarMobile = ({ onClose, isSuccessDecode }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [dataToggle, setDataToggle] = useState(false);
-  const [activeItem, setActiveItem] = useState("");
 
   const { mutate: logoutUser, data: dataLogout } = useAuthLogout();
-
-  console.log(dataLogout);
 
   const handleLogoutUser = () => {
     logoutUser();
@@ -35,7 +32,6 @@ export const NavbarMobile = ({ onClose, isSuccessDecode }) => {
       // Jika pengguna mengklik item yang sudah aktif, tutup navbar
       onClose();
     } else {
-      setActiveItem(item);
       if (item === "beranda") {
         navigate("/");
       } else if (item === "kursus") {

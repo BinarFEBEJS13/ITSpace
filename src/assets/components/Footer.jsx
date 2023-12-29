@@ -9,9 +9,9 @@ import youtube from "../svg/sosmed/youtube.svg";
 export const Footer = () => {
   return (
     <>
-      <div className="w-screen bg-gradientkanan px-6 sm:px-12">
+      <div className="w-screen bg-gradientkanan">
         <div className="container mx-auto">
-          <div className="py-6 flex flex-col gap-4 ">
+          <div className="py-6 flex flex-col gap-4 px-6 sm:px-12">
             <div className="flex flex-col justify-center items-center">
               <img src={itspace} alt="" className="w-40 sm:w-80" />
             </div>
@@ -32,6 +32,7 @@ export const Footer = () => {
                   <h6>Database</h6>
                   <h6>Backend</h6>
                   <h6>Machine Learning</h6>
+                  <h6>Data Science</h6>
                 </div>
               </div>
               <div className="flex flex-col gap-3">
