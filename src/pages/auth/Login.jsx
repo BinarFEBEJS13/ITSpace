@@ -117,16 +117,6 @@ export const Login = () => {
               Daftar di sini
             </a>
           </span>
-          {/* {!isEmailTerdaftar && (
-            <div className="absolute bottom-8 mb-4 h-[3rem] w-[20rem] md:w-[20rem] bg-merah-0 text-white rounded-xl flex justify-center items-center">
-              Email tidak terdaftar
-            </div>
-          )}
-          {passwordError && (
-            <div className="absolute  bottom-8 mb-4 h-[3rem] w-[20rem] md:w-[20rem] bg-merah-0 text-white rounded-xl flex justify-center items-center">
-              {passwordError}
-            </div>
-          )} */}
         </div>
       </div>
 
