@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LogoBg from "../../assets/img/LogoBg.jpg";
 import pass from "../../assets/svg/pass.svg";
 import passClose from "../../assets/svg/passClose.svg";
 import { useNavigate } from "react-router-dom";
-import { UseLoginUser } from "../../services/auth/login_user";
+import { useToast } from "@chakra-ui/react";
+import { useLoginUser } from "../../services/auth/login_user";
+import { resendOtp } from "../../services/auth/resend_otp";
+import { GoogleLogin } from "@react-oauth/google";
 
 export const Login = () => {
   const navigate = useNavigate();
-  const { mutate: loginUser } = UseLoginUser();
+  const toast = useToast();
+  const { mutate: loginData, isSuccess, error } = useLoginUser();
 
   //EMAIL
   const [Email, setEmail] = useState("");
@@ -19,6 +23,7 @@ export const Login = () => {
     setPasswordVisible(!PasswordVisible);
   };
 
+  //INPUT
   const handleInput = (e) => {
     if (e.target.id === "email") {
       setEmail(e.target.value);
@@ -30,26 +35,50 @@ export const Login = () => {
 
   // UNTUK LINK LUPA KATA SANDI
   const handleForgotPassword = () => {
-    navigate("/logres");
+    navigate("/resetValidasi");
   };
 
   //FUNGSI BUTTON MASUK
-  const handleLogin = async () => {
-    try {
-      await loginUser ({
-        email: Email,
-        password: Password,
-      });
 
-      console.log("Login berhasil!");
-      navigate("/");
-    } catch (error) {
-      console.error("Login error:", error);
-    }
+  const handleLogin = () => {
+    loginData({
+      email: Email,
+      password: Password,
+    });
   };
 
-  console.log(Email, "email");
-  console.log(Password, "Password");
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/");
+      toast({
+        title: "Login Berhasil",
+        status: "success",
+        duration: 3000,
+        position: "bottom",
+        isClosable: true,
+      });
+    } else if (error) {
+      if (error.response && error.response.status === 403) {
+        navigate("/otp", { state: { email: Email } });
+        resendOtp({ email: Email });
+        toast({
+          title: "Akun belum terverifikasi",
+          status: "error",
+          duration: 3000,
+          position: "bottom",
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "Email atau Password salah",
+          status: "success",
+          duration: 3000,
+          position: "bottom",
+          isClosable: true,
+        });
+      }
+    }
+  }, [Email, navigate, toast, isSuccess, error]);
 
   return (
     <div className="flex flex-row w-full h-screen">
@@ -85,7 +114,7 @@ export const Login = () => {
             </div>
             <div className="relative">
               <input
-              id="password"
+                id="password"
                 type={PasswordVisible ? "text" : "password"}
                 onChange={handleInput}
                 className="h-[3rem] w-full md:w-full rounded-xl border pl-3"
@@ -108,6 +137,20 @@ export const Login = () => {
             Masuk
           </button>
 
+          {/* BUTTON GOOGLE LOGIN */}
+
+          <GoogleLogin
+            onSuccess={(credentialResponse) => {
+              console.log(credentialResponse);
+
+              navigate("/");
+            }}
+            onError={() => {
+              console.log("Login with Google Failed");
+            }}
+            className="custom-google-button"
+          />
+
           <span>
             Belum punya akun?{" "}
             <a
@@ -117,16 +160,6 @@ export const Login = () => {
               Daftar di sini
             </a>
           </span>
-          {/* {!isEmailTerdaftar && (
-            <div className="absolute bottom-8 mb-4 h-[3rem] w-[20rem] md:w-[20rem] bg-merah-0 text-white rounded-xl flex justify-center items-center">
-              Email tidak terdaftar
-            </div>
-          )}
-          {passwordError && (
-            <div className="absolute  bottom-8 mb-4 h-[3rem] w-[20rem] md:w-[20rem] bg-merah-0 text-white rounded-xl flex justify-center items-center">
-              {passwordError}
-            </div>
-          )} */}
         </div>
       </div>
 

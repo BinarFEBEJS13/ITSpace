@@ -2,14 +2,14 @@ import { useMutation } from "@tanstack/react-query";
 import { API_ENDPOINT } from "../../utils/api-endpoint";
 import http from "../../utils/http";
 
-const LoginUser = async (input) => {
-  return await http.post(API_ENDPOINT.LOGIN, input);
+const LoginGoogle = async () => {
+  return await http.get(API_ENDPOINT.GOOGLE);
 }
 
-const useLoginUser = () => {
+const useLoginGoogle = () => {
   return useMutation({
-      mutationFn: LoginUser
+      mutationFn: LoginGoogle
   });
 }
 
-export {LoginUser, useLoginUser};
+export {LoginGoogle, useLoginGoogle};
