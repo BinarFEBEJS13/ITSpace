@@ -249,7 +249,7 @@ export const Register = () => {
             Sudah punya akun?{" "}
             <a
               className="text-purple-800 font-semibold hover:underline"
-              href="/"
+              href="/login"
             >
               Masuk di sini
             </a>
