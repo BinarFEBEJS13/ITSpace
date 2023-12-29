@@ -12,6 +12,7 @@ import user from "../svg/user.svg";
 import kursus from "../svg/course.svg";
 import { Pencarian } from "./Pencarian";
 import { NavbarMobile } from "./NavbarMobile";
+import { useGetDecode } from "../../services/get-Datas-Decode";
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -20,9 +21,17 @@ export const Navbar = () => {
   const [activeSearch, setActiveSearch] = useState(false);
   const [activeNavbarMobile, setActiveNavbarMobile] = useState(false);
   const [activeItem, setActiveItem] = useState("");
+  const [querySearch, setQuerySearch] = useState("");
 
-  const handleToggle = () => {
-    setDataToggle(!dataToggle);
+  const { isSuccess } = useGetDecode();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!querySearch || querySearch.trim() === "") return;
+    if (/^[!@#$%^&*()_+={}|[\]:;"'<>,.?/\\|~`]+$/.test(querySearch)) return;
+
+    navigate(`/kursus/${querySearch}`);
+    setQuerySearch("");
   };
 
   const handleSearch = () => {
@@ -38,9 +47,9 @@ export const Navbar = () => {
     if (item === "beranda") {
       navigate("/");
     } else if (item === "kursus") {
-      navigate("/kursus");
+      window.location.href = "/kursus/all";
     } else if (item === "kelas") {
-      navigate("/kelassaya");
+      window.location.href = "/kelassaya/all";
     } else if (item === "notifikasi") {
       navigate("/notifikasi");
     } else if (item === "akun") {
@@ -49,15 +58,21 @@ export const Navbar = () => {
   };
 
   useEffect(() => {
+    if (isSuccess) {
+      setDataToggle(true);
+    }
+  }, [isSuccess, setDataToggle]);
+
+  useEffect(() => {
     // Mendapatkan path dari lokasi saat ini
     const path = location.pathname;
 
     // Mengatur activeItem sesuai dengan path
     if (path === "/") {
       setActiveItem("beranda");
-    } else if (path === "/kursus") {
+    } else if (path === "/kursus/all") {
       setActiveItem("kursus");
-    } else if (path === "/kelassaya") {
+    } else if (path === "/kelassaya/all") {
       setActiveItem("kelas");
     } else if (path === "/notifikasi") {
       setActiveItem("notifikasi");
@@ -68,18 +83,20 @@ export const Navbar = () => {
 
   return (
     <>
-      <div className="w-screen h-20 bg-gradientkanan px-4 sm:px-12">
+      <div className="w-screen h-20 bg-gradientkanan ">
         <div className="container mx-auto h-full">
-          <div className="flex h-full">
+          <div className="flex h-full px-6 sm:px-12">
             {/* Logo ITSpace */}
-            <div className="flex sm:flex items-center w-2/6 sm:w-1/6 md:w-2/6">
-              <img src={logo} alt="" className="w-[12rem] cursor-pointer" onClick={() => navigate("/")} />
+            <div className="flex sm:flex items-center w-2/6 sm:w-1/6  md:w-2/6">
+              <img src={logo} alt="" className="w-[12rem] sm:w-5/6 md:w-5/6 lg:w-[12rem] cursor-pointer" onClick={() => navigate("/")} />
             </div>
             {/* Search Ukuran diatas sm */}
             <div className="flex items-center justify-center w-2/3 sm:w-2/6">
               <div className="relative w-full">
-                <input placeholder="cari kursus terbaik.." className="hidden sm:block pl-4 pr-14 w-full py-3 rounded-2xl"></input>
-                <img src={searchnav} alt="" className="hidden sm:block bg-biru-0 absolute top-1/2 transform -translate-y-1/2 right-3 rounded-md cursor-pointer p-1" />
+                <form onSubmit={handleSubmit}>
+                  <input value={querySearch} onChange={(e) => setQuerySearch(e.target.value)} placeholder="cari kursus terbaik.." className="hidden sm:block pl-4 pr-14 w-full py-3 rounded-2xl"></input>
+                </form>
+                <img onClick={handleSubmit} src={searchnav} alt="" className="hidden sm:block bg-biru-0 absolute top-1/2 transform -translate-y-1/2 right-3 rounded-md cursor-pointer p-1" />
                 {/* Pencarian untuk mobile */}
                 <img src={searchnav} alt="" onClick={handleSearch} className="block w-8 sm:hidden absolute top-1/2 transform -translate-y-1/2 right-3 rounded-md cursor-pointer mr-6" />
                 <img src={hamburgermenu} alt="" onClick={handleNavbarMobile} className="block w-8 sm:hidden absolute top-1/2 transform -translate-y-1/2 right-0 rounded-md cursor-pointer " />
@@ -89,13 +106,8 @@ export const Navbar = () => {
             <div className="hidden sm:flex items-center w-2/6 sm:w-3/6 lg:w-2/6 justify-end ">
               {/* Apbila user belum login */}
               {dataToggle ? (
-                <button className="flex gap-2 items-center text-white">
-                  <img src={login} alt="" />
-                  Masuk
-                </button>
-              ) : (
                 // Kalo user sudah login
-                <div className="flex gap-4 items-center">
+                <div className="flex sm:gap-3 lg:gap-4 items-center">
                   {/* Beranda */}
                   <div className="cursor-pointer" onClick={() => handleActiveItem("beranda")}>
                     {activeItem === "beranda" ? (
@@ -152,13 +164,43 @@ export const Navbar = () => {
                     )}
                   </div>
                 </div>
+              ) : (
+                ///////
+                <div className="flex gap-4 items-center">
+                  {/* Beranda */}
+                  <div className="cursor-pointer" onClick={() => handleActiveItem("beranda")}>
+                    {activeItem === "beranda" ? (
+                      <div className="flex text-white gap-1 lg:gap-2 bg-gradientbutton px-2 lg:px-4 py-1 rounded-md shadow-sm-button">
+                        <img src={beranda} alt="" />
+                        Beranda
+                      </div>
+                    ) : (
+                      <img src={beranda} alt="" className="" />
+                    )}
+                  </div>
+                  {/* Kursus */}
+                  <div className="cursor-pointer" onClick={() => handleActiveItem("kursus")}>
+                    {activeItem === "kursus" ? (
+                      <div className="flex text-white gap-2 bg-gradientbutton px-4 py-1 rounded-md shadow-sm-button">
+                        <img src={kursus} alt="" />
+                        Kursus
+                      </div>
+                    ) : (
+                      <img src={kursus} alt="" className="" />
+                    )}
+                  </div>
+                  <button onClick={() => navigate("/login")} className="flex gap-2 items-center text-white">
+                    <img src={login} alt="" />
+                    Masuk
+                  </button>
+                </div>
               )}
             </div>
           </div>
         </div>
       </div>
       {activeSearch ? <Pencarian onClose={handleSearch} /> : ""}
-      {activeNavbarMobile ? <NavbarMobile onClose={handleNavbarMobile} /> : ""}
+      {activeNavbarMobile ? <NavbarMobile onClose={handleNavbarMobile} isSuccessDecode={isSuccess} /> : ""}
     </>
   );
 };

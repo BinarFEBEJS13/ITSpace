@@ -90,25 +90,14 @@ export const Login = () => {
           {/* INPUTAN EMAIL */}
           <div className="w-full md:w-[35rem] flex flex-col relative">
             <label className="mb-1">Email/No Telepon</label>
-            <input
-              id="email"
-              type="text"
-              className="h-[3rem] w-full rounded-xl border pl-3"
-              placeholder="Contoh: user1@gmail.com"
-              value={Email}
-              onChange={handleInput}
-            />
+            <input id="email" type="text" className="h-[3rem] w-full rounded-xl border pl-3" placeholder="Contoh: user1@gmail.com" value={Email} onChange={handleInput} />
           </div>
 
           {/* INPUTAN PASSWORD */}
           <div className="w-full md:w-[35rem] flex flex-col">
             <div className="flex justify-between items-center mb-1">
               <label>Password</label>
-              <a
-                href="/logres"
-                className="text-blue-500 hover:underline"
-                onClick={handleForgotPassword}
-              >
+              <a href="/logres" className="text-blue-500 hover:underline" onClick={handleForgotPassword}>
                 Lupa Kata sandi
               </a>
             </div>
@@ -130,10 +119,7 @@ export const Login = () => {
           </div>
 
           {/* BUTTON LOGIN */}
-          <button
-            className="h-[3rem] w-full md:w-[35rem] rounded-xl bg-gradientkanan text-white"
-            onClick={handleLogin}
-          >
+          <button className="h-[3rem] w-full md:w-[35rem] rounded-xl bg-gradientkanan text-white" onClick={handleLogin}>
             Masuk
           </button>
 
@@ -153,10 +139,7 @@ export const Login = () => {
 
           <span>
             Belum punya akun?{" "}
-            <a
-              className="text-purple-800 font-semibold hover:underline"
-              href="/register"
-            >
+            <a className="text-purple-800 font-semibold hover:underline" href="/register">
               Daftar di sini
             </a>
           </span>
