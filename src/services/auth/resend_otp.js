@@ -12,4 +12,4 @@ const UseResendOtp = () => {
     });
 }
 
-export {resendOtp, UseResendOtp}
+export {resendOtp, UseResendOtp};

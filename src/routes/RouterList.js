@@ -11,7 +11,6 @@ import Dashboard from "../pages/Admin/Dashboard";
 import { Beranda } from "../pages/Beranda";
 import { BerandaKelasSaya } from "../pages/BerandaKelasSaya";
 import { DetailKelas } from "../pages/DetailKelas";
-import { KelasPremium } from "../assets/components/KelasPremium";
 import { AkunProfile } from "../pages/AkunProfile";
 import { Notifikasi } from "../pages/Notifikasi";
 import { Success } from "../pages/Success";
@@ -25,6 +24,10 @@ import { Backend } from "../pages/category/Backend";
 import { Database } from "../pages/category/Database";
 import { MachineLearning } from "../pages/category/MachineLearning";
 import { DataScience } from "../pages/category/DataScience";
+import { EmailResetPass } from "../pages/auth/EmailResetPass";
+import TokenProtected from "../assets/components/TokenProtected";
+
+
 
 export const RouterList = () => {
   return (
@@ -35,20 +38,21 @@ export const RouterList = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/otp" element={<OTP />} />
         <Route path="/reset" element={<ResetPass />} />
+        <Route path="/resetValidasi" element={<EmailResetPass/>}/>
         {/* Route Main */}
         <Route path="/" element={<Beranda />}></Route>
         <Route path="/kelassaya/:queryEnrollments" element={<BerandaKelasSaya />}></Route>
         <Route path="/kursus/:querySearch" element={<Kursus />}></Route>
         <Route path="/detail-kelas/:courseId" element={<DetailKelas />}></Route>
-        <Route path="/premium" element={<KelasPremium />}></Route>
         <Route path="/checkout/:courseId" element={<Checkout />}></Route>
         <Route path="/payment/:courseId/:idTransactions" element={<Payment />}></Route>
         <Route path="/success/payment/:courseId/:idTransactions" element={<Success />}></Route>
-        <Route path="/akun" element={<Akun />}></Route>
-        <Route path="/akun/profile" element={<AkunProfile />}></Route>
-        <Route path="/akun/change-password" element={<AkunPassword />}></Route>
-        <Route path="/akun/transaction" element={<AkunPembayaran />}></Route>
-        <Route path="/notifikasi" element={<Notifikasi />}></Route>
+        <Route path="/akun" element={<TokenProtected><Akun /></TokenProtected>}></Route>
+        <Route path="/akun/profile" element={<TokenProtected><AkunProfile /></TokenProtected>}></Route>
+        <Route path="/akun/change-password" element={<TokenProtected><AkunPassword /></TokenProtected>}></Route>
+        <Route path="/akun/transaction" element={<TokenProtected><AkunPembayaran /></TokenProtected>}></Route>
+        <Route path="/notifikasi" element={<TokenProtected><Notifikasi /></TokenProtected>}></Route>
+
         {/* Route Admin */}
         <Route path="/admin/login" element={<AdminLogin />}></Route>
         <Route path="/admin/dashboard" element={<Dashboard />}></Route>

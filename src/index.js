@@ -7,6 +7,11 @@ import { Provider } from "react-redux";
 import store from "./redux/store/store";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import "./assets/css/index.css";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+
+export default theme;
+const queryITSpace = new QueryClient();
 
 const theme = extendTheme({
   fonts: {
@@ -15,12 +20,10 @@ const theme = extendTheme({
   },
 });
 
-export default theme;
-const queryITSpace = new QueryClient();
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_OAUTH_GOOGLE_ID}>
     <Provider store={store}>
       <QueryClientProvider client={queryITSpace}>
         <ChakraProvider theme={theme}>
@@ -28,5 +31,6 @@ root.render(
         </ChakraProvider>
       </QueryClientProvider>
     </Provider>
+    </GoogleOAuthProvider>
   </React.StrictMode>
 );

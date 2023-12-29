@@ -1,41 +1,128 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useGetUsersProfile } from "../../services/users/get-user-profile";
+import { useToast } from "@chakra-ui/react";
+// img
 import picture from "../img/picture.png";
 
+import { API_ENDPOINT } from "../../utils/api-endpoint";
+import http from "../../utils/http";
+import { useGetDataUser } from "../../services/users/get-data-user";
+
 export const Profile = () => {
+  const [Nama, setNama] = useState("")
+  const [Email, setEmail] = useState("");
+  const [Telepon, setTelepon] = useState("");
+  const [Negara, setNegara] = useState("");
+  const [Kota, setKota] = useState("");
+  const [Image, setImage] = useState(null);
+  const [showImage, setShowImage] = useState();
+  const toast =useToast()
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+    setShowImage(URL.createObjectURL(file))
+  }
+  
+  const { data: GetUserProfile } = useGetUsersProfile()
+  const { data: getDataUser } = useGetDataUser({ query: GetUserProfile?.data?.id })
+
+  useEffect(() => {
+    setShowImage(getDataUser?.data?.profile?.profilePicture);
+    setNama(getDataUser?.data?.profile?.name);
+    setEmail(getDataUser?.data?.email);
+    setTelepon(getDataUser?.data?.profile?.phoneNumber);
+    setNegara(getDataUser?.data?.profile?.country);
+    setKota(getDataUser?.data.profile?.city);
+  }, [getDataUser])
+
+  const handlePutProfile = (e) => {
+    if (e) {
+      if (e.target.id === "nama") {
+        setNama(e.target.value);
+      }
+      if (e.target.id === "email") {
+        setEmail(e.target.value);
+      }
+      if (e.target.id === "telepon") {
+        setTelepon(e.target.value);
+      }
+      if (e.target.id === "negara") {
+        setNegara(e.target.value);
+      }
+      if (e.target.id === "kota") {
+        setKota(e.target.value);
+      }
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('image', Image);
+    formData.append('name', Nama);
+    formData.append('email', Email);
+    formData.append('phoneNumber', Telepon);
+    formData.append('country', Negara);
+    formData.append('city', Kota);
+
+    try {
+      const response = await http.put(`${API_ENDPOINT.PUT_USER}/${getDataUser?.data?.id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.status === 201) {
+        console.log('Image uploaded successfully!');
+        toast({
+          title: "Profil Berhasil Diperbarui",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        console.error('Image upload failed.');
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+  };
+
   return (
     <div className="flex justify-center">
-      <div className="flex flex-col justify-center ml-0 sm:ml-4 mt-[4rem] sm:mt-4 w-[23rem] sm:w-[18rem] px-5">
-        <div className="relative">
-          <div className="mx-auto w-[70px] h-[70px] bg-white outline outline-[#6148FF] rounded-full z-0"></div>
-          <div className="flex justify-center absolute left-[130px] bottom-0 z-10">
-            <div className="flex items-center justify-center w-7 h-7 bg-white rounded-lg z-20">
-              <img className="w-4 h-4" src={picture} alt=""></img>
-            </div>
+      <div className="flex flex-col justify-center ml-0 sm:ml-4 mt-[1rem] mobile sm:mt-4 w-[23rem] sm:w-[18rem] px-5">
+        <div className="w-[90px] h-[90px] mt-auto mx-auto relative bg-white rounded-full outline-ungu-0">
+          <img className="rounded-full object-cover object-center" src={showImage} alt=""/>
+          <div className="absolute bottom-0 right-0 bg-white w-6 h-6 flex items-center justify-center rounded-md overflow-hidden cursor-pointer">
+              <input id="image" type="file" onChange={handleImageChange} accept="image/*" className="absolute transform scale-200 opacity-0 cursor-pointer"/>
+              <img className="w-4 h-4 fill-white" src={picture} alt=""></img>
           </div>
         </div>
         <div className="flex flex-col justify-center gap-2">
           <div className="">
-            <span className="text-[12px]">Nama</span>
-            <input type="text" className="w-full p-3 sm:p-2 rounded-2xl sm:rounded-xl outline outline-gray-400 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan nama Anda"></input>
+            <span className="text-[12px] font-semibold">Nama</span>
+            <input id="nama" onChange={handlePutProfile} value={Nama || ""} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan nama Anda"/>
           </div>
           <div>
-            <span className="text-[12px]">Email</span>
-            <input type="text" className="w-full p-3 sm:p-2 rounded-2xl sm:rounded-xl outline outline-gray-400 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan email Anda"></input>
+            <span className="text-[12px] font-semibold">Email</span>
+            <input id="email" onChange={handlePutProfile} value={Email || ""} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan email Anda"/>
           </div>
           <div>
-            <span className="text-[12px]">Nomor Telepon</span>
-            <input type="text" className="w-full p-3 sm:p-2 rounded-2xl sm:rounded-xl outline outline-gray-400 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan nomor telepon"></input>
+            <span className="text-[12px] font-semibold">Nomor Telepon</span>
+            <input id="telepon" onChange={handlePutProfile} value={Telepon || ""} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan nomor telepon"/>
           </div>
           <div>
-            <span className="text-[12px]">Negara</span>
-            <input type="text" className="w-full p-3 sm:p-2 rounded-2xl sm:rounded-xl outline outline-gray-400 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan kota tempat tinggal"></input>
+            <span className="text-[12px] font-semibold">Negara</span>
+            <input id="negara" onChange={handlePutProfile} value={Negara || ""} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan negara Anda"/>
           </div>
           <div>
-            <span className="text-[12px]">Kota</span>
-            <input type="text" className="w-full p-3 sm:p-2 rounded-2xl sm:rounded-xl outline outline-gray-400 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan kota tempat tinggal"></input>
+            <span className="text-[12px] font-semibold">Kota</span>
+            <input id="kota" onChange={handlePutProfile} value={Kota || ""} type="text" className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]" placeholder="Masukkan kota tempat tinggal"/>
           </div>
           <div className="my-4 sm:mt-2">
-            <button className="w-full p-3 sm:p-2 bg-[#6148FF] rounded-3xl sm:rounded-2xl text-white font-semibold text-sm tracking-[1px]">Simpan profil saya</button>
+            <button onClick={handleSubmit} className="w-full p-3 sm:p-2 bg-gradientkanan rounded-3xl sm:rounded-2xl text-white font-semibold text-sm tracking-[1px] hover:scale-110 transition-transform duration-300">Simpan profil saya</button>
           </div>
         </div>
       </div>

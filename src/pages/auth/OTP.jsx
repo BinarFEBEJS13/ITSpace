@@ -4,17 +4,19 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { UseVerifyOtp } from "../../services/auth/verify_otp";
 import { CookieKeys, CookieStorage } from "../../utils/cookies";
 import { UseResendOtp } from "../../services/auth/resend_otp";
-// import check from "../../assets/svg/check.svg";
+import { useToast } from "@chakra-ui/react";
+import check from "../../assets/svg/check.svg";
 
 export const OTP = () => {
   const navigate = useNavigate();
-  const { mutate: veryOtp } = UseVerifyOtp();
+  const { mutate: veryOtp, isSuccess, error } = UseVerifyOtp();
   const { mutate: resendOtpMutation } = UseResendOtp();
   const [OTP, setOtp] = useState(Array(6).fill(""));
   const location = useLocation();
   const emailFromState = location.state?.email || "";
   const emailFromCookies = CookieStorage.get(CookieKeys.email) || "";
   const email = emailFromState || emailFromCookies;
+  const toast = useToast();
 
   // INPUT OTP
   const handleInputOtp = (e, index) => {
@@ -57,45 +59,92 @@ export const OTP = () => {
   };
 
   // BUTTON SIMPAN
-  const handleSimpan = async () => {
-    try {
-      const verifyData = {
-        email: email,
-        otp: OTP.join(""),
-      };
-
-      await veryOtp(verifyData);
-
-      console.log("Verifikasi Berhasil");
-      navigate("/");
-    } catch (error) {
-      console.error("Verifikasi Gagal", error);
-    }
+  const handleSimpan = () => {
+    veryOtp({
+      email: email,
+      otp: OTP.join(""),
+    });
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/login");
+      toast({
+        title: "Register Berhasil",
+        status: "success",
+        duration: 3000,
+        position: "bottom",
+        isClosable: true,
+      });
+    } else if (error) {
+      if (error.response && error.response.status === 401) {
+        toast({
+          title: "OTP tidak Valid!!!",
+          status: "error",
+          duration: 3000,
+          position: "bottom",
+          isClosable: true,
+        });
+        setOtp(Array(6).fill(""));
+      } else if (error) {
+        if (error.response && error.response.status === 400) {
+          toast({
+            title: "Masukan OTP!!!",
+            status: "error",
+            duration: 3000,
+            position: "bottom",
+            isClosable: true,
+          });
+        }
+      }
+    }
+  }, [navigate, toast, isSuccess, error]);
+
   console.log(OTP, "otp");
   console.log(email, "email");
+
+  //NOTIFIKASI BUAT MOBILE
+  useEffect(() => {
+    if (isSuccess) {
+      toast({
+        title: "Registrasi Berhasil",
+        status: "success",
+        position: "bottom",
+        duration: null, // Atur durasi menjadi null agar notifikasi tidak otomatis hilang
+      isClosable: true,
+        render: ({ onClose }) => (
+          <>
+            <div className="fixed inset-0 bg-black bg-opacity-75 z-10 md:hidden"></div>
+            <div className="fixed bottom-0 left-0 w-full h-[60%] bg-white z-20 md:hidden flex flex-col items-center justify-center rounded-t-[3rem]">
+              <p className="text-4xl font-bold text-ungu-0 mb-2">Registrasi</p>
+              <p className="text-4xl font-bold text-ungu-0 mb-4">Berhasil!!!</p>
+              <img
+                src={check}
+                alt="check"
+                className="w-[6rem] h-[6rem] text-green-500 mb-2"
+              />
+              <div className="flex flex-col items-center mt-2">
+                <button
+                  className="fixed bottom-8 bg-ungu-0 h-[3rem] w-[20rem] rounded-full text-white"
+                  onClick={() => {
+                    navigate("/login");
+                    onClose();
+                  }}
+                >
+                  Beranda
+                </button>
+              </div>
+            </div>
+          </>
+        ),
+      });
+    }
+  }, [isSuccess, navigate, toast]);
 
   return (
     <div className="flex flex-col md:flex-row w-full h-screen">
       {/* SEBELAH KIRI */}
-      <div className="flex flex-col md:w-2/3 md:mx-auto h-screen justify-center mx-4">
-        <a href="/register" className="flex-shrink-0 ml-0 mb-1">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6 ml-[5rem] mb-[1rem]"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-            />
-          </svg>{" "}
-        </a>
-
+      <div className="w-full md:w-2/3 flex flex-col h-screen items-center justify-center mx-auto p-4">
         <h1 className="mb-[2rem] font-bold text-2xl text-purple-800">
           Masukan OTP
         </h1>
@@ -136,25 +185,6 @@ export const OTP = () => {
           >
             Simpan
           </button>
-
-          {/* {showWrongOtpNotification && <div className="absolute bottom-[5rem] mb-4 h-[3rem] w-[20rem] md:w-[20rem] bg-merah-0 text-white rounded-xl flex justify-center items-center">Maaf, Kode OTP salah!</div>}
-          {showSuccessNotification && <div className="absolute bottom-[5rem] mb-4 h-[3rem] w-[20rem] md:w-[20rem] bg-hijau-0 text-white rounded-xl flex justify-center items-center">Registrasi Berhasil!</div>} */}
-
-          {/* NOTOFIKASI BAGIAN MOBILE */}
-          {/* {showSuccessNotification && <div className="fixed inset-0 bg-black bg-opacity-75 z-10 md:hidden"></div>}
-          {showSuccessNotification && (
-            <div className="fixed bottom-0 left-0 w-full h-[60%] bg-white z-10 md:hidden flex flex-col items-center justify-center rounded-t-[3rem]">
-              <p className="text-4xl font-bold text-ungu-0 mb-2">Registrasi</p>
-              <p className="text-4xl font-bold text-ungu-0 mb-4">Berhasil!!!</p>
-              <img src={check} alt="check" className="w-[6rem] h-[6rem] text-green-500 mb-2" /> */}
-          {/* <div className="flex flex-col items-center mt-2">
-            <button
-              className="fixed bottom-8 bg-ungu-0 h-[3rem] w-[20rem] rounded-full text-white"
-              onClick={() => navigate("/")}
-            >
-              Beranda
-            </button>
-          </div> */}
         </div>
       </div>
 

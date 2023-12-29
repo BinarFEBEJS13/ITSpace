@@ -4,16 +4,23 @@ export const API_ENDPOINT = {
   //Authentication
   REGISTER: "/auth/register",
   LOGIN: "/auth/login",
+  GOOGLE: "/auth/google",
   LOGOUT: "/auth/logout",
   RESEND_OTP: "/auth/resend-otp",
   VERIFY_OTP: "/auth/verify-otp",
   RESET_PASSWORD: "/auth/reset-password",
+
   CHANGE_PASWORD: "/auth/change-password",
   DECODE: "auth/decode",
+
+  CHANGE_PASSWORD: "/auth/change-password",
+  USERS_PROFILE: "/auth/decode",
+
   //Categories
   CATEGORIES: "/categories",
   // Users
   USERS: "/users",
+
   // Enrollments
   MY_ENROLLMENTS: "/my-enrollments",
   ENROLLMENTS: "/enrollments",
@@ -29,4 +36,13 @@ export const API_ENDPOINT = {
   AUTH_CHECK_ENROLLMENT: "/auth/check-enrollment",
   // Transactions
   TRANSACTIONS: "/transactions",
+
+  USERS_ID: "/users",
+  PUT_USER: "/users",
+  // Transactions
+  MY_TRANSACTIONS: "/my-transactions",
+  // 
+  MY_NOTIFICATIONS: "/my-notifications",
+  PUT_NOTIFICATIONS: "/my-notifications"
+
 };
