@@ -18,7 +18,7 @@ export const UIUX = () => {
     category: "ui/ux",
     order: "popularity",
     page: 1,
-    limit: 4,
+    limit: 3,
   });
 
   const dataKursus = datacourses?.data?.courses;
@@ -159,7 +159,7 @@ export const UIUX = () => {
                     <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
                   </div>
                 ) : dataKursus?.length > 0 ? (
-                  <div className=" w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  <div className=" w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
                     {/* Card Beli */}
                     {dataKursus?.map((value) => {
                       return (

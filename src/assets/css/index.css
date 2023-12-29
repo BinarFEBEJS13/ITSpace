@@ -3,17 +3,17 @@
 @tailwind utilities;
 
 html::-webkit-scrollbar {
-    width: 0.3rem;
-    background: transparent;
+  width: 0.3rem;
+  background: transparent;
 }
 
 html::-webkit-scrollbar-thumb {
-    background: linear-gradient(#073A75, #7805A1);
+  background: linear-gradient(#073a75, #7805a1);
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
+  display: none;
+}
 
 @layer base {
   @font-face {
@@ -33,26 +33,26 @@ html::-webkit-scrollbar-thumb {
 
 @media (max-width: 320px) {
   .card {
-    @apply rounded-2xl
+    @apply rounded-2xl;
   }
 }
 
 @media (max-width: 320px) {
   .mobile {
-    @apply w-[19rem]
+    @apply w-[19rem];
   }
 
   .picture {
-    @apply left-[140px]
+    @apply left-[140px];
   }
 
   .notif {
     @apply gap-[3rem] 
-    min-h-[155px]
+    min-h-[155px];
   }
 
   .transaction {
-    @apply space-x-[10rem]
+    @apply space-x-[10rem];
   }
 }
 
@@ -64,8 +64,7 @@ th {
   padding: 9px 20px;
 }
 
-/* Style Punya Swipper */
-.mySwiper .swiper-button-prev,
+/* .mySwiper .swiper-button-prev,
 .mySwiper .swiper-button-next {
   font-size: 1rem !important;
   width: 1rem;
@@ -73,7 +72,8 @@ th {
   background-color: #73ca5c;
   padding: 1.5rem;
   border-radius: 10%;
-}
+  transform: translateX(5rem);
+} */
 
 .mySwiper .swiper-pagination-bullet {
   background-color: #73ca5c !important;
