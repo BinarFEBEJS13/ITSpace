@@ -1,16 +1,19 @@
-import { useMutation } from "@tanstack/react-query";
-import { API_ENDPOINT } from "../../utils/api-endpoint"
-import http from "../../utils/http"
+// import { useMutation } from "@tanstack/react-query";
+import { API_ENDPOINT } from "../../utils/api-endpoint";
+import http from "../../utils/http";
 
-const ResetPass = async ({email}) => {
-    console.log (email)
-    return await http.get(`${API_ENDPOINT.RESET_PASSWORD}/${email}`)
+const ForgotPass = async ({ email }) => {
+  try {
+    console.log(email);
+    const response = await http.get(`${API_ENDPOINT.RESET_PASSWORD}/${email}`);
+    if (response.data.success) {
+      return response.data;
+    } else {
+      throw new Error(response.data.message);
+    }
+  } catch (error) {
+    throw new Error("Terjadi kesalahan");
   }
+};
 
-const UseResetPass = () => {
-    return useMutation({
-        mutationFn: ResetPass
-    });
-}
-
-export {ResetPass, UseResetPass};
+export { ForgotPass };

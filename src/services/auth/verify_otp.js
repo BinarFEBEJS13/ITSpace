@@ -1,27 +1,37 @@
+// import { useMutation } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { API_ENDPOINT } from "../../utils/api-endpoint";
 import http from "../../utils/http";
 
 const verifyOtp = async (input) => {
-  try {
-      const response = await http.put(API_ENDPOINT.VERIFY_OTP, input);
-      console.log('Response from verifyOtp:', response);
-
-      if (response && response.data && response.data.success) {
-          return { success: true };
-      } else {
-          return { success: false, message: "Verifikasi gagal" };
-      }
-  } catch (error) {
-      console.error("Error during verification:", error);
-      throw error;
-  }
-};
+  return await http.put(API_ENDPOINT.VERIFY_OTP, input);
+}
 
 const UseVerifyOtp = () => {
   return useMutation({
-    mutationFn: verifyOtp,
+      mutationFn: verifyOtp
   });
-};
+}
 
-export { verifyOtp, UseVerifyOtp };
+export {verifyOtp, UseVerifyOtp}
+
+// const verifyOtp = async (input) => {
+//   try {
+//   const response = await http.put(API_ENDPOINT.VERIFY_OTP, input);
+//   if (response.data.success) {
+//     return response.data;
+//   } else {
+//     throw new Error(response.data.message);
+//   }
+// } catch (error) {
+//   throw new Error("Terjadi kesalahan");
+//   }
+// };
+
+// // const UseVerifyOtp = () => {
+// //   return useMutation({
+// //     mutationFn: verifyOtp,
+// //   });
+// // };
+
+// export { verifyOtp };

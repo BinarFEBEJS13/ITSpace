@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import pass from "../../assets/svg/pass.svg";
 import passClose from "../../assets/svg/passClose.svg";
 import LogoBg from "../../assets/img/LogoBg.jpg";
-// import salah from "../../assets/svg/salah.svg";
+import salah from "../../assets/svg/salah.svg";
 import check from "../../assets/svg/check.svg";
 import { useNavigate } from "react-router-dom";
 import { UseRegister } from "../../services/auth/register";
 import { CookieKeys, CookieStorage } from "../../utils/cookies";
+import { useToast } from "@chakra-ui/react";
 
 export const Register = () => {
   const [Username, setUsername] = useState("");
@@ -15,9 +16,11 @@ export const Register = () => {
   const [Password, setPassword] = useState("");
   const [validPass, setValidPass] = useState("");
   const navigate = useNavigate();
-  const { mutate: register } = UseRegister();
+  const { mutate: registerData, isSuccess, error } = UseRegister();
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPhoneValid, setIsPhoneValid] = useState(false);
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const toast = useToast();
 
   const handleInput = (e) => {
     if (e) {
@@ -69,32 +72,40 @@ export const Register = () => {
   };
 
   //FUNGSI UNTUK REGISTER
-  const handleRegister = async () => {
-    try {
-      const registerData = {
-        name: Username,
-        telp: Telp,
-        email: Email,
-        password: Password,
-        passwordValidation: validPass,
-      };
-
-      await register(registerData);
-
-      CookieStorage.set(CookieKeys.email, Email);
-
-      console.log("Register berhasil!");
-      navigate("/otp", { state: { email: Email } });
-    } catch (error) {
-      console.error("Register error:", error);
-    }
+  const handleRegister = () => {
+    registerData({
+      name: Username,
+      telp: Telp,
+      email: Email,
+      password: Password,
+      passwordValidation: validPass,
+    });
   };
 
-  console.log(Username, "name");
-  console.log(Email, "email");
-  console.log(Telp, "telp");
-  console.log(Password, "password");
-  console.log(validPass, " passwordValidation");
+  useEffect(() => {
+    if (isSuccess) {
+      CookieStorage.set(CookieKeys.email, Email);
+      navigate("/otp", { state: { email: Email } });
+      toast({
+        title: "tautan terkirim",
+        status: "success",
+        duration: 3000,
+        position: "bottom",
+        isClosable: true,
+      });
+    } else if (error) {
+      if (error.response && error.response.status === 400) {
+        toast({
+          title: "Password min 8 karakter!!!",
+          status: "error",
+          duration: 3000,
+          position: "bottom",
+          isClosable: true,
+        });
+        setIsPasswordValid(false);
+      }
+    }
+  }, [Email, navigate, toast, isSuccess, error]);
 
   return (
     <div className="flex flex-row w-full h-screen">
@@ -168,16 +179,27 @@ export const Register = () => {
               <input
                 id="password"
                 type={PasswordVisible ? "text" : "password"}
-                className="h-[3rem] w-full rounded-xl border border-gray-300 pl-3"
+                className={`h-[3rem] w-full rounded-xl border ${
+                  isPasswordValid ? "border-gray-300" : "border-red-500"
+                } pl-3`}
                 placeholder="Buat Password"
                 onChange={handleInput}
               />
-              <img
-                src={PasswordVisible ? passClose : pass}
-                alt={PasswordVisible ? "passClose" : "pass"}
-                className="top-3 right-5 absolute cursor-pointer"
-                onClick={togglePasswordVisibility}
-              />
+              {!isPasswordValid && (
+                <img
+                  src={salah}
+                  alt="salah"
+                  className="top-3 right-5 absolute"
+                />
+              )}
+              {isPasswordValid && (
+                <img
+                  src={PasswordVisible ? passClose : pass}
+                  alt={PasswordVisible ? "passClose" : "pass"}
+                  className="top-3 right-5 absolute cursor-pointer"
+                  onClick={togglePasswordVisibility}
+                />
+              )}
             </div>
           </div>
 
@@ -190,16 +212,27 @@ export const Register = () => {
               <input
                 id="validPass"
                 type={ValidPassVisible ? "text" : "password"}
-                className="h-[3rem] w-full rounded-xl border border-gray-300 pl-3"
+                className={`h-[3rem] w-full rounded-xl border ${
+                  isPasswordValid ? "border-gray-300" : "border-red-500"
+                } pl-3`}
                 placeholder="Ulangi Password"
                 onChange={handleInput}
               />
-              <img
-                src={ValidPassVisible ? passClose : pass}
-                alt={ValidPassVisible ? "passClose" : "pass"}
-                className="top-3 right-5 absolute cursor-pointer"
-                onClick={toggleValidPassVisibility}
-              />
+              {!isPasswordValid && (
+                <img
+                  src={salah}
+                  alt="salah"
+                  className="top-3 right-5 absolute"
+                />
+              )}
+              {isPasswordValid && (
+                <img
+                  src={PasswordVisible ? passClose : pass}
+                  alt={PasswordVisible ? "passClose" : "pass"}
+                  className="top-3 right-5 absolute cursor-pointer"
+                  onClick={toggleValidPassVisibility}
+                />
+              )}
             </div>
           </div>
 
@@ -221,16 +254,6 @@ export const Register = () => {
               Masuk di sini
             </a>
           </span>
-          {/* {!isValidPassword && registrationAttempted && (
-            <div className="flex absolute bottom-0 h-[3rem] w-[20rem] md:w-[20rem] bg-merah-0 text-white rounded-xl justify-center items-center">
-              Password min 8 karakter!
-            </div>
-          )}
-          {registrationSuccess && (
-            <div className="flex absolute bottom-0 h-[3rem] w-[20rem] md:w-[20rem] bg-hijau-0 text-white rounded-xl justify-center items-center">
-              Tautan Verifikasi telah dikirim!
-            </div>
-          )} */}
         </div>
       </div>
 

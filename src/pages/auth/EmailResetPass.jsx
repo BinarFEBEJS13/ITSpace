@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import LogoBg from "../../assets/img/LogoBg.jpg";
-import { useNavigate } from "react-router-dom";
-import { UseResetPass } from "../../services/auth/forgotPass";
+// import { useNavigate } from "react-router-dom";
+import { ForgotPass } from "../../services/auth/forgotPass";
 
 export const EmailResetPass = () => {
-  const navigate = useNavigate();
-  const { mutate: reset } = UseResetPass();
+  // const navigate = useNavigate();
+  // const { mutate: reset } = UseResetPass();
   const [email, setEmail] = useState("");
+  const [errorNotification, setErrorNotification] = useState("");
+  const [successNotification, setSuccessNotification] = useState("");
 
   const handleInput = (e) => {
     if (e.target.id === "email") {
@@ -20,11 +22,21 @@ export const EmailResetPass = () => {
         email: email,
       };
 
-      await reset(emailReset);
-      navigate("/reset");
+      const response = await ForgotPass(emailReset);
+      if (response && response.success) {
+        console.log("Validasi berhasil");
+        setSuccessNotification("Tautan telah dikirim!");
+        setErrorNotification("");
+        // navigate("/reset");
+      } else {
+        console.error("Validasi gagal:", response?.message || "Unknown error");
+        setErrorNotification("Email tidak terdaftar!!!");
+        setSuccessNotification("");
+      }
     } catch (error) {
-      console.error("Error mengirim email reset:", error.message);
-      console.log("Email tidak terdaftar.");
+      console.error(error.message);
+      setErrorNotification("Email tidak terdaftar!!!");
+      setSuccessNotification("");
     }
   };
 
@@ -57,6 +69,18 @@ export const EmailResetPass = () => {
           >
             Kirim Tautan
           </button>
+
+          {errorNotification && (
+            <div className="absolute bottom-8 mb-4 h-[3rem] w-[20rem] md:w-[20rem] bg-merah-0 text-white rounded-xl flex justify-center items-center">
+              {errorNotification}
+            </div>
+          )}
+
+          {successNotification && (
+            <div className="absolute bottom-8 mb-4 h-[3rem] w-[20rem] md:w-[20rem] bg-hijau-0 text-white rounded-xl flex justify-center items-center">
+              {successNotification}
+            </div>
+          )}
         </div>
       </div>
 

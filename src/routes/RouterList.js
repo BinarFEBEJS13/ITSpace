@@ -29,7 +29,7 @@ export const RouterList = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/otp" element={<OTP />} />
         <Route path="/reset" element={<ResetPass />} />
-        <Route path="/email" element={<EmailResetPass/>}/>
+        <Route path="/resetValidasi" element={<EmailResetPass/>}/>
         {/* Route Main */}
         <Route path="/" element={<Beranda />}></Route>
         <Route path="/kelassaya" element={<BerandaKelasSaya />}></Route>

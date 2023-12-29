@@ -2,16 +2,19 @@ import React, { useState } from "react";
 import LogoBg from "../../assets/img/LogoBg.jpg";
 import pass from "../../assets/svg/pass.svg";
 import passClose from "../../assets/svg/passClose.svg";
-import { useChangePassword } from "../../services/auth/changePass";
 import { useNavigate } from "react-router-dom";
+import { useResetPassword } from "../../services/auth/resetPass";
+import { useToast } from "@chakra-ui/react";
 
 export const ResetPass = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [password2Visible, setPassword2Visible] = useState(false);
   const navigate = useNavigate();
-  const { mutate: change } = useChangePassword();
+  const { mutate: reset } = useResetPassword();
   const [Password, setPassword] = useState("");
   const [validPass, setValidPass] = useState("");
+  const token = window.location.search.slice(1);
+  const toast = useToast();
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prevVisible) => !prevVisible);
@@ -34,13 +37,21 @@ export const ResetPass = () => {
 
   const handleChangePassword = async () => {
     try {
-      const changePass = {
-        password: Password,
-        passwordValidation: validPass,
+      const resetPass = {
+        newPassword: Password,
+        newPasswordValidation: validPass,
+        token: token,
       };
 
-      await change(changePass);
-      navigate("/reset");
+      await reset(resetPass);
+      toast({
+        title: "Password berhasil diubah",
+        status: "success",
+        duration: 3000,
+        position: "bottom",
+      });
+      navigate("/login");
+      console.log(resetPass, "resetpass");
     } catch (error) {
       console.error("Error mengirim email reset:", error.message);
       console.log("Email tidak terdaftar.");
