@@ -8,9 +8,7 @@ import store from "./redux/store/store";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import "./assets/css/index.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
-export default theme;
 const queryITSpace = new QueryClient();
 
 const theme = extendTheme({
@@ -19,18 +17,19 @@ const theme = extendTheme({
     body: `'Poppins', sans-serif`,
   },
 });
+export default theme;
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <GoogleOAuthProvider clientId={process.env.REACT_APP_OAUTH_GOOGLE_ID}>
-    <Provider store={store}>
-      <QueryClientProvider client={queryITSpace}>
-        <ChakraProvider theme={theme}>
-          <RouterList />
-        </ChakraProvider>
-      </QueryClientProvider>
-    </Provider>
+      <Provider store={store}>
+        <QueryClientProvider client={queryITSpace}>
+          <ChakraProvider theme={theme}>
+            <RouterList />
+          </ChakraProvider>
+        </QueryClientProvider>
+      </Provider>
     </GoogleOAuthProvider>
   </React.StrictMode>
 );
