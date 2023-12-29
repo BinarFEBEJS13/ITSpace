@@ -24,8 +24,6 @@ export const FilterMobile = ({ onClose, onApplyFilter, onClearFilter }) => {
     }));
   };
 
-  console.log(selectedFilters);
-
   const handleChangeKategori = (event) => {
     const { value, checked } = event.target;
     setSelectedFilters((prevFilters) => ({

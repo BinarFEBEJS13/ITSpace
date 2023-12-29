@@ -22,7 +22,7 @@ import "swiper/css/bundle";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 // import required modules
-import { Pagination, Navigation } from "swiper/modules";
+import { Pagination } from "swiper/modules";
 import { Footer } from "../assets/components/Footer";
 import { NotFoundCourse } from "../assets/components/HandleErrorPage/NotFoundCourse";
 // IMPORT CHAKRA UI
@@ -35,7 +35,6 @@ export const Beranda = () => {
   const handleActivePopular = (item) => {
     setActivePopular(item);
   };
-
   const { data: dataKursuss, isLoading } = useGetDataKursus({
     category: activePopular,
     order: "popularity",
@@ -196,11 +195,10 @@ export const Beranda = () => {
                     <Swiper
                       slidesPerView={4}
                       spaceBetween={10}
-                      navigation={true}
                       pagination={{
                         clickable: true,
                       }}
-                      modules={[Pagination, Navigation]}
+                      modules={[Pagination]}
                       className="mySwiper w-full"
                       breakpoints={{
                         319: {
