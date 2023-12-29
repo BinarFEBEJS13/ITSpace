@@ -18,7 +18,6 @@ import { Notifikasi } from "../pages/Notifikasi";
 import { Success } from "../pages/Success";
 import { Kursus } from "../pages/Kursus";
 import AdminLogin from "../pages/Admin/Login";
-import ImageUploadForm from "../services/users/user-photo-profile";
 import TokenProtected from "../assets/components/TokenProtected";
 
 export const RouterList = () => {
@@ -43,7 +42,6 @@ export const RouterList = () => {
         <Route path="/akun/change-password" element={<TokenProtected><AkunPassword /></TokenProtected>}></Route>
         <Route path="/akun/transaction" element={<TokenProtected><AkunPembayaran /></TokenProtected>}></Route>
         <Route path="/notifikasi" element={<TokenProtected><Notifikasi /></TokenProtected>}></Route>
-        <Route path="/contoh" element={<ImageUploadForm />}></Route>
         {/* Route Admin */}
         <Route path="/admin/login" element={<AdminLogin />}></Route>
         <Route path="/admin/dashboard" element={<Dashboard />}></Route>
