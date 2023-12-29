@@ -19,9 +19,9 @@ export const Notifikasi = () => {
   const [clickedNotifications, setClickedNotifications] = useState([]);
 
   const handleNotificationClick = (id, index) => {
-    if (!clickedNotifications.includes(index)) {
-      setClickedNotifications([...clickedNotifications, index]);
+    if (!clickedNotifications.includes(index) && getNotif && !getNotif[index]?.is_read) {
       putNotif(id);
+      setClickedNotifications([...clickedNotifications, index]);
     }
   };
 

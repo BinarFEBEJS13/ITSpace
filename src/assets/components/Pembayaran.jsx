@@ -19,7 +19,6 @@ export const Pembayaran = () => {
 
   const sendDataTransactions = (idCourse, idTransaksi, isDone) => {
     if (isDone === true) {
-      console.log(isDone, "fernandes")
     } else {
       window.location.href = `/payment/${idCourse}/${idTransaksi}`;
     }
@@ -37,7 +36,7 @@ export const Pembayaran = () => {
               <img className="flex w-full" src={transactions?.course?.thumbnailUrl} alt=""></img>
               <div className="flex flex-col gap-[2px] ml-2 mt-1">
                 <div className="flex space-x-[11rem] transaction sm:space-x-[9rem] text-[10px] font-bold">
-                  <p>{transactions?.course?.courseCategory[0]?.category?.name}</p>
+                  <p className="text-[#6148FF]">{transactions?.course?.courseCategory[0]?.category?.name}</p>
                   <div className="flex justify-center items-center w-10 h-4 bg-[#6148FF] rounded-lg">
                     <img src={star} alt=""></img>
                     <p className="text-white">{transactions?.course?.rate !== null ? transactions?.course?.rate.toFixed(1) : '0.0'}</p>
