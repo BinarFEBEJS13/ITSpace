@@ -13,4 +13,4 @@ const usePostDataChapters = () => {
     })
 }
 
-export {usePostDataChapters}
+export {usePostDataChapters,postDataChapter}

@@ -15,4 +15,4 @@ const useDeleteChapter = () => {
     })
 }
 
-export {useDeleteChapter}
+export {useDeleteChapter,deleteChapter}

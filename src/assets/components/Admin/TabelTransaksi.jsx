@@ -3,9 +3,13 @@ import { Sidebar } from "./Sidebar";
 import { IoChevronDownCircleOutline } from "react-icons/io5";
 import { Header } from "./Header";
 import { DataDashboard } from "./DataDashboard";
-import { useGetPembayaran } from "../../../services/Admin/dashboard-utama/get-status-pembayaran";
+import { useGetPembayaran } from "../../../services/Admin/transaksi/get-status-pembayaran";
 import SearhIcon from "../../../assets/svg/search-admin.svg";
-import Filter from "../../../assets/svg/filter.svg";
+import "react-datepicker/dist/react-datepicker.css";
+import "react-datepicker/dist/react-datepicker-cssmodules.css";
+import 'rsuite/dist/rsuite-no-reset.min.css';
+
+
 import {
   Button,
   Menu,
@@ -17,25 +21,26 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import DatePicker from "react-datepicker";
+import { DateRangePicker } from 'rsuite';
 
 const TabelTransaksi = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [Search, setSearch] = useState("");
-  const [SearchBtn, setSearchBtn] = useState("");
-  // const [courseCode, setCourseCode] = useState("");
+  const [Status, setStatus] = useState("");
   const [Payment, setPayment] = useState("");
-  const [sidebarVisible, setSidebarVisible] = useState(false);
-
-  const {
-    data: Transaksi,
-    isLoading,
-    refetch: refetchData,
-  } = useGetPembayaran({
+  const [dateRange, setDateRange] = useState({ startDate: null, endDate: null });
+  const { data: Transaksi, isLoading } = useGetPembayaran({
     // courseCode: courseCode,
+    page: currentPage,
+    limit: 10,
+    status: Status,
     se: Search,
     method: Payment,
+    from: dateRange.startDate,
+    to: dateRange.endDate,
   });
-
+  console.log(Transaksi, "Transaksi");
   const handlePrev = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
@@ -46,35 +51,21 @@ const TabelTransaksi = () => {
     setCurrentPage(currentPage + 1);
   };
 
-  // const handleFilterByCourseCode = (selectedLevel) => {
-  //   setCourseCode(selectedLevel);
-  //   setCurrentPage(1);
-  // };
 
   const handleFilterByPayment = (selectedCategory) => {
     setPayment(selectedCategory);
     setCurrentPage(1);
   };
 
-  const datafilter = (e) => {
-    Transaksi.filter((kelas) =>
-      kelas.course.title.toLowerCase().includes(Search.toLowerCase())
-    );
+  const handleFilterByStatus = (selectedCategory) => {
+    setStatus(selectedCategory);
+    setCurrentPage(1);
   };
-  // const handleToggleSearch = async (e) => {
-  //   e.preventDefault(); // Prevent automatic form submission
 
-  //   if (SearchBtn) {
-  //     setSearch(e.target.value);
-  //     // Pesetrform search when the search button is clicked
-  //     await refetchData();
-  //     // Add any other logic related to search results or messages
-  //   }
-  // };
   console.log(Transaksi, "PAYMENT");
   return (
     <div className="flex h-screen flex-col bg-[rgba(208,208,208,0.21)] sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
-      <Sidebar setSidebarVisible={setSidebarVisible} />
+      <Sidebar />
 
       <div className=" w-full lg:overflow-x-hidden">
         {/* ========================= Header =========================  */}
@@ -87,7 +78,30 @@ const TabelTransaksi = () => {
             <h1 className="sm:w-full font-bold text-normal sm:text-xl">
               Status Pembayaran
             </h1>
-            <div className="flex gap-2 sm:gap-3">
+            <div className="text-center rounded-lg flex items-center gap-4 sm:gap-3">
+              {/* <DatePicker
+              wrapperClassName="datePicker"
+                popperPlacement="bottom"
+                showPopperArrow={false}
+                placeholderText="Filter Date"
+                className="border p-2 flex items-center gap-4 border-gray-300 rounded-md"
+                selectsRange={true}
+                startDate={startDate}
+                endDate={endDate}
+                onChange={(update) => {
+                  setDateRange(update);
+                }}
+                isClearable={true}
+              /> */}
+               <DateRangePicker
+                size="lg"
+                placement="leftStart"
+                appearance="default"
+                placeholder="dd/mm/yyyy"
+                onChange={(value) => setDateRange(value)}
+                value={dateRange}
+                className="custom-date-picker"
+              />
               <div>
                 <Menu>
                   <MenuButton
@@ -102,16 +116,46 @@ const TabelTransaksi = () => {
                     Filter
                   </MenuButton>
                   <MenuList>
-                    <MenuOptionGroup color="#6148FF" title="Level" type="radio">
-                      {/* <MenuItemOption
-                        onClick={() => handleFilterByCourseCode(courseCode)}
-                      >
-                        Course Code
-                      </MenuItemOption> */}
+                    <MenuOptionGroup
+                      color="#6148FF"
+                      title="Status Pembayaran"
+                      type="radio"
+                    >
                       <MenuItemOption
-                        onClick={() => handleFilterByPayment(Payment)}
+                        value="SUDAH BAYAR"
+                        onClick={() => handleFilterByStatus("1")}
                       >
-                        Pembayaran
+                        Sudah Bayar
+                      </MenuItemOption>
+                      <MenuItemOption
+                        value="BELUM BAYAR"
+                        onClick={() => handleFilterByStatus("0")}
+                      >
+                        Belum Bayar
+                      </MenuItemOption>
+                    </MenuOptionGroup>
+                    <MenuOptionGroup
+                      color="#6148FF"
+                      title="Metode Pembayaran"
+                      type="radio"
+                    >
+                      <MenuItemOption
+                        value="VIRTUAL_ACCOUNT"
+                        onClick={() => handleFilterByPayment("VIRTUAL_ACCOUNT")}
+                      >
+                        Virtual Account
+                      </MenuItemOption>
+                      <MenuItemOption
+                        value="GERAI_RETAIL"
+                        onClick={() => handleFilterByPayment("GERAI_RETAIL")}
+                      >
+                        Kartu Kredit
+                      </MenuItemOption>
+                      <MenuItemOption
+                        value="E_WALLET"
+                        onClick={() => handleFilterByPayment("E_WALLET")}
+                      >
+                        E-Wallet
                       </MenuItemOption>
                     </MenuOptionGroup>
                     <MenuDivider />
@@ -163,11 +207,15 @@ const TabelTransaksi = () => {
                 <table className="w-full mt-5">
                   <thead className="bg-[#EBF3FC] font-light md:font-normal text-md text-center">
                     <tr>
-                      <th>ID</th>
+                      <th>ID Transaksi</th>
+                      <th>ID User</th>
+                      <th>User Pembeli</th>
                       <th>Nama Kelas</th>
                       <th>Tipe Kelas</th>
                       <th>Status</th>
                       <th>Metode Pembayaran</th>
+                      <th>Harga Kelas</th>
+                      <th>Tanggal Beli</th>
                       <th>Tanggal Bayar</th>
                     </tr>
                   </thead>
@@ -175,6 +223,8 @@ const TabelTransaksi = () => {
                     {Transaksi?.data?.transactions.map((transaksi, index) => (
                       <tr key={index}>
                         <td>{transaksi.id}</td>
+                        <td>{transaksi.author.id}</td>
+                        <td>{transaksi.author.profile.name}</td>
                         <td>{transaksi.course.title}</td>
                         <td>
                           <span
@@ -201,7 +251,34 @@ const TabelTransaksi = () => {
                             : "BELUM BAYAR"}
                         </td>
                         <td>{transaksi.paymentMethod}</td>
-                        <td>{transaksi.payDate}</td>
+                        <td>
+                          Rp.
+                          {new Intl.NumberFormat("id-ID").format(
+                            transaksi.course.price
+                          )}
+                        </td>
+                        <td>
+                          {new Date(transaksi.date).toLocaleDateString(
+                            "id-ID",
+                            {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                            }
+                          )}
+                        </td>
+                        <td>
+                          {transaksi.payDone === true
+                            ? new Date(transaksi.payDate).toLocaleDateString(
+                                "id-ID",
+                                {
+                                  day: "numeric",
+                                  month: "short",
+                                  year: "numeric",
+                                }
+                              )
+                            : "-"}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -209,13 +286,13 @@ const TabelTransaksi = () => {
               </div>
             )}
           </div>
-          {Transaksi?.data?.transactions.length > 4 && (
+          {Transaksi?.data?.transactions.length >= 0 && (
             <div className="flex mt-2 gap-2 justify-end mx-[4rem]">
               <div className="flex bg-[rgba(0,0,0,0.4)] rounded-[50px] p-3 gap-3 text-white">
                 <div
                   onClick={handlePrev}
                   className={`p-1 rounded-[50px] bg-[#6048ff] ${
-                    !Transaksi?.data?.Pagination?.links.prev
+                    !Transaksi?.data?.pagination?.links?.prev
                       ? "cursor-not-allowed opacity-50"
                       : ""
                   }`}
@@ -226,7 +303,7 @@ const TabelTransaksi = () => {
                 <div
                   onClick={handleNext}
                   className={`p-1 rounded-[50px] bg-[#6148FF] ${
-                    !Transaksi?.data?.Pagination?.links.next
+                    !Transaksi?.data?.pagination?.links?.next
                       ? "cursor-not-allowed opacity-50"
                       : ""
                   }`}

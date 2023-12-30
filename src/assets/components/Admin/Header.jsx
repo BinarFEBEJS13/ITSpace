@@ -22,7 +22,7 @@ export const Header = () => {
       {Open && (
 
           <div
-            className="bg-[rgba(0,0,0,0.8)]"
+            className="bg-[rgba(0,0,0,0.8)] "
             >
             <Sidebar Open={Open} setOpen={setOpen}/>
           </div>
@@ -30,7 +30,7 @@ export const Header = () => {
       <div className="flex items-center gap-4 w-3/4">
         <FiMenu
           onClick={toggleSidebar}
-          className="block cursor-pointer font-3xl text-white sm:block md:block lg:block xl:hidden"
+          className="block cursor-pointer text-3xl text-white sm:block md:block lg:block xl:hidden"
         />
         <h1 className="uppercase text-sm font-bold sm:text-xl text-white">
           Hi {UsersID?.data?.profile?.name}

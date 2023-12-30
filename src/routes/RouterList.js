@@ -7,7 +7,6 @@ import { ResetPass } from "../pages/auth/ResetPass";
 import { AkunPassword } from "../pages/AkunPassword";
 import { AkunPembayaran } from "../pages/AkunPembayaran";
 import { Akun } from "../pages/Akun";
-import Dashboard from "../pages/Admin/Dashboard";
 import { Beranda } from "../pages/Beranda";
 import { BerandaKelasSaya } from "../pages/BerandaKelasSaya";
 import { DetailKelas } from "../pages/DetailKelas";
@@ -21,10 +20,10 @@ import AdminLogin from "../pages/Admin/Login";
 import { TableKelas } from "../assets/components/Admin/TableKelas";
 import { TableUser } from "../assets/components/Admin/TableUser";
 import TabelTransaksi from "../assets/components/Admin/TabelTransaksi";
-import { Chapters } from "../assets/components/Admin/Chapters";
 
-import ImageUploadForm from "../services/users/user-photo-profile";
 import TokenProtected from "../assets/components/TokenProtected";
+import { Chapters } from "../assets/components/Admin/chapter/Chapters";
+import { Category } from "../assets/components/Admin/kategori/Category";
 
 export const RouterList = () => {
   return (
@@ -49,16 +48,15 @@ export const RouterList = () => {
         <Route path="/akun/change-password" element={<TokenProtected><AkunPassword /></TokenProtected>}></Route>
         <Route path="/akun/transaction" element={<TokenProtected><AkunPembayaran /></TokenProtected>}></Route>
         <Route path="/notifikasi" element={<TokenProtected><Notifikasi /></TokenProtected>}></Route>
-        <Route path="/contoh" element={<ImageUploadForm />}></Route>
         {/* Route Admin */}
         <Route path="/admin/login" element={<AdminLogin />}></Route>
-        <Route path="/admin/dashboard" element={<Dashboard />}></Route>
-        <Route path="/admin/dashboard/course" element={<TableKelas />}></Route>
+        <Route path="/admin/dashboard/course" element={<TokenProtected><TableKelas /></TokenProtected>}></Route>
         <Route
           path="/admin/dashboard/transaksi"
-          element={<TabelTransaksi />}
+          element={<TokenProtected><TabelTransaksi /></TokenProtected>}
         ></Route>
-        <Route path="/admin/dashboard/users" element={<TableUser />}></Route>
+        <Route path="/admin/dashboard/users" element={<TokenProtected><TableUser /></TokenProtected>}></Route>
+        <Route path="/admin/dashboard/category" element={<TokenProtected><Category/></TokenProtected>}></Route>
         <Route
           path="/admin/dashboard/course/:id/chapters"
           element={<Chapters />}

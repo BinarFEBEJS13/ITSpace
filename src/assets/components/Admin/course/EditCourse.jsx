@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { editDataCourse, useEditCourse } from "../../../../services/Admin/courses/put-data-courses";
 import { FaCloudArrowUp } from "react-icons/fa6";
+import { useGetCourseBYID } from "../../../../services/Admin/courses/get-data-coursesID";
 import { FaTrash } from "react-icons/fa6";
-import { usePostDataQuery } from "../../services/Admin/courses/post-data-course";
 import { useToast } from "@chakra-ui/react";
+import { useGetCategory } from "../../../../services/Admin/category/get-data-category";
+import makeAnimated from "react-select/animated";
+import Select from "react-select";
 
-
-export const AddPopup = (props) => {
+export const EditCourse = (props) => {
   const [NamaKelas, setNamaKelas] = useState("");
   const [Kategori, setKategori] = useState([]);
   const [KodeKelas, setKodeKelas] = useState("");
@@ -19,30 +22,60 @@ export const AddPopup = (props) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [Img, setImg] = useState(null);
   const toast = useToast();
+  const animatedComponents = makeAnimated();
 
-  const { handleClose } = props;
+  const { handleClose, selectedCourseData, refetchData  } = props;
 
-  const { mutate: addKelas } = usePostDataQuery({
-    onSuccess: () => {
-      props.refetch();
-    },
+  const { data: Edit } = useGetCourseBYID({
+    courseId: selectedCourseData.id,
   });
 
+  const mapKategori = Kategori.map((ok)=> ok.value)
+
+  const { data: AllCategory } = useGetCategory();
+
+  const dataKategori =
+    AllCategory?.data?.map((category) => ({
+      value: category.name,
+      label: category.name,
+    })) || [];
+  
+  const courseKategori = selectedCourseData.courseCategory.map(
+    (kategori) => kategori.category.name
+  );
+
+  const MentorData = selectedCourseData.mentor.map(
+    (mentor) => mentor.author.email
+  );
+
+  useEffect(() => {
+    if (selectedCourseData.id) {
+      setKodeKelas(Edit?.data?.code);
+      setKategori(
+        courseKategori.map((category) => ({
+          value: category,
+          label: category,
+        }))
+      );
+      setLevel(selectedCourseData.level);
+      setHarga(selectedCourseData.price);
+      setLinkKelas(Edit?.data?.groupUrl);
+      setSelectedFile(selectedCourseData.thumbnailUrl);
+      setTipeKelas(selectedCourseData.isPremium === true ? "1" : "0");
+      setNamaKelas(selectedCourseData.title);
+      setMentor(MentorData);
+      setDescription(selectedCourseData.description);
+      setFileName(selectedCourseData.fileName);
+    }
+  }, [selectedCourseData, Edit]);
+
+  
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setSelectedFile(URL.createObjectURL(file));
       setFileName(file.name);
       setImg(file);
-    }
-  };
-
-  const editData = (props) => {
-    console.log(props);
-    if (props.length === 0) {
-      return [];
-    } else {
-      return props.split(",");
     }
   };
 
@@ -58,25 +91,33 @@ export const AddPopup = (props) => {
     formData.append("description", Description);
     formData.append("image", Img);
     formData.append("groupUrl", LinkKelas);
-    const mentorArray = typeof Mentor === "string" ? Mentor.split(",") : [];
+    const mentorArray =
+      typeof Mentor === "string" ? Mentor.split(",") : MentorData;
     mentorArray.forEach((email, index) => {
       formData.append(`mentorEmail[${index}]`, email);
     });
+
   
-    const kategoriArray = typeof Kategori === "string" ? Kategori.split(",") : [];
-    kategoriArray.forEach((category, index) => {
+    mapKategori.forEach((category, index) => {
       formData.append(`courseCategory[${index}]`, category);
     });
 
-    addKelas(formData);
-    toast({
-      title: "successfully add a new course",
-      status: "success",   
-      position: "bottom-right",
-      duration: 9000,
-      isClosable: true,
-      size: "lg",
-    });
+    editDataCourse({ id: selectedCourseData.id, input: formData }).then((result) => {
+      toast({
+        title: result?.response?.data?.message,
+        duration: 9000,
+        status: "success",
+        position: "top",
+      });
+    refetchData()
+    }).catch((err) => {
+      toast({
+        title: err?.response?.data?.message,
+        duration: 9000,
+        status: "error",
+        position: "top",
+      });
+    });;
     handleClose();
   };
 
@@ -103,8 +144,11 @@ export const AddPopup = (props) => {
       if (e.target.id === "harga") {
         setHarga(parseInt(e.target.value));
       }
+      if (e.target.id === "img") {
+        setImg(e.target.value);
+      }
       if (e.target.id === "LinkKelas") {
-        setLinkKelas(e.target.value);
+        setLinkKelas(e.target.value || ""); 
       }
       if (e.target.id === "description") {
         setDescription(e.target.value);
@@ -118,11 +162,10 @@ export const AddPopup = (props) => {
   };
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center fixed t-2 l-[50px] bg-[rgba(0,0,0,0.4)] ">
+    <div className="w-screen h-screen flex items-center justify-center  fixed t-2 l-[50px] bg-[rgba(0,0,0,0.4)] ">
       <form
-        encType="multipart/form-data"
         onSubmit={handleKelas}
-        className="pop-up overflow-y-auto max-h-[70%] lg:max-h-[95%] rounded-2xl w-11/12 md:w-3/4 xl:w-[30%] bg-white absolute"
+        className="pop-up overflow-y-auto max-h-[70%] lg:max-h-[95%] rounded-2xl w-11/12 md:w-3/4 xl:w-5/12 bg-white absolute"
       >
         <i
           onClick={props.handleClose}
@@ -130,7 +173,7 @@ export const AddPopup = (props) => {
         ></i>
         <div className="flex items-center justify-center flex-col sm:gap-5">
           <h1 className="font-bold sm:text-xl text-[#6148FF] my-2">
-            Tambah Kelas
+            Edit Kelas
           </h1>
           <div className="flex flex-col gap-2 w-4/5 sm:w-4/5 ">
             <div className="flex flex-col">
@@ -145,12 +188,15 @@ export const AddPopup = (props) => {
             </div>
             <div className="flex flex-col">
               <label htmlFor="">Kategori</label>
-              <input
-                id="kategori"
-                type="text"
-                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
-                onChange={handleOnchange}
+              <Select
                 value={Kategori}
+                onChange={(e) => setKategori(e)}
+                closeMenuOnSelect={false}
+                components={animatedComponents}
+                isMulti
+                options={dataKategori}
+                className="basic-multi-select"
+                classNamePrefix="select"
               />
             </div>
 
@@ -246,7 +292,7 @@ export const AddPopup = (props) => {
             </div>
 
             <div className="flex flex-col ">
-              <label htmlFor="">Link Kelas</label>
+              <label htmlFor="">Link Grup Telegram</label>
               <input
                 id="LinkKelas"
                 type="text"
@@ -267,14 +313,19 @@ export const AddPopup = (props) => {
               />
             </div>
 
-            <div className="text-white flex gap-4 font-bold text-sm sm:text-base my-4">
+            <div className="text-white flex gap-2 font-bold text-sm sm:text-base my-4">
               <button
                 type="submit"
-                className="bg-[#6148FF] w-1/2 rounded-lg p-3"
+                onClick={handleKelas}
+                className="bg-[#6148FF] w-1/2 rounded-[25px] p-3"
               >
                 Simpan
               </button>
-              <button onClick={() => handleClose()} className="bg-gray-200 w-1/2 text-black rounded-lg p-3">
+              <button
+                type="submit"
+                onClick={handleKelas}
+                className="bg-gray-200 w-1/2 text-black rounded-lg p-3"
+              >
                 Cancel
               </button>
             </div>

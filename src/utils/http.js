@@ -38,7 +38,7 @@ http.interceptors.response.use(
     // Handle 401 errors
     if (error.response.status === 401) {
       // Perform actions like redirecting to login page or displaying an error message
-      window.location.href = "/login";
+      window.location.href = "/admin/login";
     }
     // Return the error for further handling
     return Promise.reject(error);

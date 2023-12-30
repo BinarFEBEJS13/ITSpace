@@ -18,7 +18,7 @@ const GetDataVideoDirect = async ({queryKey}) => {
 const useGetDataVideo = (options) => {
     return useQuery({
       queryKey: [API_ENDPOINT.COURSES, options],
-      queryFn: GetDataVideoDirect,
+      queryFn: GetDataVideo,
     });
   };
 export{useGetDataVideo,GetDataVideoDirect}

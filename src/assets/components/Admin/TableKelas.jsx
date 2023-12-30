@@ -24,17 +24,20 @@ import {
   MenuOptionGroup,
   MenuItemOption,
   MenuDivider,
+  Table,
 } from "@chakra-ui/react";
 import { useGetCourse } from "../../../services/Admin/courses/get-data-courses";
 import { useDeleteCourse } from "../../../services/Admin/courses/delete-data-courses";
-import { AddPopup } from "../AddPopup";
-import { EditPopup } from "../EditPopup";
+
 import { IoChevronDownCircleOutline } from "react-icons/io5";
 import { useGetCategory } from "../../../services/Admin/category/get-data-category";
 import { Header } from "./Header";
 import { DataDashboard } from "./DataDashboard";
 import { Sidebar } from "./Sidebar";
 import { useNavigate } from "react-router-dom";
+import { EditCourse } from "./course/EditCourse";
+import { AddCourse } from "./course/AddCourse";
+import { Category } from "./kategori/Category";
 
 export const TableKelas = () => {
   const [AddPopupForm, setAddPopupForm] = useState(false);
@@ -44,10 +47,10 @@ export const TableKelas = () => {
   const [selectedChapter, setSelectedChapter] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [Search, setSearch] = useState("");
-  const [SearchBtn, setSearchBtn] = useState("");
   const [CategoryFilter, setCategoryFilter] = useState("");
   const [levelFilter, setlevelFilter] = useState("");
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [tipeKelasFilter, settipeKelasFilter] = useState("");
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -61,6 +64,7 @@ export const TableKelas = () => {
     se: Search,
     category: CategoryFilter,
     level: levelFilter,
+    ispremium: tipeKelasFilter,
   });
 
   const { data: categoryCourse } = useGetCategory();
@@ -91,19 +95,23 @@ export const TableKelas = () => {
 
   const { mutate: deleteCourse } = useDeleteCourse({
     onSuccess: () => {
-      onClose();
       refetchData();
       toast.promise(examplePromise, {
-        title: "Course Deleted",
-        status: "success",
-        position: "bottom-right",
-        size: "lg",
+        success: { title: "Course Deleted", description: "Done" },
+        error: { title: "Error :(", description: "Something wrong" },
+        loading: { title: "Deleting Course...", description: "Please wait" },
       });
+      onClose();
     },
   });
 
   const handleFilterByLevel = (selectedLevel) => {
     setlevelFilter(selectedLevel);
+    setCurrentPage(1);
+  };
+
+  const handleFilterByTipeKelas = (selectedLevel) => {
+    settipeKelasFilter(selectedLevel);
     setCurrentPage(1);
   };
 
@@ -122,15 +130,17 @@ export const TableKelas = () => {
     setCurrentPage(currentPage + 1);
   };
 
+  const handleInputChange = (e) => {
+    // Update the input value in the state on every change
+    setSearch(e.target.value);
+  };
+
   const handleToggleSearch = async (e) => {
     e.preventDefault(); // Prevent automatic form submission
 
-    if (SearchBtn) {
-      setSearch(e.target.value);
-      // Perform search when the search button is clicked
-      await refetchData();
-      // Add any other logic related to search results or messages
-    }
+    // Perform search when the button is clicked
+    await refetchData();
+    // Add any other logic related to search results or messages
   };
 
   const handleOpen = () => {
@@ -173,7 +183,7 @@ export const TableKelas = () => {
                 <Button
                   colorScheme="red"
                   onClick={() => deleteCourse(selectedCourseId)}
-                  ml={3}
+                  ml={1}
                 >
                   Delete
                 </Button>
@@ -183,14 +193,14 @@ export const TableKelas = () => {
         </AlertDialog>
         <div className="fixed top-0 left-0 z-50">
           {AddPopupForm && (
-            <AddPopup
+            <AddCourse
               handleClose={handleClose}
               refetchData={refetchData}
               selectedCourseData={selectedCourseData}
             />
           )}
           {PopupEdit && (
-            <EditPopup
+            <EditCourse
               handleClose={handleClose}
               refetchData={refetchData}
               selectedCourseData={selectedCourseData}
@@ -222,19 +232,40 @@ export const TableKelas = () => {
                   Filter
                 </MenuButton>
                 <MenuList>
+                  <MenuOptionGroup
+                    color="#6148FF"
+                    title="Tipe Kelas"
+                    type="radio"
+                  >
+                    <MenuItemOption
+                      onClick={() => handleFilterByTipeKelas("1")}
+                      value="PREMIUM"
+                    >
+                      PREMIUM
+                    </MenuItemOption>
+                    <MenuItemOption
+                      onClick={() => handleFilterByTipeKelas("0")}
+                      value="GRATIS"
+                    >
+                      GRATIS
+                    </MenuItemOption>
+                  </MenuOptionGroup>
                   <MenuOptionGroup color="#6148FF" title="Level" type="radio">
                     <MenuItemOption
                       onClick={() => handleFilterByLevel("BEGINNER")}
+                      value="BEGINNER"
                     >
                       Beginner
                     </MenuItemOption>
                     <MenuItemOption
                       onClick={() => handleFilterByLevel("INTERMEDIATE")}
+                      value="INTERMEDIATE"
                     >
                       Intermediate
                     </MenuItemOption>
                     <MenuItemOption
                       onClick={() => handleFilterByLevel("ADVANCED")}
+                      value="ADVANCED"
                     >
                       Advanced
                     </MenuItemOption>
@@ -248,6 +279,7 @@ export const TableKelas = () => {
                     {categoryCourse?.data?.map((filterCategory, index) => (
                       <MenuItemOption
                         key={index}
+                        value={filterCategory.name}
                         onClick={() =>
                           handleFilterByCategory(filterCategory.name)
                         }
@@ -269,6 +301,7 @@ export const TableKelas = () => {
           <input
             type="text"
             placeholder="Search Nama Kelas"
+            onChange={handleInputChange}
             className="sm pl-5 pr-10 border border-[#6148FF] w-full rounded-md py-2 flex items-center"
           />
           <button type="submit" className="flex justify-end items-center">
@@ -312,7 +345,6 @@ export const TableKelas = () => {
                     <th>Harga Kelas</th>
                     <th>Image</th>
                     <th>Description</th>
-                    <th>Link Group</th>
                     <th className="text-center">EDIT</th>
                     <th className="text-center">DELETE</th>
                     <th className="text-center">ADD CHAPTER</th>
@@ -368,7 +400,10 @@ export const TableKelas = () => {
                             </span>
                           ))}
                         </td>
-                        <td>Rp.{kelas.price}</td>
+                        <td>
+                          Rp.
+                          {new Intl.NumberFormat("id-ID").format(kelas.price)}
+                        </td>
                         <td>
                           <img
                             src={kelas.thumbnailUrl}
@@ -377,7 +412,6 @@ export const TableKelas = () => {
                           />
                         </td>
                         <td>{kelas.description}</td>
-                        <td>{kelas.groupUrl}</td>
                         <td>
                           <button
                             onClick={() => handleEdit(kelas.id)}

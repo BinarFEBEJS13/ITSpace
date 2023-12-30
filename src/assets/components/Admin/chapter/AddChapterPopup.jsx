@@ -1,13 +1,19 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
-import { usePostDataChapters } from "../../../services/Admin/chapters/post-chapters";
-import { useGetDataChapters } from "../../../services/Admin/chapters/get-chapters";
+import { usePostDataChapters,postDataChapter } from "../../../../services/Admin/chapters/post-chapters";
+import { useGetDataChapters } from "../../../../services/Admin/chapters/get-chapters";
 import { useParams } from "react-router-dom";
-import { useUpdateChapter } from "../../../services/Admin/chapters/edit-chapter";
-import { useGetDataChaptersID } from "../../../services/Admin/chapters/get-chapterID";
+import { useUpdateChapter,updateChapter } from "../../../../services/Admin/chapters/edit-chapter";
+import { useGetDataChaptersID } from "../../../../services/Admin/chapters/get-chapterID";
 import { useToast } from "@chakra-ui/react";
 
-export const AddChapterPopup = ({ setAddChapters, selectedChapter, Type, courseId }) => {
+export const AddChapterPopup = ({
+  setAddChapters,
+  selectedChapter,
+  Type,
+  courseId,
+  reloadData,
+}) => {
   const [Judul, setJudul] = useState("");
   const [TipeKelas, setTipeKelas] = useState("0");
   const [Chapter, setChapter] = useState(0);
@@ -30,28 +36,18 @@ export const AddChapterPopup = ({ setAddChapters, selectedChapter, Type, courseI
     courseId: id,
   });
 
-  
-  const { mutate: AddChapters, data: postChapter } = usePostDataChapters()
-
-  const { mutate: UpdateChapter } = useUpdateChapter();
 
 
   const dataType = useMemo(() => (Type ? Type : "add"), [Type]);
-  console.log(dataType, "MODE");
 
   useEffect(() => {
     if (selectedChapter.id && dataType === "edit") {
       setJudul(selectedChapter.title);
-      setTipeKelas(selectedChapter.isPremium);
+      setTipeKelas(selectedChapter.isPremium === true? "1" : "0");
       setChapter(selectedChapter.number);
       // setEdit()
     }
   }, [selectedChapter]);
-
-  useEffect(() => {
-  
-  }, [])
-  
 
   const validateForm = () => {
     let isValid = true;
@@ -62,7 +58,7 @@ export const AddChapterPopup = ({ setAddChapters, selectedChapter, Type, courseI
     };
 
     if (!Judul.trim()) {
-      errors.judul = "Judul Chapter cannot be empty";
+      errors.judul = "Judul Chapter tidak boleh kosong";
       isValid = false;
     }
 
@@ -72,18 +68,12 @@ export const AddChapterPopup = ({ setAddChapters, selectedChapter, Type, courseI
     }
 
     if (!String(Chapter).trim()) {
-      errors.chapter = "Chapter cannot be empty";
-      isValid = false;
-    } else if (chapterBYID && chapterBYID.number === parseInt(Chapter)) {
-      errors.chapter = "Chapter already exists";
+      errors.chapter = "Chapter tidak boleh kosong";
       isValid = false;
     }
-
     setInputErrors(errors);
     return isValid;
   };
-
-
 
   const handleonChange = (e) => {
     if (e) {
@@ -106,7 +96,7 @@ export const AddChapterPopup = ({ setAddChapters, selectedChapter, Type, courseI
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if(dataType === "add"){
+    if (dataType === "add") {
       if (!validateForm()) {
         return;
       }
@@ -120,54 +110,65 @@ export const AddChapterPopup = ({ setAddChapters, selectedChapter, Type, courseI
     };
 
     if (dataType === "edit" && selectedChapter.id) {
-      UpdateChapter({
+      updateChapter({
         chapterId: selectedChapter.id,
         ...chapterData,
-        
-      });
-      toast({
-        title : "Success",
-        description : "Chapter Edited",
-        status: "info",
-        duration : 9000,
-        size: 'lg',
-        position : "bottom-right",
-        colorScheme : "orange"
       })
+        .then((result) => {
+          toast({
+            title: result?.data?.message,
+            description: `Anda Telah Membuat chapter Dengan judul ${result?.data?.data?.title} `,
+            status: "info",
+            duration: 9000,
+            size: "lg",
+            position: "top",
+            colorScheme: "orange",
+          });
+        reloadData()
+        })
+        .catch((err) => {
+          toast({
+            title: err?.response?.data?.message,
+            description: "Maaf terjadi kesalahan tolong cek kembali",
+            status: "error",
+            duration: 9000,
+            size: "lg",
+            position: "top",
+          });
+        });
     } else {
-      if (postChapter?.data?.response?.status === 400) {
+      postDataChapter(chapterData).then((result) => {
         toast({
-          title : "Success",
-          description : "SALAHHHH",
-          status: "error",
-          duration : 9000,
-          size: "lg",
-          position : "bottom-right"
-        })
-        return;
-      }
-      else{
-        AddChapters(chapterData);
-        toast({
-          title : "Success",
-          description : "Chapter successfully added",
+          title: result?.data?.message,
+          description: `Anda Telah Membuat chapter Dengan judul ${result?.data?.data?.title} `,
           status: "success",
-          duration : 9000,
+          duration: 9000,
           size: "lg",
-          position : "bottom-right"
-        })
-      }
-      }
-    
+          position: "bottom-right",
+        });
+        reloadData()
+      }).catch((err) => {
+        toast({
+          title: err?.response?.data?.message,
+          description: "Ada Terjadi Kesalahan Tolong Periksa Kembali",
+          status: "error",
+          duration: 9000,
+          size: "lg",
+          position: "bottom-right",
+        });
+      });;
+     
+    }
+
     toggleClose();
   };
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center fixed t-2 l-[50px] bg-[rgba(0,0,0,0.4)] ">
+    <div className="w-screen h-screen flex items-start justify-center fixed t-2 l-[50px] bg-[rgba(0,0,0,0.4)] ">
       <form
         onSubmit={handleSubmit}
         encType="multipart/form-data"
-        className="pop-up overflow-y-auto max-h-[70%] lg:max-h-[95%] rounded-2xl w-11/12 md:w-3/4 xl:w-[20%] bg-white absolute"
+        className="pop-up overflow-y-auto  mt-[3rem]  rounded-lg w-[50%] xl:w-[25%] bg-white absolute"
       >
         <FaXmark
           onClick={toggleClose}
@@ -175,7 +176,7 @@ export const AddChapterPopup = ({ setAddChapters, selectedChapter, Type, courseI
         />
         <div className="flex items-center justify-center flex-col sm:gap-5">
           <h1 className="font-bold sm:text-xl text-[#6148FF] my-2">
-            Tambah Chapter
+          {dataType === "edit" ? "Edit Chapter" : "Tambah Chapter"}
           </h1>
           <div className="flex flex-col gap-2 w-4/5 sm:w-4/5 ">
             <div className="flex flex-col ">
@@ -190,8 +191,8 @@ export const AddChapterPopup = ({ setAddChapters, selectedChapter, Type, courseI
                 value={Judul}
               />
               {inputErrors.judul && (
-              <p className="text-red-500 text-sm">{inputErrors.judul}</p>
-            )}
+                <p className="text-red-500 text-sm">{inputErrors.judul}</p>
+              )}
             </div>
 
             <div className="flex flex-col ">
@@ -216,21 +217,21 @@ export const AddChapterPopup = ({ setAddChapters, selectedChapter, Type, courseI
                   inputErrors.chapter ? "border-red-500" : "border-[#D0D0D0]"
                 }`}
                 value={Chapter}
-              /> 
+              />
               {inputErrors.chapter && (
-              <p className="text-red-500 text-sm">{inputErrors.chapter}</p>
-            )}
+                <p className="text-red-500 text-sm">{inputErrors.chapter}</p>
+              )}
             </div>
             <div className="text-white flex justify-end gap-2 font-bold text-sm sm:text-base my-4">
               <button
                 type="submit"
-                className="bg-[#FF0000] w-1/2 rounded-[25px] p-3"
+                className="bg-[#6148FF] w-1/2 rounded-lg p-3"
               >
-                Submit
+                {dataType === "edit" ? "Edit" : "Tambah"}
               </button>
               <button
                 onClick={toggleClose}
-                className="bg-[#6148FF] w-1/2 rounded-[25px] p-3"
+                className="bg-gray-200 text-black w-1/2 rounded-lg p-3"
               >
                 Cancel
               </button>

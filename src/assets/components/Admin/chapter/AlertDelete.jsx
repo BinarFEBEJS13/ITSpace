@@ -1,28 +1,42 @@
-
 import React from "react";
 import { FaXmark } from "react-icons/fa6";
-import { useParams } from "react-router-dom";
-import { useGetDataChaptersID } from "../../../services/Admin/chapters/get-chapterID";
-import { useDeleteChapter } from "../../../services/Admin/chapters/delete-chapter";
+import { deleteChapter, useDeleteChapter } from "../../../../services/Admin/chapters/delete-chapter";
+import { useToast } from "@chakra-ui/react";
 
-export const AlertDeletePage = ({ setAlertDelete, selectedChapter, courseId }) => {
+
+export const AlertDeletePage = ({ setAlertDelete, selectedChapter, courseId, reloadData}) => {
+  const toast = useToast();
+
   const toggleClose = () => {
     setAlertDelete(false);
+  
   };
+
   const { mutate: DeleteChapter } = useDeleteChapter();
-
-
-  const handleDelete = (hapusId) => {
-    DeleteChapter({
+  const handleDelete =  (hapusId) => {
+    deleteChapter({
       courseId: courseId,
       chapterId: hapusId,
-    });
+    }).then((result) => {
+      toast({
+        title: result?.data?.message,
+        description: ` Chapter Dengan judul ${result?.data?.data?.title} berhasil di hapus `,
+        status: "success",
+        duration: 9000,
+        size: "lg",
+        position: "top",
+      });
+      reloadData()
+    }).catch((err) => {
+      return err
+    });;
+
     setAlertDelete(false);
   };
 
   return (
     <div className="w-full  z-40 h-full fixed top-0 left-0 bg-[rgba(0,0,0,0.4)] flex items-start justify-center">
-      <div className="bg-white flex rounded-lg shadow-lg flex-col items-center justify-center w-[20%] mt-[5rem]">
+      <div className="bg-white flex rounded-lg shadow-lg flex-col items-center justify-center mt-[5rem]">
         <div className="flex justify-between w-full px-6 my-4">
           <h1 className="font-bold text-2xl">Delete Chapter</h1>
           <FaXmark
@@ -43,7 +57,7 @@ export const AlertDeletePage = ({ setAlertDelete, selectedChapter, courseId }) =
             Delete
           </button>
           <button
-            onClick={toggleClose}
+             onClick={toggleClose}
             className="bg-gray-200 text-black rounded-lg p-3"
           >
             Cancel

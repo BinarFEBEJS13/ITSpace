@@ -128,3 +128,32 @@ th {
     border-radius: 10px;
     border: 3px double #ffffff;
   }
+
+  /* Add these styles to your CSS */
+.custom-date-picker .rs-picker-toggle {
+  border-color: #6148FF; /* Customize border color */
+}
+
+.custom-date-picker .rs-picker-toggle:hover {
+  background-color: #6148FF; /* Customize hover background color */
+}
+
+.custom-date-picker .rs-picker-menu {
+  border-color: #6148FF; /* Customize menu border color */
+}
+
+.custom-date-picker .rs-picker-toolbar {
+  background-color: #6148FF; /* Customize toolbar background color */
+}
+
+.custom-date-picker .rs-picker-toolbar button {
+  color: #fff; /* Customize toolbar button color */
+}
+
+.custom-date-picker .rs-picker-menu .rs-calendar-header {
+  background-color: #6148FF; /* Customize calendar header background color */
+}
+
+.custom-date-picker .rs-picker-menu .rs-calendar-table .rs-cell-hover {
+  background-color: #73CA5C !important; /* Customize calendar cell hover color */
+}

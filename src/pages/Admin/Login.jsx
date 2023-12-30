@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import Logo from "../../assets/img/Login Image.png";
 import { FiEye } from "react-icons/fi";
 import { FiEyeOff } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLoginAdmin } from "../../services/Admin/auth/post-login-admin";
 import { useToast } from "@chakra-ui/react";
+import { API_ENDPOINT } from "../../utils/api-endpoint";
+import http from "../../utils/http";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -33,6 +35,7 @@ const Login = () => {
     data,
   } = useLoginAdmin();
   
+  // console.log(data, "pekep");
 
   useEffect(() => {
       if (data?.data?.data?.profile?.role === "ADMIN") {
@@ -48,18 +51,15 @@ const Login = () => {
           navigate("/admin/dashboard/transaksi")
         }, 3000);
       }
-      else if (!data?.data?.data?.profile?.role === "ADMIN") {
+      else if (data?.data?.data?.profile?.role === "USER") {
         toast({
           title: "Your Account is not an Admin",
           status : "error",
           position : "top-right",
           isClosable : true,
-          duration : 3000,
+          duration : 4000,
           size: "lg"
         })
-        setTimeout(() => {
-          navigate("/admin/dashboard/transaksi")
-        }, 3000);
       }
       else if (data?.response?.status === 400){
         toast({
@@ -73,7 +73,7 @@ const Login = () => {
       }
       else if (data?.response?.status === 401){
         toast({
-          title : "Sorry This User is Not Admin",
+          title : "",
           status: "error",
           duration : 4000,
           position : "top-right",
@@ -92,8 +92,11 @@ const Login = () => {
         })
       }
 
-  }, [data, loginAdmin, navigate]);
+  }, [data]);
 
+  const googleLogin = () => {
+    window.open(`${process.env.REACT_APP_SERVER}/auth/google`)
+  }
 
   const handleLogin = () => {
     loginAdmin({
@@ -102,12 +105,10 @@ const Login = () => {
     })
   };
  
-  console.log(Email ,"EMAILLL");
-  console.log(Password ,"PWWWWW");
   return (
     <>
       <div className="flex items-center">
-        <div className="w-1/2 h-screen hidden md:hidden lg:hidden xl:block">
+        <div className="xl:w-[55%] 2xl:w-1/2 h-screen hidden md:hidden lg:hidden xl:block">
           <img className="h-full w-full" src={Logo} alt="" />
         </div>
 
@@ -128,9 +129,9 @@ const Login = () => {
             <div className="flex flex-col relative">
               <div className="flex justify-between">
                 <label htmlFor="">Password</label>
-                <a className="text-[#6148FF]" href="/">
+                <Link className="text-[#6148FF]" to="">
                   Lupa Kata Sandi
-                </a>
+                </Link>
               </div>
               <input
                 id="password"
@@ -154,7 +155,7 @@ const Login = () => {
             </div>
             <button
               onClick={handleLogin}
-              className="mt-3 text-white px-3 py-4 bg-[#6148FF] rounded-2xl"
+              className="mt-3 text-white px-3 py-4 bg-gradientkanan rounded-2xl"
             >
               Masuk
             </button>

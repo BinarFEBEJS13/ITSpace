@@ -9,9 +9,12 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import {
-  GetDataVideoDirect,
-  useGetDataVideo,
-} from "../../../services/Admin/videos/get-data-video";
+  GetDataVideoDirect, useGetDataVideo,
+} from "../../../../services/Admin/videos/get-data-video";
+import { FaTrash } from "react-icons/fa6";
+import { FaEdit } from "react-icons/fa";
+import { EditVideo } from "./EditVideo";
+import { DeleteVideo } from "./DeleteVideo";
 
 // export const Video = ({ courseId, chapterId }) => {
 //   const [videos, setVideos] = useState([]);
@@ -66,16 +69,25 @@ import {
 //     </div>
 //   );
 // };
-export const Video = ({ courseId, chapterId }) => {
+export const Video = ({ courseId, chapterId, fetchData }) => {
   const [videos, setVideos] = useState([]);
+  const [selectVideo, setselectVideo] = useState("");
+  const [toggleForm, settoggleForm] = useState("");
+  const [toggleAlert, settoggleAlert] = useState("");
 
-
+const {data : GetVideo, refetch : reloadData } = useGetDataVideo({
+  courseId: courseId,
+  chapterId: chapterId
+})
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (courseId && chapterId) {
           // Memanggil fungsi GetDataVideoDirect dengan queryKey yang sesuai
-          const videoData = await GetDataVideoDirect({ queryKey: [{ courseId, chapterId }] });
+          // await reloadData();
+          const videoData = await GetDataVideoDirect({
+            queryKey: [{ courseId, chapterId }],
+          });
           setVideos(videoData);
         } else {
           // Handle kasus di mana courseId dan/atau chapterId tidak terdefinisi atau kosong
@@ -86,16 +98,24 @@ export const Video = ({ courseId, chapterId }) => {
         // Handle error fetching data, misalnya menampilkan pesan kesalahan
       }
     };
-  
+
     // Memanggil fetchData saat komponen pertama kali dimuat atau saat courseId atau chapterId berubah
     fetchData();
   }, [courseId, chapterId]);
-  // useEffect(() => {
-  //   if (courseId && chapterId) {
-  //     getdataVideo();
-  //   } else {
-  //   }
-  // }, [courseId, chapterId]);
+
+
+  const handleEdit = (videoId) => {
+    const selectVideo = videos?.data?.find((video) => video.id === videoId);
+    setselectVideo(selectVideo);
+    settoggleForm(true);
+  };
+
+  const handleDelete = (videoId) => {
+    const selectVideo = videos?.data?.find((video) => video.id === videoId);
+    setselectVideo(selectVideo)
+    settoggleAlert(true)
+  };
+
 
   const renderVideo = () => {
     if (videos) {
@@ -108,8 +128,20 @@ export const Video = ({ courseId, chapterId }) => {
               <Td>{video.description}</Td>
               <Td>{video.url}</Td>
               <Td>{video.duration} menit</Td>
-              <Td>25.4</Td>
-              <Td>25.4</Td>
+              <Td>
+                {" "}
+                <button
+                  onClick={() => handleEdit(video.id)}
+                  className="bg-[#ffa500] text-xl text-white rounded-xl p-4"
+                >
+                  <FaEdit />
+                </button>
+              </Td>
+              <Td>
+                <button onClick={() => handleDelete(video.id)} className="bg-[#FF0000] text-xl text-white rounded-xl p-4">
+                  <FaTrash />
+                </button>
+              </Td>
             </Tr>
           );
         });
@@ -119,6 +151,13 @@ export const Video = ({ courseId, chapterId }) => {
 
   return (
     <div>
+      {toggleAlert && (
+        <DeleteVideo reloadData={reloadData}  settoggleAlert={settoggleAlert} selectVideo={selectVideo} courseId={courseId} chapterId={chapterId} />
+      )}
+      {toggleForm && (
+        <EditVideo reloadData={reloadData} settoggleForm={settoggleForm} selectVideo={selectVideo} courseId={courseId} chapterId={chapterId}/> 
+      ) 
+      }
       <h1 className="mx-[2rem] md:mx-[1.5rem] font-bold text-lg mb-2">
         Manage Video Section
       </h1>
@@ -134,80 +173,10 @@ export const Video = ({ courseId, chapterId }) => {
               <Th>Delete</Th>
             </Tr>
           </Thead>
-          <Tbody>
-            {renderVideo()}
-          </Tbody>
+          <Tbody>{renderVideo()}</Tbody>
         </Table>
       </TableContainer>
     </div>
   );
 };
-
-// export const Video = ({ courseId, chapterId }) => {
-//   const [dataVideo, setdataVideo] = useState([])
-
-//   const { data: videos, isError, isLoading } = useGetDataVideo({ courseId, chapterId });
-//   useEffect(() => {
-//     setdataVideo(videos)
-
-//   }, [videos,courseId, chapterId])
-  
-//   // const getdataVideo = async () => {
-//   //       const { data } = await GetDataVideoDirect({
-//   //         courseId: courseId,
-//   //         chapterId: chapterId,
-//   //       });
-//   //       console.log(data, "ISINYAAAAAAAA");
-//   //     };
-    
-//   // useEffect(() => {
-//   //   if (courseId && chapterId) {
-//   //     getdataVideo();
-//   //   } else {
-//   //   }
-//   // }, [courseId, chapterId]);
-
-//   const renderVideo = () => {
-//     if (isLoading) {
-//       return <p>Loading...</p>;
-//     }
-
-//     if (isError) {
-//       return <p>Error fetching data</p>;
-//     }
-
-//     return dataVideo?.data.map((video, index) => (
-//       <tr key={index}>
-//         <td>{video.title}</td>
-//         <td>{video.description}</td>
-//         <td>{video.url}</td>
-//         <td>{video.duration} menit</td>
-//         <td>Edit</td>
-//         <td>Delete</td>
-//       </tr>
-//     ));
-//   };
-
-//   return (
-//     <div>
-//       <h1 className="mx-[2rem] md:mx-[1.5rem] font-bold text-lg mb-2">
-//         Manage Video Section
-//       </h1>
-//       <table>
-//         {/* Your table structure */}
-//         <thead>
-//           <tr>
-//             <th>Judul Video</th>
-//             <th>Deskripsi Video</th>
-//             <th>Link Video</th>
-//             <th>Durasi Video</th>
-//             <th>Edit</th>
-//             <th>Delete</th>
-//           </tr>
-//         </thead>
-//         <tbody>{renderVideo()}</tbody>
-//       </table>
-//     </div>
-//   );
-// };
 
