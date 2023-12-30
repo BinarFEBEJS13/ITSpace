@@ -28,12 +28,14 @@ export const Profile = () => {
   const { data: getDataUser } = useGetDataUser({ query: GetUserProfile?.data?.id })
 
   useEffect(() => {
-    setShowImage(getDataUser?.data?.profile?.profilePicture);
-    setNama(getDataUser?.data?.profile?.name);
-    setEmail(getDataUser?.data?.email);
-    setTelepon(getDataUser?.data?.profile?.phoneNumber);
-    setNegara(getDataUser?.data?.profile?.country);
-    setKota(getDataUser?.data.profile?.city);
+    if (getDataUser && getDataUser.data && getDataUser.data.profile) {
+      setShowImage(getDataUser.data.profile.profilePicture);
+      setNama(getDataUser.data.profile.name);
+      setEmail(getDataUser.data.email);
+      setTelepon(getDataUser.data.profile.phoneNumber);
+      setNegara(getDataUser.data.profile.country);
+      setKota(getDataUser.data.profile.city);
+    }
   }, [getDataUser])
 
   const handlePutProfile = (e) => {
@@ -75,7 +77,7 @@ export const Profile = () => {
       });
 
       if (response.status === 201) {
-        console.log('Image uploaded successfully!');
+        console.log('Profil Berhasil Diperbarui!');
         toast({
           title: "Profil Berhasil Diperbarui",
           status: "success",
@@ -84,9 +86,22 @@ export const Profile = () => {
         });
       } else {
         console.error('Image upload failed.');
+        if (response.status === 401) {
+        toast({
+          title: "Tidak dapat memperbarui profil",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
       }
     } catch (error) {
-      console.error('Error uploading image:', error);
+      toast({
+        title: "Tidak dapat memperbarui profil",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 

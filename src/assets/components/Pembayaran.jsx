@@ -6,6 +6,9 @@ import clock from "../svg/clock.svg";
 import book from "../svg/book.svg";
 import badge from "../svg/badge.svg";
 import diamond from "../svg/diamond.svg";
+
+// img
+import nodata from '../img/nodata.png'
 import { useGetMyTransactions } from "../../services/transactions/get-my-transactions";
 
 export const Pembayaran = () => {
@@ -31,12 +34,12 @@ export const Pembayaran = () => {
         <h2 className="flex w-full text-[1.5rem] sm:text-lg justify-start sm:justify-center font-extrabold">
           Riwayat Pembayaran
         </h2>
-        {getTransactions && getTransactions.map((transactions, index) => (
+        {getTransactions && getTransactions.length > 0 ? ( getTransactions.map((transactions, index) => (
             <div key={index} className="card mt-3 gap-2">
               <img className="flex w-full" src={transactions?.course?.thumbnailUrl} alt=""></img>
               <div className="flex flex-col gap-[2px] ml-2 mt-1">
                 <div className="flex space-x-[11rem] transaction sm:space-x-[9rem] text-[10px] font-bold">
-                  <p className="text-[#6148FF]">{transactions?.course?.courseCategory[0]?.category?.name}</p>
+                  <p className="text-[#6148FF]">{transactions?.course?.courseCategory[0]?.category?.name ?? 'Category'}</p>
                   <div className="flex justify-center items-center w-10 h-4 bg-[#6148FF] rounded-lg">
                     <img src={star} alt=""></img>
                     <p className="text-white">{transactions?.course?.rate !== null ? transactions?.course?.rate.toFixed(1) : '0.0'}</p>
@@ -70,7 +73,13 @@ export const Pembayaran = () => {
                   </div>
                 </div>
             </div>
-          ))}
+        ))
+        ) : (
+          <div className="flex flex-col items-center mt-5">
+            <img className="w-[170px]" src={nodata} alt="No transactions"/>
+            <p className="text-[14px] sm:text-[12px]">Anda belum melakukan transaksi</p>
+          </div>
+        )}
       </div>
     </div>
   );
