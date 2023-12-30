@@ -9,3 +9,4 @@ export default combineReducers({
   users: getUsersSlice,
   getDataCourses: getDataCourses,
 });
+

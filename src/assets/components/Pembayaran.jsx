@@ -1,5 +1,4 @@
 import React from "react";
-import imagepayment from "../img/image_payment.png";
 
 // svg
 import star from "../svg/star.svg";
@@ -7,6 +6,9 @@ import clock from "../svg/clock.svg";
 import book from "../svg/book.svg";
 import badge from "../svg/badge.svg";
 import diamond from "../svg/diamond.svg";
+
+// img
+import nodata from '../img/nodata.png'
 import { useGetMyTransactions } from "../../services/transactions/get-my-transactions";
 
 export const Pembayaran = () => {
@@ -18,14 +20,11 @@ export const Pembayaran = () => {
   const getNewTransactions = getTransactions ? getTransactions.map((transaction) => transaction.id) : [];
   console.log(getNewTransactions, "new trans")
 
-  const susuMurniNasional = (idCOurse, idTransaksi, isDone) => {
+  const sendDataTransactions = (idCourse, idTransaksi, isDone) => {
     if (isDone === true) {
-      console.log(isDone, "fernandes")
     } else {
-      window.location.href = `/payment/${idCOurse}/${idTransaksi}`;
+      window.location.href = `/payment/${idCourse}/${idTransaksi}`;
     }
-    // console.log(idCOurse, "idcourse")
-    // console.log(idTransaksi, "idTransaksi");
   }
 
   console.log(getTransactions, "ini pembayaran")
@@ -35,15 +34,15 @@ export const Pembayaran = () => {
         <h2 className="flex w-full text-[1.5rem] sm:text-lg justify-start sm:justify-center font-extrabold">
           Riwayat Pembayaran
         </h2>
-        {getTransactions && getTransactions.map((transactions, index) => (
+        {getTransactions && getTransactions.length > 0 ? ( getTransactions.map((transactions, index) => (
             <div key={index} className="card mt-3 gap-2">
               <img className="flex w-full" src={transactions?.course?.thumbnailUrl} alt=""></img>
               <div className="flex flex-col gap-[2px] ml-2 mt-1">
                 <div className="flex space-x-[11rem] transaction sm:space-x-[9rem] text-[10px] font-bold">
-                  <p>{transactions?.course?.courseCategory[0]?.category?.name}</p>
+                  <p className="text-[#6148FF]">{transactions?.course?.courseCategory[0]?.category?.name ?? 'Category'}</p>
                   <div className="flex justify-center items-center w-10 h-4 bg-[#6148FF] rounded-lg">
                     <img src={star} alt=""></img>
-                    <p className="text-white">{transactions?.course?.rate !== null ? transactions?.course?.rate: '0.0'}</p>
+                    <p className="text-white">{transactions?.course?.rate !== null ? transactions?.course?.rate.toFixed(1) : '0.0'}</p>
                   </div>
                 </div>
                 <p className="text-[10px] font-bold">
@@ -66,7 +65,7 @@ export const Pembayaran = () => {
                 </div>
               </div>
                 <div className="flex justify-center">
-                  <div onClick={() => susuMurniNasional(transactions?.courseId, transactions?.id, transactions?.payDone)} className={`flex justify-center space-x-1 rounded-md items-center w-[16rem] h-4 sm:w-[14rem] sm:h-3 ${transactions?.payDone ? 'bg-green-400' : 'bg-merah-0'} text-white my-2 sm:mt-1 cursor-pointer`}>
+                  <div onClick={() => sendDataTransactions(transactions?.courseId, transactions?.id, transactions?.payDone)} className={`flex justify-center space-x-1 rounded-md items-center w-[16rem] h-4 sm:w-[14rem] sm:h-3 ${transactions?.payDone ? 'bg-green-400' : 'bg-merah-0'} text-white my-2 sm:mt-1 cursor-pointer`}>
                     <img className="w-2 h-2" src={diamond} alt="" />
                     <p className="text-[8px]">
                       {transactions?.payDone ? "Paid" : "Waiting for payment"}
@@ -74,7 +73,13 @@ export const Pembayaran = () => {
                   </div>
                 </div>
             </div>
-          ))}
+        ))
+        ) : (
+          <div className="flex flex-col items-center mt-5">
+            <img className="w-[170px]" src={nodata} alt="No transactions"/>
+            <p className="text-[14px] sm:text-[12px]">Anda belum melakukan transaksi</p>
+          </div>
+        )}
       </div>
     </div>
   );
