@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;700&display=swap');
 
 html::-webkit-scrollbar {
   width: 0.3rem;
@@ -21,7 +22,7 @@ html::-webkit-scrollbar-thumb {
     src: url("../../../public/Poppins-Regular.ttf") format("truetype");
   }
   html {
-    font-family: Poppins;
+    font-family: 'Poppins', sans-serif !important;
   }
 }
 
@@ -57,11 +58,14 @@ html::-webkit-scrollbar-thumb {
 }
 
 td {
+  text-align: center;
   padding: 12px 20px;
+
 }
 
 th {
-  padding: 9px 20px;
+  padding: 12px 40px;
+  
 }
 
 /* .mySwiper .swiper-button-prev,
@@ -113,4 +117,64 @@ input[type="radio"] {
 }
 .star {
   cursor: pointer;
+}
+
+.file-btn{
+  background: #6148FF;
+  border-radius: 25px;
+  color: #fff;
+  padding: 3px 10px;
+  cursor: pointer;
+  border: 3px solid #222;
+}
+
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #b9b5ba #ffffff;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 20px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #b9b5ba67;
+    border-radius: 10px;
+    border: 3px double #ffffff;
+  }
+
+  /* Add these styles to your CSS */
+.custom-date-picker .rs-picker-toggle {
+  border-color: #6148FF; /* Customize border color */
+}
+
+.custom-date-picker .rs-picker-toggle:hover {
+  background-color: #6148FF; /* Customize hover background color */
+}
+
+.custom-date-picker .rs-picker-menu {
+  border-color: #6148FF; /* Customize menu border color */
+}
+
+.custom-date-picker .rs-picker-toolbar {
+  background-color: #6148FF; /* Customize toolbar background color */
+}
+
+.custom-date-picker .rs-picker-toolbar button {
+  color: #fff; /* Customize toolbar button color */
+}
+
+.custom-date-picker .rs-picker-menu .rs-calendar-header {
+  background-color: #6148FF; /* Customize calendar header background color */
+}
+
+.custom-date-picker .rs-picker-menu .rs-calendar-table .rs-cell-hover {
+  background-color: #73CA5C !important; /* Customize calendar cell hover color */
 }
