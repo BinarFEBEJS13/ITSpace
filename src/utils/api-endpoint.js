@@ -41,8 +41,7 @@ export const API_ENDPOINT = {
   PUT_USER: "/users",
   // Transactions
   MY_TRANSACTIONS: "/my-transactions",
-  // 
+  //
   MY_NOTIFICATIONS: "/my-notifications",
-  PUT_NOTIFICATIONS: "/my-notifications"
-
+  PUT_NOTIFICATIONS: "/my-notifications",
 };
