@@ -1,11 +1,11 @@
 export const API_ENDPOINT = {
   //Courses
   COURSES: "/courses",
-  COURSES_IMG : "/courses/images",
+  COURSES_IMG: "/courses/images",
   //Authentication
   REGISTER: "/auth/register",
   LOGIN: "/auth/login",
-  GOOGLE: "/api/v1/auth/google",
+  GOOGLE: "/auth/google",
   LOGOUT: "/auth/logout",
   RESEND_OTP: "/auth/resend-otp",
   VERIFY_OTP: "/auth/verify-otp",
@@ -20,7 +20,7 @@ export const API_ENDPOINT = {
   //Categories
   CATEGORIES: "/categories",
   //TRANSACTION
-  TRANSACTION : "/transactions",
+  TRANSACTION: "/transactions",
   // Users
   USERS: "/users",
 

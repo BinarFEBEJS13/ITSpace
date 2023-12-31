@@ -56,29 +56,29 @@ export const NavbarMobile = ({ onClose, isSuccessDecode }) => {
     <>
       <div className="fixed inset-0 z-50 bg-black bg-opacity-90 sm:hidden">
         <div className="relative rounded-md flex justify-end">
-          <div className="relative w-1/2 bg-birumuda-0 h-screen px-3">
+          <div className="relative w-1/2 bg-gradientkanan h-screen px-3">
             {/* Button Close */}
-            <button onClick={onClose} className=" bg-biru-0 text-white rounded-full absolute px-2 right-3 top-3">
+            <button onClick={onClose} className=" bg-white text-biru-0 rounded-full absolute px-2 right-3 top-3">
               X
             </button>
             {/* Filter Untuk Mobile */}
             <div className="flex rounded-md pt-10">
               {/* <div className="flex flex-col gap-4 items-start"> */}
               {dataToggle ? (
-                <div className="flex flex-col gap-4 items-start">
-                  <button onClick={() => handleActiveItem("beranda")} className="border-b border-biru-0 text-sm">
+                <div className="flex flex-col gap-4 items-start text-white">
+                  <button onClick={() => handleActiveItem("beranda")} className=" text-sm">
                     Beranda
                   </button>
-                  <button onClick={() => handleActiveItem("kursus")} className="border-b border-biru-0 text-sm">
+                  <button onClick={() => handleActiveItem("kursus")} className=" text-sm">
                     Kursus
                   </button>
-                  <button onClick={() => handleActiveItem("kelas")} className="border-b border-biru-0 text-sm">
+                  <button onClick={() => handleActiveItem("kelas")} className=" text-sm">
                     Kelas
                   </button>
-                  <button onClick={() => handleActiveItem("notifikasi")} className="border-b border-biru-0 text-sm">
+                  <button onClick={() => handleActiveItem("notifikasi")} className=" text-sm">
                     Notifikasi
                   </button>
-                  <button onClick={() => handleActiveItem("akun")} className="border-b border-biru-0 text-sm">
+                  <button onClick={() => handleActiveItem("akun")} className=" text-sm">
                     Akun
                   </button>
                   <div onClick={() => handleLogoutUser()} className="flex gap-1 bg-merah-0 px-2 py-2 rounded-md text-sm">
@@ -87,14 +87,14 @@ export const NavbarMobile = ({ onClose, isSuccessDecode }) => {
                   </div>
                 </div>
               ) : (
-                <div className="flex flex-col gap-4 items-start">
-                  <button onClick={() => handleActiveItem("beranda")} className="border-b border-biru-0 text-sm">
+                <div className="flex flex-col gap-4 items-start text-white">
+                  <button onClick={() => handleActiveItem("beranda")} className=" text-sm">
                     Beranda
                   </button>
-                  <button onClick={() => handleActiveItem("kursus")} className="border-b border-biru-0 text-sm">
+                  <button onClick={() => handleActiveItem("kursus")} className=" text-sm">
                     Kursus
                   </button>
-                  <div onClick={() => navigate("/login")} className="flex gap-1 bg-gradientkanan px-4 py-2 rounded-md text-sm">
+                  <div onClick={() => navigate("/login")} className="flex gap-1 border border-white px-4 py-2 rounded-md text-sm">
                     <img src={masuk} alt="masuk" />
                     <button className="text-white">Masuk</button>
                   </div>

@@ -18,9 +18,9 @@ export const Pencarian = ({ onClose }) => {
   return (
     <>
       <div className="fixed inset-0 z-50 bg-black bg-opacity-90 py-4 px-4 sm:hidden">
-        <div className="w-full bg-birumuda-0 relative p-4 rounded-md flex flex-col gap-4">
+        <div className="w-full bg-gradientkanan relative p-4 rounded-md flex flex-col gap-4">
           {/* Button Close */}
-          <button onClick={onClose} className=" bg-biru-0 text-white rounded-full px-2 absolute -top-3 -right-3">
+          <button onClick={onClose} className=" bg-white text-biru-0 rounded-full px-2 absolute -top-3 -right-3">
             X
           </button>
           {/* Input Pencarian */}

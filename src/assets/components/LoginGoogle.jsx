@@ -37,7 +37,7 @@ function LoginGoogle({ buttonText }) {
   return (
     <div className="text-center">
       <button className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-md flex items-center justify-center space-x-2 shadow-md hover:shadow-lg" onClick={() => loginWithGoogle()}>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 533.5 544.3" class="w-6 h-6">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 533.5 544.3" className="w-6 h-6">
           <path fill="#4285f4" d="M505.3 278.8c0-18.5-1.5-36.7-4.3-54.8H261.8v98.7h136.2c-6 32.8-26.3 61.7-56.3 80.1v66h89.6c52.4-48.3 82.7-119.4 82.7-200.1" />
           <path fill="#34a853" d="M261.8 547.1c74.5 0 137.3-24.4 182.3-66.5l-89.6-66c-25.1 17.1-56.8 27-92.7 27-71 0-130.6-46.2-152.2-110.7H9.7v66.1c44 87.1 135.1 146.8 242.1 146.8" />
           <path fill="#fbbc05" d="M109.6 329.3c-3.2-9.7-4.9-19.9-4.9-30.3 0-10.4 1.7-20.6 4.9-30.3V202.6H9.7c-17.8 53.5-27.9 110.5-27.9 175.5 0 65 10.1 122 27.9 175.5h95.1v-96.7" />

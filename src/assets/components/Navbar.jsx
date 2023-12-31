@@ -47,9 +47,9 @@ export const Navbar = () => {
     if (item === "beranda") {
       navigate("/");
     } else if (item === "kursus") {
-      window.location.href = "/kursus/all";
+      navigate("/kursus/all");
     } else if (item === "kelas") {
-      window.location.href = "/kelassaya/all";
+      navigate("/kelassaya/all");
     } else if (item === "notifikasi") {
       navigate("/notifikasi");
     } else if (item === "akun") {
