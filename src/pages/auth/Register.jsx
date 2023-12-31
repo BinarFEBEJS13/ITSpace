@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import pass from "../../assets/svg/pass.svg";
 import passClose from "../../assets/svg/passClose.svg";
 import LogoBg from "../../assets/img/LogoBg.jpg";
-import salah from "../../assets/svg/salah.svg";
 import check from "../../assets/svg/check.svg";
 import { useNavigate } from "react-router-dom";
-import { UseRegister } from "../../services/auth/register";
+import { Registrasi } from "../../services/auth/register";
 import { CookieKeys, CookieStorage } from "../../utils/cookies";
 import { useToast } from "@chakra-ui/react";
 
@@ -16,10 +15,8 @@ export const Register = () => {
   const [Password, setPassword] = useState("");
   const [validPass, setValidPass] = useState("");
   const navigate = useNavigate();
-  const { mutate: registerData, isSuccess, error } = UseRegister();
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPhoneValid, setIsPhoneValid] = useState(false);
-  const [isPasswordValid, setIsPasswordValid] = useState(true);
   const toast = useToast();
 
   const handleInput = (e) => {
@@ -73,39 +70,35 @@ export const Register = () => {
 
   //FUNGSI UNTUK REGISTER
   const handleRegister = () => {
-    registerData({
+    Registrasi({
       name: Username,
       telp: Telp,
       email: Email,
       password: Password,
       passwordValidation: validPass,
-    });
-  };
-
-  useEffect(() => {
-    if (isSuccess) {
-      CookieStorage.set(CookieKeys.email, Email);
-      navigate("/otp", { state: { email: Email } });
-      toast({
-        title: "tautan terkirim",
-        status: "success",
-        duration: 3000,
-        position: "bottom",
-        isClosable: true,
-      });
-    } else if (error) {
-      if (error.response && error.response.status === 400) {
+    })
+      .then((result) => {
+        CookieStorage.set(CookieKeys.email, Email);
+        navigate("/otp", { state: { email: Email } });
         toast({
-          title: "Password min 8 karakter!!!",
+          title: "tautan terkirim",
+          status: "success",
+          duration: 3000,
+          position: "bottom",
+          isClosable: true,
+        });
+      })
+      .catch((err) => {
+        console.log(err, "error");
+        toast({
+          title: err?.response?.data?.message,
           status: "error",
           duration: 3000,
           position: "bottom",
           isClosable: true,
         });
-        setIsPasswordValid(false);
-      }
-    }
-  }, [Email, navigate, toast, isSuccess, error]);
+      });
+  };
 
   return (
     <div className="flex flex-row w-full h-screen">
@@ -133,9 +126,7 @@ export const Register = () => {
               <input
                 id="email"
                 type="email"
-                className={`h-[3rem] w-full rounded-xl border ${
-                  isEmailValid ? "border-green-500" : "border-gray-300"
-                } pl-3`}
+                className="h-[3rem] w-full rounded-xl border border-gray-300 pl-3"
                 placeholder="Contoh:sayahuman@gmail.com"
                 onChange={handleInput}
               />
@@ -179,27 +170,16 @@ export const Register = () => {
               <input
                 id="password"
                 type={PasswordVisible ? "text" : "password"}
-                className={`h-[3rem] w-full rounded-xl border ${
-                  isPasswordValid ? "border-gray-300" : "border-red-500"
-                } pl-3`}
+                className="h-[3rem] w-full rounded-xl border border-gray-300 pl-3"
                 placeholder="Buat Password"
                 onChange={handleInput}
               />
-              {!isPasswordValid && (
-                <img
-                  src={salah}
-                  alt="salah"
-                  className="top-3 right-5 absolute"
-                />
-              )}
-              {isPasswordValid && (
-                <img
-                  src={PasswordVisible ? passClose : pass}
-                  alt={PasswordVisible ? "passClose" : "pass"}
-                  className="top-3 right-5 absolute cursor-pointer"
-                  onClick={togglePasswordVisibility}
-                />
-              )}
+              <img
+                src={PasswordVisible ? passClose : pass}
+                alt={PasswordVisible ? "passClose" : "pass"}
+                className="top-3 right-5 absolute cursor-pointer"
+                onClick={togglePasswordVisibility}
+              />
             </div>
           </div>
 
@@ -212,27 +192,16 @@ export const Register = () => {
               <input
                 id="validPass"
                 type={ValidPassVisible ? "text" : "password"}
-                className={`h-[3rem] w-full rounded-xl border ${
-                  isPasswordValid ? "border-gray-300" : "border-red-500"
-                } pl-3`}
+                className="h-[3rem] w-full rounded-xl border border-gray-300 pl-3"
                 placeholder="Ulangi Password"
                 onChange={handleInput}
               />
-              {!isPasswordValid && (
-                <img
-                  src={salah}
-                  alt="salah"
-                  className="top-3 right-5 absolute"
-                />
-              )}
-              {isPasswordValid && (
-                <img
-                  src={PasswordVisible ? passClose : pass}
-                  alt={PasswordVisible ? "passClose" : "pass"}
-                  className="top-3 right-5 absolute cursor-pointer"
-                  onClick={toggleValidPassVisibility}
-                />
-              )}
+              <img
+                src={ValidPassVisible ? passClose : pass}
+                alt={ValidPassVisible ? "passClose" : "pass"}
+                className="top-3 right-5 absolute cursor-pointer"
+                onClick={toggleValidPassVisibility}
+              />
             </div>
           </div>
 
