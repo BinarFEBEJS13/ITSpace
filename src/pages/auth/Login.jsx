@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
 import { useLoginUser } from "../../services/auth/login_user";
 import { resendOtp } from "../../services/auth/resend_otp";
-import { GoogleLogin } from "@react-oauth/google";
+import GoogleLogin from "../../assets/components/GoogleLogin";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -138,8 +138,9 @@ export const Login = () => {
           </button>
 
           {/* BUTTON GOOGLE LOGIN */}
+          <GoogleLogin/>
 
-          <GoogleLogin
+          {/* <GoogleLogin
             onSuccess={(credentialResponse) => {
               console.log(credentialResponse);
 
@@ -149,7 +150,7 @@ export const Login = () => {
               console.log("Login with Google Failed");
             }}
             className="custom-google-button"
-          />
+          /> */}
 
           <span>
             Belum punya akun?{" "}

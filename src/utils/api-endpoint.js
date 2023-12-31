@@ -4,7 +4,7 @@ export const API_ENDPOINT = {
   //Authentication
   REGISTER: "/auth/register",
   LOGIN: "/auth/login",
-  GOOGLE: "/auth/google",
+  GOOGLE: "/api/v1/auth/google",
   LOGOUT: "/auth/logout",
   RESEND_OTP: "/auth/resend-otp",
   VERIFY_OTP: "/auth/verify-otp",

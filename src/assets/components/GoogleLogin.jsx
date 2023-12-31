@@ -5,15 +5,11 @@ import axios from "axios";
 import { CookiesProvider } from "react-cookie";
 import { CookieKeys } from "../../utils/cookies";
 import { FcGoogle } from "react-icons/fc";
-// import { useGoogleLogin } from "@react-oauth/google";
-// import axios from "axios";
-// // import { toast } from "react-toastify";
-// import { API_ENDPOINT } from "../../utils/api-endpoint";
-// import { CookieKeys, CookieStorage } from "../../utils/cookies";
-// import { FcGoogle } from "react-icons/fc";
-// import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function GoogleLogin({ buttonText }) {
+  const navigate = useNavigate();
   const registerLoginWithGoogleAction = async (accessToken) => {
     try {
       let data = JSON.stringify({
@@ -34,28 +30,26 @@ function GoogleLogin({ buttonText }) {
       const token = response.data.data;
 
       CookiesProvider.set(CookieKeys.AuthToken, token.token);
-
-      // navigate("/");
-
-      // Temporary solution
-      window.location.href = "/";
+      navigate("/");
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        // toast.error(error.response.data.message);
-        alert(error.response.data.message);
+        toast.error(error.response.data.message);
         return;
       }
-      //   toast.error(error.message);
-      alert(error.message);
+      toast.error(error.message);
     }
   };
 
   const loginWithGoogle = useGoogleLogin({
-    onSuccess: (responseGoogle) => registerLoginWithGoogleAction(responseGoogle.access_token),
+    onSuccess: (responseGoogle) =>
+      registerLoginWithGoogleAction(responseGoogle.access_token),
   });
 
   return (
-    <button className="border w-[50%] h-[10%] bg-white text-black flex items-center justify-center space-x-2" onClick={() => loginWithGoogle()}>
+    <button
+      className="border w-[50%] h-[10%] bg-white text-black flex items-center justify-center space-x-2"
+      onClick={() => loginWithGoogle()}
+    >
       <FcGoogle className="text-xl" />
       <span>Login with Google</span>
     </button>
