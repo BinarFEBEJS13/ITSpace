@@ -57,7 +57,7 @@ export const Notifikasi = () => {
             <div className="relative flex flex-col mx-auto w-[90%] h-[100%] gap-[2rem] sm:gap-0 md:gap-[1.5rem] lg:gap-[1rem] notif sm:overflow-y-auto custom-scrollbar mt-3 mb-3">
               {getNotif && getNotif.length > 0 ? (
                 getNotif.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map((notif, index) => (
-                  <div key={index} className={`relative notif sm:min-h-[100px] md:min-h-[140px] lg:min-h-[125px] min-h-[140px] p-1 rounded-lg flex w-full justify-start gap-8 sm:gap-0 ${clickedNotifications.includes(index) ? '' : `${notif?.is_read === true ? '' : 'bg-purple-100'}`}`}>
+                  <div key={index} className={`relative notif sm:min-h-[100px] md:min-h-[140px] lg:min-h-[125px] min-h-[150px] p-1 rounded-lg flex w-full justify-start gap-8 sm:gap-0 ${clickedNotifications.includes(index) ? '' : `${notif?.is_read === true ? '' : 'bg-purple-100'}`}`}>
                     <div className="flex flex-row space-x-4 mt-4" onClick={() => handleNotificationClick(notif?.id, index)}>
                       <div className="flex justify-start items-center w-8 h-8 ml-1">
                         <img src={bell_notifikasi} alt=""/>
