@@ -114,20 +114,6 @@ export const Login = () => {
           </button>
 
           {/* BUTTON GOOGLE LOGIN */}
-
-          {/* <GoogleLogin
-            onSuccess={(credentialResponse) => {
-              console.log(credentialResponse);
-
-              navigate("/");
-            }}
-            onError={() => {
-              console.log("Login with Google Failed");
-            }}
-            className="custom-google-button"
-          /> */}
-
-          {/* COba google login */}
           <LoginGoogle />
           <span>
             Belum punya akun?{" "}

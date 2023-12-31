@@ -28,10 +28,8 @@ export const Akun = () => {
     navigate("/login");
   };
 
-  console.log(logoutUser, "ini logout");
-
   return (
-    <div className="flex flex-col w-full bg-blue-50 sm:bg-white overflow-x-hidden">
+    <div className="flex flex-col w-full bg-blue-50 h-screen sm:h-auto sm:bg-white overflow-x-hidden">
       <Navbar></Navbar>
       <div className="hidden sm:flex justify-start sm:justify-center">
         <div className="flex justify-start w-[55%] sm:w-[60%] md:w-[88%] lg:w-[71%] xl:w-[58%] px-0 mt-5">

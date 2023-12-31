@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import LogoBg from "../../assets/img/LogoBg.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { UseVerifyOtp } from "../../services/auth/verify_otp";
@@ -6,6 +6,8 @@ import { CookieKeys, CookieStorage } from "../../utils/cookies";
 import { UseResendOtp } from "../../services/auth/resend_otp";
 import { useToast } from "@chakra-ui/react";
 import check from "../../assets/svg/check.svg";
+
+const createRefsArray = (length) => Array.from({ length }, () => useRef());
 
 export const OTP = () => {
   const navigate = useNavigate();
@@ -17,6 +19,8 @@ export const OTP = () => {
   const emailFromCookies = CookieStorage.get(CookieKeys.email) || "";
   const email = emailFromState || emailFromCookies;
   const toast = useToast();
+  const inputRefs = createRefsArray(6);
+  
 
   // INPUT OTP
   const handleInputOtp = (e, index) => {
@@ -24,6 +28,10 @@ export const OTP = () => {
       const newOtp = [...OTP];
       newOtp[index] = e.target.value;
       setOtp(newOtp);
+
+      if (index < inputRefs.length - 1 && e.target.value.length === 1) {
+        inputRefs[index + 1]?.current?.focus();
+      }
     }
   };
 
@@ -110,7 +118,7 @@ export const OTP = () => {
         title: "Registrasi Berhasil",
         status: "success",
         position: "bottom",
-        duration: null, // Atur durasi menjadi null agar notifikasi tidak otomatis hilang
+        duration: null,
       isClosable: true,
         render: ({ onClose }) => (
           <>
@@ -159,6 +167,7 @@ export const OTP = () => {
               <input
                 key={index}
                 id="otp"
+                ref={inputRefs[index]}
                 onChange={(e) => handleInputOtp(e, index)}
                 type="text"
                 className="h-[3rem] w-[3rem] border border-gray-400 rounded-xl text-center text-2xl font-semibold"

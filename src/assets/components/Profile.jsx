@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useGetUsersProfile } from "../../services/users/get-user-profile";
-import { useToast } from "@chakra-ui/react";
+import { Wrap, WrapItem, useToast } from "@chakra-ui/react";
 // img
 import picture from "../img/picture.png";
 
 import { API_ENDPOINT } from "../../utils/api-endpoint";
 import http from "../../utils/http";
 import { useGetDataUser } from "../../services/users/get-data-user";
+import { Avatar } from "@chakra-ui/react";
 
 export const Profile = () => {
   const [Nama, setNama] = useState("")
@@ -28,12 +29,14 @@ export const Profile = () => {
   const { data: getDataUser } = useGetDataUser({ query: GetUserProfile?.data?.id })
 
   useEffect(() => {
-    setShowImage(getDataUser?.data?.profile?.profilePicture);
-    setNama(getDataUser?.data?.profile?.name);
-    setEmail(getDataUser?.data?.email);
-    setTelepon(getDataUser?.data?.profile?.phoneNumber);
-    setNegara(getDataUser?.data?.profile?.country);
-    setKota(getDataUser?.data.profile?.city);
+    if (getDataUser && getDataUser.data && getDataUser.data.profile) {
+      setShowImage(getDataUser.data.profile.profilePicture);
+      setNama(getDataUser.data.profile.name);
+      setEmail(getDataUser.data.email);
+      setTelepon(getDataUser.data.profile.phoneNumber);
+      setNegara(getDataUser.data.profile.country);
+      setKota(getDataUser.data.profile.city);
+    }
   }, [getDataUser])
 
   const handlePutProfile = (e) => {
@@ -45,7 +48,7 @@ export const Profile = () => {
         setEmail(e.target.value);
       }
       if (e.target.id === "telepon") {
-        setTelepon(e.target.value);
+        setTelepon(e.target.value);   
       }
       if (e.target.id === "negara") {
         setNegara(e.target.value);
@@ -63,9 +66,9 @@ export const Profile = () => {
     formData.append('image', Image);
     formData.append('name', Nama);
     formData.append('email', Email);
-    formData.append('phoneNumber', Telepon);
-    formData.append('country', Negara);
-    formData.append('city', Kota);
+    formData.append('phoneNumber', Telepon ?? '');
+    formData.append('country', Negara ?? '');
+    formData.append('city', Kota ?? '');
 
     try {
       const response = await http.put(`${API_ENDPOINT.PUT_USER}/${getDataUser?.data?.id}`, formData, {
@@ -75,7 +78,7 @@ export const Profile = () => {
       });
 
       if (response.status === 201) {
-        console.log('Image uploaded successfully!');
+        console.log('Profil Berhasil Diperbarui!');
         toast({
           title: "Profil Berhasil Diperbarui",
           status: "success",
@@ -84,17 +87,34 @@ export const Profile = () => {
         });
       } else {
         console.error('Image upload failed.');
+        if (response.status === 401) {
+        toast({
+          title: "Tidak dapat memperbarui profil",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
       }
     } catch (error) {
-      console.error('Error uploading image:', error);
+      toast({
+        title: "Tidak dapat memperbarui profil",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
   return (
     <div className="flex justify-center">
       <div className="flex flex-col justify-center ml-0 sm:ml-4 mt-[1rem] mobile sm:mt-4 w-[23rem] sm:w-[18rem] px-5">
-        <div className="w-[90px] h-[90px] mt-auto mx-auto relative bg-white rounded-full outline-ungu-0">
-          <img className="rounded-full object-cover object-center" src={showImage} alt=""/>
+        <div className=" mt-auto mx-auto relative rounded-full border-[1.5px] border-ungu-0">
+          <Wrap>
+            <WrapItem>
+              <Avatar outline='blue' size='xl' src={showImage} />
+            </WrapItem>
+          </Wrap>
           <div className="absolute bottom-0 right-0 bg-white w-6 h-6 flex items-center justify-center rounded-md overflow-hidden cursor-pointer">
               <input id="image" type="file" onChange={handleImageChange} accept="image/*" className="absolute transform scale-200 opacity-0 cursor-pointer"/>
               <img className="w-4 h-4 fill-white" src={picture} alt=""></img>
