@@ -48,7 +48,7 @@ html::-webkit-scrollbar-thumb {
   }
 
   .notif {
-    @apply gap-[3rem] 
+    @apply gap-[2rem] 
     min-h-[155px];
   }
 
