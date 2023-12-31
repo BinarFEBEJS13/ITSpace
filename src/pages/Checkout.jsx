@@ -39,7 +39,7 @@ export const Checkout = () => {
   const { data: dataCrsId } = useGetDataCoursesId({ query: courseId });
   const dataCourseId = dataCrsId?.data;
 
-  const { mutate: postTransactions, data: getDataTransactions, isSuccess, isError } = useDataTransactions();
+  const { mutate: postTransactions, data: getDataTransactions, isSuccess, error } = useDataTransactions();
 
   // Handle PPN & Total Pembayaran
   const hargaKursus = Number(dataCourseId?.price) || 0;
@@ -60,11 +60,7 @@ export const Checkout = () => {
         courseId: courseId,
         paymentMethod: pembayaran,
       });
-    }
-    // else if (){
-    //   console.log();
-    // }
-    else {
+    } else {
       toast({
         title: "Gagal",
         description: "Silahkan pilih kursus yang lain",
@@ -79,7 +75,7 @@ export const Checkout = () => {
     if (isSuccess) {
       window.location.href = `/payment/${courseId}/${getDataTransactions?.data?.data?.id}`;
     }
-    if (isError) {
+    if (error?.response?.status === 401) {
       toast({
         title: "Gagal",
         description: "Silahkan login terlebih dahulu",
@@ -88,7 +84,16 @@ export const Checkout = () => {
         position: "top-right",
       });
     }
-  }, [isSuccess, isError, courseId, getDataTransactions, toast]);
+    if (error?.response?.status === 400) {
+      toast({
+        title: "Gagal",
+        description: error?.response?.data?.message,
+        duration: 3000,
+        status: "error",
+        position: "top-right",
+      });
+    }
+  }, [isSuccess, error, courseId, getDataTransactions, toast]);
 
   useEffect(() => {
     if (dataCourseId?.isPremium === false) {

@@ -6,7 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
 import { useLoginUser } from "../../services/auth/login_user";
 import { resendOtp } from "../../services/auth/resend_otp";
-import GoogleLogin from "../../assets/components/GoogleLogin";
+// import { GoogleLogin } from "@react-oauth/google";
+import LoginGoogle from "../../assets/components/LoginGoogle";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -71,7 +72,7 @@ export const Login = () => {
       } else {
         toast({
           title: "Email atau Password salah",
-          status: "success",
+          status: "error",
           duration: 3000,
           position: "bottom",
           isClosable: true,
@@ -102,19 +103,8 @@ export const Login = () => {
               </a>
             </div>
             <div className="relative">
-              <input
-                id="password"
-                type={PasswordVisible ? "text" : "password"}
-                onChange={handleInput}
-                className="h-[3rem] w-full md:w-full rounded-xl border pl-3"
-                placeholder="Masukkan Password"
-              />
-              <img
-                src={PasswordVisible ? passClose : pass}
-                alt={PasswordVisible ? "passClose" : "pass"}
-                className="top-3 right-5 absolute cursor-pointer"
-                onClick={togglePasswordVisibility}
-              />
+              <input id="password" type={PasswordVisible ? "text" : "password"} onChange={handleInput} className="h-[3rem] w-full md:w-full rounded-xl border pl-3" placeholder="Masukkan Password" />
+              <img src={PasswordVisible ? passClose : pass} alt={PasswordVisible ? "passClose" : "pass"} className="top-3 right-5 absolute cursor-pointer" onClick={togglePasswordVisibility} />
             </div>
           </div>
 
@@ -124,20 +114,7 @@ export const Login = () => {
           </button>
 
           {/* BUTTON GOOGLE LOGIN */}
-          <GoogleLogin/>
-
-          {/* <GoogleLogin
-            onSuccess={(credentialResponse) => {
-              console.log(credentialResponse);
-
-              navigate("/");
-            }}
-            onError={() => {
-              console.log("Login with Google Failed");
-            }}
-            className="custom-google-button"
-          /> */}
-
+          <LoginGoogle />
           <span>
             Belum punya akun?{" "}
             <a className="text-purple-800 font-semibold hover:underline" href="/register">
