@@ -37,7 +37,7 @@ export const Success = () => {
                   <p className="text-center text-white">Terimakasih atas pembayaran transaksi anda!</p>
                 </div>
                 <div className="w-full flex justify-center items-center flex-col gap-4">
-                  <h2 className="text-ungu-0 font-bold text-3xl">Selamat!</h2>
+                  <h2 className="text-ungu-0 font-semibold text-3xl">Selamat!</h2>
                   <img src={selamat} alt="" />
                   <div className="text-center">
                     <p className="font-semibold">Transaksi pembayaran kelas premium berhasil!</p>

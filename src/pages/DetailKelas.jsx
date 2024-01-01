@@ -176,7 +176,7 @@ export const DetailKelas = () => {
                         <div className="flex items-center">
                           {dataCoursesId?.courseCategory?.map((category, index) => (
                             <React.Fragment key={index}>
-                              <h6 className="text-ungu-0 font-bold text-xs xl:text-sm">{category?.category?.name}</h6>
+                              <h6 className="text-ungu-0 font-semibold text-xs xl:text-sm">{category?.category?.name}</h6>
                               {index < dataCoursesId.courseCategory.length - 1 && <span className="pr-2">,</span>}
                             </React.Fragment>
                           ))}
@@ -187,7 +187,7 @@ export const DetailKelas = () => {
                         </span>
                       </div>
                       <div className="flex flex-col gap-2">
-                        <h2 className="font-bold cursor-pointer">{dataCoursesId?.title}</h2>
+                        <h2 className="font-semibold cursor-pointer">{dataCoursesId?.title}</h2>
                         <div className="flex items-center">
                           {dataCoursesId?.mentor?.map((mentor, index) => (
                             <React.Fragment key={index}>
@@ -261,7 +261,7 @@ export const DetailKelas = () => {
                     {/* Detail Belajar */}
                     <div className="hidden sm:flex flex-col gap-4">
                       <div className="flex flex-col gap-2">
-                        <h2 className="font-bold">Tentang Kelas</h2>
+                        <h2 className="font-semibold">Tentang Kelas</h2>
                         <div className="">
                           <p className="text-xs xl:text-sm text-justify indent-12">{dataCoursesId?.description}</p>
                         </div>
@@ -271,7 +271,7 @@ export const DetailKelas = () => {
                       /*///////////////////////////////  Tentang Untuk Mobile ////////////////////////////////////////////// */
                       <div className="flex sm:hidden flex-col gap-4">
                         <div className="flex flex-col gap-2">
-                          <h2 className="font-bold">Tentang Kelas</h2>
+                          <h2 className="font-semibold">Tentang Kelas</h2>
                           <div className="">
                             <p className="text-xs xl:text-sm text-justify indent-12">{dataCoursesId?.description}</p>
                           </div>
