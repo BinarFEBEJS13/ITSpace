@@ -98,9 +98,9 @@ export const Login = () => {
           <div className="w-full md:w-[35rem] flex flex-col">
             <div className="flex justify-between items-center mb-1">
               <label>Password</label>
-              <a href="/logres" className="text-blue-500 hover:underline" onClick={handleForgotPassword}>
+              <button className="text-blue-500 hover:underline" onClick={handleForgotPassword}>
                 Lupa Kata sandi
-              </a>
+              </button>
             </div>
             <div className="relative">
               <input id="password" type={PasswordVisible ? "text" : "password"} onChange={handleInput} className="h-[3rem] w-full md:w-full rounded-xl border pl-3" placeholder="Masukkan Password" />
