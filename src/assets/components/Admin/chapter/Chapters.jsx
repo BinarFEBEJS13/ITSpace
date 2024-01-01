@@ -91,20 +91,19 @@ export const Chapters = () => {
 
       <div className="w-full lg:overflow-x-hidden">
         <Header />
-        <div className="mx-[2rem] my-[2rem] md:mx-[2rem] flex justify-between ">
+        <div className="mx-[2rem] my-[2rem] md:mx-[2rem] flex justify-between">
           <div className="flex text-3xl items-center gap-4">
             <FaArrowLeftLong
               onClick={() => navigate("/admin/dashboard/course")}
             />
-
-            <h1 className=" font-bold text-normal sm:text-3xl">
-              Kembali ke halaman course
+            <h1 className="font-bold text-lg md:text-2xl">
+              Kembali
             </h1>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 sm:mx-[3rem]">
             <div
               onClick={toggleAddChapters}
-              className="flex items-center gap-2 border-2 px-4 py-2 font-bold text-base rounded-2xl bg-[#6148FF] border-[#6148FF] text-white"
+              className="flex items-center gap-2 py-1 px-2 border-2 sm:px-4 sm:py-2 font-bold text-base rounded-2xl bg-[#6148FF] border-[#6148FF] text-white"
             >
               <img src={Tambah} alt="" />
               New Chapter
@@ -113,14 +112,14 @@ export const Chapters = () => {
         </div>
         {Chapter?.data?.length === 0 ? (
           <div className="flex flex-col gap-6 items-center justify-center h-[60%] ">
-            <img src={chapterImg} alt="" />
-            <h1 className="text-xl font-bold text-[#6148FF]">Maaf Chapter untuk course ini tidak ada</h1>
+            <img className="w-[70%] sm:w-[30%]" src={chapterImg} alt="" />
+            <h1 className="sm:text-xl font-bold text-[#6148FF]">Maaf Chapter untuk course ini tidak ada</h1>
           </div>
         ) : (
           <div>
             <div className="mx-[2rem] flex flex-col gap-4 text-xl my-[2rem] md:mx-[5rem]">
               <h1 className="capitalize font-bold text-normal sm:text-3xl">
-                {courses?.title}
+                Kelas : {courses?.title}
               </h1>
               <div className="flex items-center gap-3">
                 <h1 className="uppercase font-bold">{courses?.code}</h1>
@@ -136,7 +135,7 @@ export const Chapters = () => {
                   {courses?.level}
                 </h1>
                 <h1
-                  className={`text-white rounded-full px-3 py-1 font-bold ${
+                  className={`text-white rounded-full sm:px-3 px-2 py-1 font-bold ${
                     Chapter?.data?.course?.isPremium === 1
                       ? "bg-[#6148FF]"
                       : "bg-[#73CA5C]"
@@ -152,27 +151,27 @@ export const Chapters = () => {
               {Chapter?.data?.map((chapter, index) => (
                 <div
                   key={index}
-                  className="bg-white my-4 mx-auto w-full shadow-xl p-4 rounded-[16px] max-h-[400px] overflow-y-auto"
+                  className="bg-white my-4 mx-auto w-full shadow-xl sm:p-4 rounded-[16px] max-h-[400px] overflow-y-auto"
                 >
                   <div className="flex justify-between">
                     <div className="w-full justify-center p-6 flex flex-col gap-3">
-                      <h1 className="text-4xl text-[#6148FF]">
+                      <h1 className="text-xl font-semibold sm:text-4xl text-[#6148FF]">
                         Chapter {chapter.number}
                       </h1>
-                      <div className="capitalize flex items-center gap-3">
-                        <label className="text-2xl" htmlFor="">
+                      <div className="capitalize  flex items-center gap-3">
+                        <label  htmlFor="">
                           Judul Chapter :
                         </label>
-                        <span className="capitalize text-3xl font-medium ">
+                        <span className="font-medium  ">
                           {chapter.title}
                         </span>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <label className="text-2xl" htmlFor="">
+                      <div className="flex items-center gap-1 sm:gap-3">
+                        <label htmlFor="">
                           Tipe Chapter :
                         </label>
                         <span
-                          className={`px-7 py-3 text-white font-bold text-sm rounded-[25px] ${
+                          className={`px-2 py-1 sm:px-7 sm:py-3 text-white font-bold text-sm rounded-[25px] ${
                             chapter.isPremium === true
                               ? "bg-[#6148FF]"
                               : "bg-[#73CA5C]"
@@ -182,7 +181,7 @@ export const Chapters = () => {
                         </span>
                       </div>
                     </div>
-                    <div className="p-6 flex justify-end ">
+                    <div className="p-2 sm:p-6 flex justify-end ">
                       <div className="flex flex-col gap-2">
                         <button
                           onClick={() => togglePopUp(chapter.id)}

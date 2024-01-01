@@ -22,8 +22,7 @@ root.render(
   <React.StrictMode>
     <GoogleOAuthProvider clientId={process.env.REACT_APP_OAUTH_GOOGLE_ID}>
       <QueryClientProvider client={queryITSpace}>
-        <ChakraProvider>
-
+        <ChakraProvider theme={theme}>
         <RouterList />
         </ChakraProvider>
       </QueryClientProvider>

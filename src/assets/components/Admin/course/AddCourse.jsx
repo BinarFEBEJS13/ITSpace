@@ -1,9 +1,17 @@
 import React, { useState } from "react";
 import { FaCloudArrowUp } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa6";
-import { useToast } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Select,
+  Input,
+  useToast,
+  Textarea,
+} from "@chakra-ui/react";
 import { useGetCategory } from "../../../../services/Admin/category/get-data-category";
-import Select from "react-select";
+import Selectt from "react-select";
 import makeAnimated from "react-select/animated";
 import { postDataCourse } from "../../../../services/Admin/courses/post-data-course";
 
@@ -12,8 +20,8 @@ export const AddCourse = (props) => {
   const [NamaKelas, setNamaKelas] = useState("");
   const [Kategori, setKategori] = useState([]);
   const [KodeKelas, setKodeKelas] = useState("");
-  const [TipeKelas, setTipeKelas] = useState("0");
-  const [Level, setLevel] = useState("BEGINNER");
+  const [TipeKelas, setTipeKelas] = useState("");
+  const [Level, setLevel] = useState("");
   const [Harga, setHarga] = useState(0);
   const [Mentor, setMentor] = useState([]);
   const [Description, setDescription] = useState("");
@@ -21,10 +29,20 @@ export const AddCourse = (props) => {
   const [fileName, setFileName] = useState("No selected file");
   const [selectedFile, setSelectedFile] = useState(null);
   const [Img, setImg] = useState(null);
+  const [inputErrors, setInputErrors] = useState({
+    NamaKelas: "",
+    Kategori: [],
+    KodeKelas: "",
+    TipeKelas: "",
+    Level: "",
+    Harga: "",
+    Mentor: [],
+    Description: "",
+    LinkKelas: "",
+  });
   const toast = useToast();
 
   const { handleClose, refetchData } = props;
-
 
   const { data: AllCategory } = useGetCategory();
 
@@ -34,7 +52,7 @@ export const AddCourse = (props) => {
       label: category.name,
     })) || [];
 
-  const mapKategori = Kategori.map((ok)=> ok.value)
+  const mapKategori = Kategori.map((ok) => ok.value);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -45,10 +63,77 @@ export const AddCourse = (props) => {
     }
   };
 
-console.log(Kategori.map((ok)=> ok.value), "WOWOWOWOWOOWO");
+  const validateForm = () => {
+    let isValid = true;
+    const errors = {
+      NamaKelas: "",
+      Kategori: [],
+      KodeKelas: "",
+      TipeKelas: "",
+      Level: "",
+      Harga: "",
+      Mentor: [],
+      Description: "",
+      LinkKelas: "",
+    };
+
+    if (!NamaKelas.trim()) {
+      errors.NamaKelas = "Nama Kelas tidak boleh kosong";
+      isValid = false;
+    }
+    if (!Kategori.length) {
+      errors.Kategori = "Kategori Kelas tidak boleh kosong";
+      isValid = false;
+    }
+    if (!KodeKelas.trim()) {
+      errors.KodeKelas = "Kode Kelas tidak boleh kosong";
+      isValid = false;
+    }
+
+    if (TipeKelas !== "0" && TipeKelas !== "1") {
+      errors.TipeKelas = "Pilih Tipe Kelas";
+      isValid = false;
+    }
+
+    if (
+      Level !== "BEGINNER" &&
+      Level !== "INTERMEDIATE" &&
+      Level !== "ADVANCED"
+    ) {
+      errors.Level = "Pilih level Kelas";
+      isValid = false;
+    }
+
+    if (Harga === 0) {
+      errors.Harga = "Harga tidak boleh kosong";
+      isValid = false;
+    } else if (!Number.isInteger(Number(Harga))) {
+      errors.Harga = "Harga harus berupa angka bulat";
+      isValid = false;
+    }
+
+    if (!Mentor.length) {
+      errors.Mentor = "Mentor tidak boleh kosong";
+      isValid = false;
+    }
+    if (!LinkKelas.trim()) {
+      errors.LinkKelas = "Link Kelas tidak boleh kosong";
+      isValid = false;
+    }
+    if (!Description.trim()) {
+      errors.Description = "Deskripsi Kelas tidak boleh kosong";
+      isValid = false;
+    }
+    setInputErrors(errors);
+    return isValid;
+  };
 
   const handleKelas = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
     const formData = new FormData();
 
     formData.append("code", KodeKelas);
@@ -64,7 +149,6 @@ console.log(Kategori.map((ok)=> ok.value), "WOWOWOWOWOOWO");
     mentorArray.forEach((email, index) => {
       formData.append(`mentorEmail[${index}]`, email);
     });
-    console.log(mentorArray, "mentorArraymentorArraymentorArray");
     // formData.append("kategori", Kategori)
 
     // const kategoriArray =
@@ -76,7 +160,8 @@ console.log(Kategori.map((ok)=> ok.value), "WOWOWOWOWOOWO");
     postDataCourse(formData)
       .then((result) => {
         toast({
-          title: result?.response?.data?.message,
+          title:
+            result?.response?.data?.message || "Berhasil Menambah Kelas Baru",
           duration: 9000,
           status: "success",
           position: "top",
@@ -84,6 +169,7 @@ console.log(Kategori.map((ok)=> ok.value), "WOWOWOWOWOOWO");
         refetchData();
       })
       .catch((err) => {
+        console.log(err, "err");
         toast({
           title: err?.response?.data?.message,
           duration: 9000,
@@ -93,19 +179,6 @@ console.log(Kategori.map((ok)=> ok.value), "WOWOWOWOWOOWO");
       });
     handleClose();
   };
-
-  // const handleAddMentor = () => {
-  //   if (newMentor.trim() !== "") {
-  //     setMentor([...Mentor, newMentor]);
-  //     setNewMentor("");
-  //   }
-  // };
-
-  // const handleRemoveMentor = (index) => {
-  //   const updatedMentors = [...Mentor];
-  //   updatedMentors.splice(index, 1);
-  //   setMentor(updatedMentors);
-  // };
 
   const handleOnchange = (e) => {
     if (e) {
@@ -160,136 +233,158 @@ console.log(Kategori.map((ok)=> ok.value), "WOWOWOWOWOOWO");
             Tambah Kelas
           </h1>
           <div className="flex flex-col gap-4 w-4/5 sm:w-4/5 ">
-            <div className="flex flex-col">
-              <label htmlFor="">Kode Kelas</label>
-              <input
+            <FormControl isInvalid={inputErrors.KodeKelas !== ""}>
+              <FormLabel>Kode Kelas</FormLabel>
+              <Input
                 id="KodeKelas"
-                type="text"
-                className="px-3 py-2 rounded-lg border border-[#D0D0D0]"
-                onChange={handleOnchange}
                 value={KodeKelas}
+                placeholder="Kode Kelas"
+                onChange={(e) => {
+                  handleOnchange(e);
+                  setInputErrors((prevErrors) => ({
+                    ...prevErrors,
+                    KodeKelas: "",
+                  }));
+                }}
+                onBlur={validateForm}
               />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="">Kategori</label>
-              <Select
+              {inputErrors.KodeKelas && (
+                <FormErrorMessage>{inputErrors.KodeKelas}</FormErrorMessage>
+              )}
+            </FormControl>
+            <FormControl isInvalid={inputErrors}>
+              <FormLabel>Kategori</FormLabel>
+              <Selectt
                 value={Kategori}
-                onChange={(e) => setKategori(e)}
+                onChange={(e) => {
+                  setKategori(e);
+                  setInputErrors((prevErrors) => ({
+                    ...prevErrors,
+                    Kategori: [],
+                  }));
+                }}
                 closeMenuOnSelect={false}
                 components={animatedComponents}
                 isMulti
+                placeholder="Pilih kategori Kelas"
                 options={dataKategori}
                 className="basic-multi-select"
                 classNamePrefix="select"
               />
-            </div>
+              {inputErrors.Kategori && (
+                <FormErrorMessage>{inputErrors.Kategori}</FormErrorMessage>
+              )}
+            </FormControl>
 
-            {/* Menampilkan tag kategori yang dipilih */}
-
-            <div className="flex flex-col ">
-              <label htmlFor="">Nama Kelas</label>
-              <input
+            <FormControl isInvalid={inputErrors.NamaKelas !== ""}>
+              <FormLabel>Nama Kelas</FormLabel>
+              <Input
                 id="NamaKelas"
-                type="text"
-                className="px-3 py-2 rounded-lg border border-[#D0D0D0]"
                 value={NamaKelas}
-                onChange={handleOnchange}
+                onChange={(e) => {
+                  handleOnchange(e);
+                  setInputErrors((prevErrors) => ({
+                    ...prevErrors,
+                    NamaKelas: "",
+                  }));
+                }}
+                onBlur={validateForm}
+                placeholder="Nama Kelas"
               />
-            </div>
+              {inputErrors.NamaKelas && (
+                <FormErrorMessage>{inputErrors.NamaKelas}</FormErrorMessage>
+              )}
+            </FormControl>
 
-            <div className="flex flex-col ">
-              <label htmlFor="TipeKelas">Tipe Kelas</label>
-              <select
+            <FormControl isInvalid={inputErrors.TipeKelas !== "" && (inputErrors.TipeKelas !== "1" || inputErrors.TipeKelas !== "0")}>
+              <FormLabel>Level</FormLabel>
+              <Select
                 id="TipeKelas"
-                className="px-3 py-2 rounded-lg border border-[#D0D0D0]"
-                onChange={handleOnchange}
                 value={TipeKelas}
+                onChange={(e) => {
+                  handleOnchange(e);
+                  setInputErrors((prevErrors) => ({
+                    ...prevErrors,
+                    TipeKelas: "",
+                  }));
+                }}
+                placeholder="Pilih Tipe Kelas"
+                onBlur={validateForm}
               >
                 <option value="0">GRATIS</option>
                 <option value="1">PREMIUM</option>
-              </select>
-            </div>
+              </Select>
+              {inputErrors.TipeKelas && (
+                <FormErrorMessage>{inputErrors.TipeKelas}</FormErrorMessage>
+              )}
+            </FormControl>
 
-            <div className="flex flex-col ">
-              <label htmlFor="">Level</label>
-              <select
+            <FormControl isInvalid={inputErrors.Level !== "" && (inputErrors.Level !== "BEGINNER" || inputErrors.Level !== "INTERMEDIATE" || inputErrors.Level !== "ADVANCED")}>
+              <FormLabel>Level</FormLabel>
+              <Select
                 id="level"
-                className="px-3 py-2 rounded-lg border border-[#D0D0D0]"
                 value={Level}
-                onChange={handleOnchange}
+                placeholder="Pilih level kelas"
+                onChange={(e) => {
+                  handleOnchange(e);
+                  setInputErrors((prevErrors) => ({
+                    ...prevErrors,
+                    Level: "",
+                  }));
+                }}
+                onBlur={validateForm}
               >
                 <option value="BEGINNER">BEGINNER</option>
                 <option value="INTERMEDIATE">INTERMEDIATE</option>
                 <option value="ADVANCED">ADVANCED</option>
-              </select>
-            </div>
-
-            {/* <div className="flex flex-col">
-              <label htmlFor="">Tambah Mentor</label>
-              <div className="flex items-center">
-                <input
-                  id="mentor"
-                  type="text"
-                  className="px-3 py-2 rounded-lg border w-full border-[#D0D0D0]"
-                  value={newMentor}
-                  onChange={(e) => setNewMentor(e.target.value)}
-                />
-                <button
-                  type="button"
-                  className="bg-[#a3a2a5c9] text-white p-4 ml-2 rounded-xl"
-                  onClick={handleAddMentor}
-                >
-                  <FaPlus />
-                </button>
-              </div>
-              {Mentor.length > 0 && (
-                <div className="mt-2 ">
-                  <label htmlFor="">Mentor Terpilih</label>
-                  <ul>
-                    {Mentor?.map((mentor, index) => (
-                      <li key={index} className="flex items-center my-2">
-                        <input
-                          value={mentor}
-                          className="px-3 py-2 rounded-lg border w-full border-[#D0D0D0]"
-                        />
-                        <button
-                          type="button"
-                          className="bg-red-500 ml-2 text-white p-4 rounded-xl"
-                          onClick={() => handleRemoveMentor(index)}
-                        >
-                          <FaTrash />
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              </Select>
+              {inputErrors.Level && (
+                <FormErrorMessage>{inputErrors.Level}</FormErrorMessage>
               )}
-            </div> */}
+            </FormControl>
 
-            <div className="flex flex-col ">
-              <label htmlFor="">Mentor</label>
-              <input
+            <FormControl isInvalid={inputErrors.Mentor.length !== 0}>
+              <FormLabel>Mentor</FormLabel>
+              <Input
                 id="mentor"
-                type="text"
-                className="px-3 py-2 rounded-lg border border-[#D0D0D0]"
                 value={Mentor}
-                onChange={handleOnchange}
+                onChange={(e) => {
+                  handleOnchange(e);
+                  setInputErrors((prevErrors) => ({
+                    ...prevErrors,
+                    Mentor: [],
+                  }));
+                }}
+                onBlur={validateForm}
+                placeholder="Mentor Kelas"
               />
-            </div>
+              {inputErrors.Mentor && (
+                <FormErrorMessage>{inputErrors.Mentor}</FormErrorMessage>
+              )}
+            </FormControl>
 
-            <div className="flex flex-col ">
-              <label htmlFor="">Harga</label>
-              <input
+            <FormControl isInvalid={inputErrors.Harga !== ""}>
+              <FormLabel>Harga</FormLabel>
+              <Input
                 id="harga"
-                type="text"
-                className="px-3 py-2 rounded-lg border border-[#D0D0D0]"
                 value={Harga}
-                onChange={handleOnchange}
+                onChange={(e) => {
+                  handleOnchange(e);
+                  setInputErrors((prevErrors) => ({
+                    ...prevErrors,
+                    Harga: "",
+                  }));
+                }}
+                onBlur={validateForm}
+                placeholder="Harga Kelas"
               />
-            </div>
+              {inputErrors.Harga && (
+                <FormErrorMessage>{inputErrors.Harga}</FormErrorMessage>
+              )}
+            </FormControl>
 
-            <div className="flex flex-col">
-              <label htmlFor="img">Images</label>
+            <div className="flex flex-col gap-1">
+              <FormLabel>Images</FormLabel>
               <div className="py-4 bg-[#ebf3fc63] flex flex-col gap-4 justify-center items-center border-2 border-dashed- w-full h-[300px] pointer rounded-lg">
                 <div className="border-4 border-dashed border-[#D0D0D0] rounded-lg h-[70%] w-[90%] flex flex-col items-center justify-center">
                   <input
@@ -319,28 +414,45 @@ console.log(Kategori.map((ok)=> ok.value), "WOWOWOWOWOOWO");
               </div>
             </div>
 
-            <div className="flex flex-col ">
-              <label htmlFor="">Link Kelas</label>
-              <input
+            <FormControl isInvalid={inputErrors.LinkKelas !== ""}>
+              <FormLabel>Link Kelas</FormLabel>
+              <Input
                 id="LinkKelas"
-                type="text"
-                className="px-3 py-2 rounded-lg border border-[#D0D0D0]"
                 value={LinkKelas}
-                onChange={handleOnchange}
+                onChange={(e) => {
+                  handleOnchange(e);
+                  setInputErrors((prevErrors) => ({
+                    ...prevErrors,
+                    LinkKelas: "",
+                  }));
+                }}
+                onBlur={validateForm}
+                placeholder="Link Kelas"
               />
-            </div>
+              {inputErrors.LinkKelas && (
+                <FormErrorMessage>{inputErrors.LinkKelas}</FormErrorMessage>
+              )}
+            </FormControl>
 
-            <div className="flex flex-col ">
-              <label htmlFor="">Deskripsi</label>
-              <input
+            <FormControl isInvalid={inputErrors.Description !== ""}>
+              <FormLabel>Deskripsi</FormLabel>
+              <Textarea
                 id="description"
-                type="text"
-                placeholder="Tambahkan Deskripsi"
-                className="px-3 py-2 rounded-lg border border-[#D0D0D0]"
                 value={Description}
-                onChange={handleOnchange}
+                onChange={(e) => {
+                  handleOnchange(e);
+                  setInputErrors((prevErrors) => ({
+                    ...prevErrors,
+                    Description: "",
+                  }));
+                }}
+                onBlur={validateForm}
+                placeholder="Deskripsi Kelas"
               />
-            </div>
+              {inputErrors.Description && (
+                <FormErrorMessage>{inputErrors.Description}</FormErrorMessage>
+              )}
+            </FormControl>
 
             <div className="text-white flex gap-4 font-bold text-sm sm:text-base my-4">
               <button

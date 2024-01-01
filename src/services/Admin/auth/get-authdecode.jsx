@@ -8,7 +8,6 @@ const GetAuthDecode = async({queryKey}) => {
     return data
 }
 
-
 const useGetDecode = (options) => {
     return useQuery({
         queryKey : [API_ENDPOINT.USERS, options],

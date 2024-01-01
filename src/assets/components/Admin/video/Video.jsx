@@ -125,6 +125,7 @@ const {data : GetVideo, refetch : reloadData } = useGetDataVideo({
           return (
             <Tr key={index}>
               <Td>{video.title}</Td>
+              <Td>urutan ke {video.number}</Td>
               <Td>{video.description}</Td>
               <Td>{video.url}</Td>
               <Td>{video.duration} menit</Td>
@@ -166,7 +167,8 @@ const {data : GetVideo, refetch : reloadData } = useGetDataVideo({
           <Thead>
             <Tr>
               <Th>Judul Video</Th>
-              <Th>Descripsi Video</Th>
+              <Th>Urutan Video</Th>
+              <Th>Deskripsi Video</Th>
               <Th>Link Video</Th>
               <Th>Durasi Video</Th>
               <Th>Edit</Th>

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import { usePostDataVideos } from "../../../../services/Admin/videos/post-data-videos";
-import { useToast } from "@chakra-ui/react";
+import { FormControl, FormErrorMessage, FormLabel, useToast } from "@chakra-ui/react";
 import { useGetDataChaptersID } from "../../../../services/Admin/chapters/get-chapterID";
 import { useGetDataVideoId } from "../../../../services/Admin/videos/get-data-videoID";
 import { EditVideos, useEditVideo } from "../../../../services/Admin/videos/put-data-videos";
+import { Input } from "rsuite";
+import { duration } from "@mui/material";
 
 export const EditVideo = ({
   courseId,
@@ -18,6 +20,13 @@ export const EditVideo = ({
   const [Link, setLink] = useState("");
   const [Durasi, setDurasi] = useState(0);
   const [Number, setNumber] = useState(0);
+  const [inputErrors, setInputErrors] = useState({
+    Judul: "",
+    Deskripsi: "",
+    Link: "",
+    Durasi: "",
+    Number: "",
+  });
 
   const toast = useToast();
 
@@ -35,9 +44,40 @@ export const EditVideo = ({
     videoId: selectVideo.id,
   });
 
-  console.log(selectVideo, "selectVideo");
-  // const { mutate: editVideo, isSuccess, error } = useEditVideo();
+  const validateForm = () => {
+    let isValid = true;
+    const errors = {
+      Judul: "",
+      Deskripsi: "",
+      Link: "",
+      Durasi: "",
+      Number: "",
+    };
 
+    if (!Judul.trim()) {
+      errors.Judul = "Judul video tidak boleh kosong";
+      isValid = false;
+    }
+    if (!Deskripsi.trim()) {
+      errors.Deskripsi = "Deskripsi video tidak boleh kosong";
+      isValid = false;
+    }
+    if (!Link.trim()) {
+      errors.Link = "Link video tidak boleh kosong";
+      isValid = false;
+    }
+    if (Durasi === 0) {
+      errors.Durasi = "Durasi video tidak boleh kosong";
+      isValid = false;
+    }
+    if (Number === 0) {
+      errors.Number = "Angka chapter tidak boleh kosong";
+      isValid = false;
+    }
+
+    setInputErrors(errors);
+    return isValid;
+  };
   const handleonChange = (e) => {
     if (e) {
       if (e.target.id === "title") {
@@ -63,6 +103,9 @@ export const EditVideo = ({
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (!validateForm()) {
+      return;
+    }
     EditVideos({
       courseId: courseId,
       chapterId: chapterId,
@@ -75,7 +118,7 @@ export const EditVideo = ({
     }).then((result) => {
       toast({
         title: result?.data?.message,
-        duration: 5000,
+        duration: 9000,
         status: "success",
         position: "top",
       });
@@ -83,7 +126,7 @@ export const EditVideo = ({
     }).catch((err) => {
       toast({
         title: err?.response?.data?.message,
-        duration: 5000,
+        duration: 9000,
         status: "error",
         position: "top",
       });
@@ -96,84 +139,133 @@ export const EditVideo = ({
   };
   return (
     <div className="w-full z-40 h-full fixed top-0 left-0 bg-[rgba(0,0,0,0.4)] flex items-start justify-center">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white flex rounded-lg shadow-lg flex-col items-center justify-center w-[80%] sm:w-[30%] mt-[5rem]"
-      >
-        <div className="flex justify-between w-full px-6 my-4">
-          <h1 className="font-bold text-2xl">Edit Data Videos</h1>
-          <FaXmark
-            className="font-bold text-2xl cursor-pointer"
-            onClick={toggleClose}
-          />
-        </div>
-        <div className="flex flex-col gap-2 w-full px-6">
-          <div className="flex flex-col">
-            <label htmlFor="">Video Title</label>
-            <input
-              onChange={handleonChange}
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white flex rounded-lg shadow-lg flex-col items-center justify-center w-[80%] md:w-[70%] xl:w-[30%] mt-[5rem]"
+    >
+      <div className="flex justify-between w-full px-6 my-4">
+        <h1 className="font-bold text-2xl">Edit Video</h1>
+        <FaXmark
+          className="font-bold text-2xl cursor-pointer"
+          onClick={toggleClose}
+        />
+      </div>
+      <div className="flex flex-col gap-2 w-full px-6">
+          <FormControl isInvalid={inputErrors.Judul !== ""}>
+            <FormLabel>Judul Video</FormLabel>
+            <Input
+            value={Judul}
               id="title"
-              className="px-3 py-2 rounded-lg border border-[#D0D0D0]"
-              type="text"
-              value={Judul}
+              onChange={(e) => {
+                handleonChange(e);
+                setInputErrors((prevErrors) => ({
+                  ...prevErrors,
+                  Judul: "",
+                }));
+              }}
+              onBlur={validateForm}
+              placeholder="Judul video"
             />
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="">Video Description</label>
-            <input
-              onChange={handleonChange}
-              id="desc"
-              className="px-3 py-2 rounded-lg  border border-[#D0D0D0]"
-              type="text"
-              value={Deskripsi}
-            />
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="">Link Video</label>
-            <input
-              onChange={handleonChange}
+            {inputErrors.Judul && (
+              <FormErrorMessage>{inputErrors.Judul}</FormErrorMessage>
+            )}{" "}
+          </FormControl>
+          <FormControl isInvalid={inputErrors.Link !== ""}>
+            <FormLabel>Link Video</FormLabel>
+            <Input
+            value={Link}
               id="link"
-              className="px-3 py-2 rounded-lg  border border-[#D0D0D0]"
-              type="text"
-              value={Link}
+              onChange={(e) => {
+                handleonChange(e);
+                setInputErrors((prevErrors) => ({
+                  ...prevErrors,
+                  Link: "",
+                }));
+              }}
+              onBlur={validateForm}
+              placeholder="Link video "
             />
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="">Video Duration</label>
-            <input
-              onChange={handleonChange}
+            {inputErrors.Link && (
+              <FormErrorMessage>{inputErrors.Link}</FormErrorMessage>
+            )}{" "}
+          </FormControl>
+          
+          <FormControl isInvalid={inputErrors.Durasi !== ""}>
+            <FormLabel>Durasi Video</FormLabel>
+            <Input
+            value={Durasi}
+              size="lg"
               id="durasi"
-              className="px-3 py-2 rounded-lg  border border-[#D0D0D0]"
-              type="text"
-              value={Durasi}
+              onChange={(e) => {
+                handleonChange(e);
+                setInputErrors((prevErrors) => ({
+                  ...prevErrors,
+                  Durasi: "",
+                }));
+              }}
+              onBlur={validateForm}
+              placeholder="Durasi video dalam menit"
             />
-          </div>
-          <div className="flex flex-col">
-            <label htmlFor="">Video Number</label>
-            <input
-              onChange={handleonChange}
+            {inputErrors.Durasi && (
+              <FormErrorMessage>{inputErrors.Durasi}</FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl isInvalid={inputErrors.Number !== ""}>
+            <FormLabel>Video Number</FormLabel>
+            <Input
+            value={Number}
               id="number"
-              className="px-3 py-2 rounded-lg  border border-[#D0D0D0]"
-              type="text"
-              value={Number}
+              size="lg"
+              onChange={(e) => {
+                handleonChange(e);
+                setInputErrors((prevErrors) => ({
+                  ...prevErrors,
+                  Number: "",
+                }));
+              }}
+              onBlur={validateForm}
+              placeholder="Urutan video contoh : 1,2..."
             />
-          </div>
+            {inputErrors.Number && (
+              <FormErrorMessage>{inputErrors.Number}</FormErrorMessage>
+            )}{" "}
+          </FormControl>
+          <FormControl isInvalid={inputErrors.Deskripsi !== ""}>
+            <FormLabel>Video Description</FormLabel>
+            <Input
+            value={Deskripsi}
+              size="lg"
+              id="desc"
+              onChange={(e) => {
+                handleonChange(e);
+                setInputErrors((prevErrors) => ({
+                  ...prevErrors,
+                  Deskripsi: "",
+                }));
+              }}
+              onBlur={validateForm}
+              placeholder="Deskripsi singkat tentang isi video"
+            />
+            {inputErrors.Deskripsi && (
+              <FormErrorMessage>{inputErrors.Deskripsi}</FormErrorMessage>
+            )}
+          </FormControl>
         </div>
-        <div className="flex gap-3 justify-end items-end w-full px-5 my-5">
-          <button
-            className="bg-[#6148FF] text-white rounded-lg px-5 py-3"
-            type="submit"
-          >
-            Edit
-          </button>
-          <button
-            onClick={toggleClose}
-            className="bg-gray-200 text-black rounded-lg p-3"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
-    </div>
+      <div className="flex gap-3 justify-end items-end w-full px-5 my-5">
+        <button
+          className="bg-[#6148FF] text-white rounded-lg px-5 py-3"
+          type="submit"
+        >
+          Edit
+        </button>
+        <button
+          onClick={toggleClose}
+          className="bg-gray-200 text-black rounded-lg p-3"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
   );
 };

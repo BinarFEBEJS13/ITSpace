@@ -3,17 +3,18 @@ import { editDataCourse, useEditCourse } from "../../../../services/Admin/course
 import { FaCloudArrowUp } from "react-icons/fa6";
 import { useGetCourseBYID } from "../../../../services/Admin/courses/get-data-coursesID";
 import { FaTrash } from "react-icons/fa6";
-import { useToast } from "@chakra-ui/react";
+import { FormControl, FormErrorMessage, FormLabel, Select, Textarea, useToast } from "@chakra-ui/react";
 import { useGetCategory } from "../../../../services/Admin/category/get-data-category";
 import makeAnimated from "react-select/animated";
-import Select from "react-select";
+import Selectt from "react-select";
+import { Input } from "rsuite";
 
 export const EditCourse = (props) => {
   const [NamaKelas, setNamaKelas] = useState("");
   const [Kategori, setKategori] = useState([]);
   const [KodeKelas, setKodeKelas] = useState("");
-  const [TipeKelas, setTipeKelas] = useState("0");
-  const [Level, setLevel] = useState("BEGINNER");
+  const [TipeKelas, setTipeKelas] = useState("");
+  const [Level, setLevel] = useState("");
   const [Harga, setHarga] = useState(0);
   const [Mentor, setMentor] = useState([]);
   const [Description, setDescription] = useState("");
@@ -21,6 +22,17 @@ export const EditCourse = (props) => {
   const [fileName, setFileName] = useState("No selected file");
   const [selectedFile, setSelectedFile] = useState(null);
   const [Img, setImg] = useState(null);
+  const [inputErrors, setInputErrors] = useState({
+    NamaKelas: "",
+    Kategori: [],
+    KodeKelas: "",
+    TipeKelas: "",
+    Level: "",
+    Harga: "",
+    Mentor: [],
+    Description: "",
+    LinkKelas: "",
+  });
   const toast = useToast();
   const animatedComponents = makeAnimated();
 
@@ -78,9 +90,76 @@ export const EditCourse = (props) => {
       setImg(file);
     }
   };
+  const validateForm = () => {
+    let isValid = true;
+    const errors = {
+      NamaKelas: "",
+      Kategori: [],
+      KodeKelas: "",
+      TipeKelas: "",
+      Level: "",
+      Harga: "",
+      Mentor: [],
+      Description: "",
+      LinkKelas: "",
+    };
 
+    if (!NamaKelas.trim()) {
+      errors.NamaKelas = "Nama Kelas tidak boleh kosong";
+      isValid = false;
+    }
+    if (!Kategori.length) {
+      errors.Kategori = "Kategori Kelas tidak boleh kosong";
+      isValid = false;
+    }
+    if (!KodeKelas.trim()) {
+      errors.KodeKelas = "Kode Kelas tidak boleh kosong";
+      isValid = false;
+    }
+
+    if (TipeKelas !== "0" && TipeKelas !== "1") {
+      errors.TipeKelas = "Pilih Tipe Kelas";
+      isValid = false;
+    }
+
+    if (
+      Level !== "BEGINNER" &&
+      Level !== "INTERMEDIATE" &&
+      Level !== "ADVANCED"
+    ) {
+      errors.Level = "Pilih level Kelas";
+      isValid = false;
+    }
+
+    if (Harga === 0) {
+      errors.Harga = "Harga tidak boleh kosong";
+      isValid = false;
+    } else if (!Number.isInteger(Number(Harga))) {
+      errors.Harga = "Harga harus berupa angka bulat";
+      isValid = false;
+    }
+
+    if (!Mentor.length) {
+      errors.Mentor = "Mentor tidak boleh kosong";
+      isValid = false;
+    }
+    if (!LinkKelas.trim()) {
+      errors.LinkKelas = "Link Kelas tidak boleh kosong";
+      isValid = false;
+    }
+    if (!Description.trim()) {
+      errors.Description = "Deskripsi Kelas tidak boleh kosong";
+      isValid = false;
+    }
+    setInputErrors(errors);
+    return isValid;
+  };
   const handleKelas = (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
     const formData = new FormData();
 
     formData.append("code", KodeKelas);
@@ -162,176 +241,259 @@ export const EditCourse = (props) => {
   };
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center  fixed t-2 l-[50px] bg-[rgba(0,0,0,0.4)] ">
-      <form
-        onSubmit={handleKelas}
-        className="pop-up overflow-y-auto max-h-[70%] lg:max-h-[95%] rounded-2xl w-11/12 md:w-3/4 xl:w-5/12 bg-white absolute"
-      >
-        <i
-          onClick={props.handleClose}
-          className="ri-close-fill absolute text-[#6148FF] right-3 top-3 font-bold text-3xl"
-        ></i>
-        <div className="flex items-center justify-center flex-col sm:gap-5">
-          <h1 className="font-bold sm:text-xl text-[#6148FF] my-2">
-            Edit Kelas
-          </h1>
-          <div className="flex flex-col gap-2 w-4/5 sm:w-4/5 ">
-            <div className="flex flex-col">
-              <label htmlFor="">Kode Kelas</label>
-              <input
-                id="KodeKelas"
-                type="text"
-                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
-                onChange={handleOnchange}
-                value={KodeKelas}
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="">Kategori</label>
-              <Select
-                value={Kategori}
-                onChange={(e) => setKategori(e)}
-                closeMenuOnSelect={false}
-                components={animatedComponents}
-                isMulti
-                options={dataKategori}
-                className="basic-multi-select"
-                classNamePrefix="select"
-              />
-            </div>
+    <div className="w-screen h-screen flex items-center justify-center fixed t-2 l-[50px] bg-[rgba(0,0,0,0.4)] ">
+    <form
+      encType="multipart/form-data"
+      onSubmit={handleKelas}
+      className="pop-up overflow-y-auto max-h-[70%] lg:max-h-[95%] rounded-2xl  md:w-[50%] lg:w-[] xl:w-[35%] bg-white absolute"
+    >
+      <i
+        onClick={props.handleClose}
+        className="ri-close-fill absolute text-[#6148FF] right-3 top-3 font-bold text-3xl"
+      ></i>
+      <div className="flex items-center justify-center flex-col sm:gap-5">
+        <h1 className="font-bold sm:text-xl text-[#6148FF] my-2">
+          Tambah Kelas
+        </h1>
+        <div className="flex flex-col gap-4 w-4/5 sm:w-4/5 ">
+          <FormControl isInvalid={inputErrors.KodeKelas !== ""}>
+            <FormLabel>Kode Kelas</FormLabel>
+            <Input
+              id="KodeKelas"
+              value={KodeKelas}
+              placeholder="Kode Kelas"
+              onChange={(e) => {
+                handleOnchange(e);
+                setInputErrors((prevErrors) => ({
+                  ...prevErrors,
+                  KodeKelas: "",
+                }));
+              }}
+              onBlur={validateForm}
+            />
+            {inputErrors.KodeKelas && (
+              <FormErrorMessage>{inputErrors.KodeKelas}</FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl isInvalid={inputErrors}>
+            <FormLabel>Kategori</FormLabel>
+            <Selectt
+              value={Kategori}
+              onChange={(e) => {
+                setKategori(e);
+                setInputErrors((prevErrors) => ({
+                  ...prevErrors,
+                  Kategori: [],
+                }));
+              }}
+              closeMenuOnSelect={false}
+              components={animatedComponents}
+              isMulti
+              placeholder="Pilih kategori Kelas"
+              options={dataKategori}
+              className="basic-multi-select"
+              classNamePrefix="select"
+            />
+            {inputErrors.Kategori && (
+              <FormErrorMessage>{inputErrors.Kategori}</FormErrorMessage>
+            )}
+          </FormControl>
 
-            <div className="flex flex-col ">
-              <label htmlFor="">Nama Kelas</label>
-              <input
-                id="NamaKelas"
-                type="text"
-                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
-                value={NamaKelas}
-                onChange={handleOnchange}
-              />
-            </div>
+          <FormControl isInvalid={inputErrors.NamaKelas !== ""}>
+            <FormLabel>Nama Kelas</FormLabel>
+            <Input
+              id="NamaKelas"
+              value={NamaKelas}
+              onChange={(e) => {
+                handleOnchange(e);
+                setInputErrors((prevErrors) => ({
+                  ...prevErrors,
+                  NamaKelas: "",
+                }));
+              }}
+              onBlur={validateForm}
+              placeholder="Nama Kelas"
+            />
+            {inputErrors.NamaKelas && (
+              <FormErrorMessage>{inputErrors.NamaKelas}</FormErrorMessage>
+            )}
+          </FormControl>
 
-            <div className="flex flex-col ">
-              <label htmlFor="TipeKelas">Tipe Kelas</label>
-              <select
-                id="TipeKelas"
-                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
-                onChange={handleOnchange}
-                value={TipeKelas}
-              >
-                <option value="0">GRATIS</option>
-                <option value="1">PREMIUM</option>
-              </select>
-            </div>
+          <FormControl isInvalid={inputErrors.TipeKelas !== "1" || inputErrors.TipeKelas !== "0"}>
+            <FormLabel>Level</FormLabel>
+            <Select
+              id="level"
+              value={TipeKelas}
+              onChange={(e) => {
+                handleOnchange(e);
+                setInputErrors((prevErrors) => ({
+                  ...prevErrors,
+                  TipeKelas: "",
+                }));
+              }}
+              placeholder="Pilih Tipe Kelas"
+              onBlur={validateForm}
+            >
+              <option value="0">GRATIS</option>
+              <option value="1">PREMIUM</option>
+            </Select>
+            {inputErrors.TipeKelas && (
+              <FormErrorMessage>{inputErrors.TipeKelas}</FormErrorMessage>
+            )}
+          </FormControl>
 
-            <div className="flex flex-col ">
-              <label htmlFor="">Level</label>
-              <select
-                id="level"
-                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
-                value={Level}
-                onChange={handleOnchange}
-              >
-                <option value="BEGINNER">BEGINNER</option>
-                <option value="INTERMEDIATE">INTERMEDIATE</option>
-                <option value="ADVANCED">ADVANCED</option>
-              </select>
-            </div>
+          <FormControl isInvalid={inputErrors.Level !== "BEGINNER" || inputErrors.Level !== "INTERMEDIATE" || inputErrors.Level !== "ADVANCED"}>
+            <FormLabel>Level</FormLabel>
+            <Select
+              id="TipeKelas"
+              value={Level}
+              placeholder="Pilih level kelas"
+              onChange={(e) => {
+                handleOnchange(e);
+                setInputErrors((prevErrors) => ({
+                  ...prevErrors,
+                  Level: "",
+                }));
+              }}
+              onBlur={validateForm}
+            >
+              <option value="BEGINNER">BEGINNER</option>
+              <option value="INTERMEDIATE">INTERMEDIATE</option>
+              <option value="ADVANCED">ADVANCED</option>
+            </Select>
+            {inputErrors.Level && (
+              <FormErrorMessage>{inputErrors.Level}</FormErrorMessage>
+            )}
+          </FormControl>
 
-            <div className="flex flex-col ">
-              <label htmlFor="">Mentor</label>
-              <input
-                id="mentor"
-                type="text"
-                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
-                value={Mentor}
-                onChange={handleOnchange}
-              />
-            </div>
+          <FormControl isInvalid={inputErrors.Mentor.length !== 0}>
+            <FormLabel>Mentor</FormLabel>
+            <Input
+              id="mentor"
+              value={Mentor}
+              onChange={(e) => {
+                handleOnchange(e);
+                setInputErrors((prevErrors) => ({
+                  ...prevErrors,
+                  Mentor: [],
+                }));
+              }}
+              onBlur={validateForm}
+              placeholder="Mentor Kelas"
+            />
+            {inputErrors.Mentor && (
+              <FormErrorMessage>{inputErrors.Mentor}</FormErrorMessage>
+            )}
+          </FormControl>
 
-            <div className="flex flex-col ">
-              <label htmlFor="">Harga</label>
-              <input
-                id="harga"
-                type="text"
-                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
-                value={Harga}
-                onChange={handleOnchange}
-              />
-            </div>
+          <FormControl isInvalid={inputErrors.Harga !== ""}>
+            <FormLabel>Harga</FormLabel>
+            <Input
+              id="harga"
+              value={Harga}
+              onChange={(e) => {
+                handleOnchange(e);
+                setInputErrors((prevErrors) => ({
+                  ...prevErrors,
+                  Harga: "",
+                }));
+              }}
+              onBlur={validateForm}
+              placeholder="Harga Kelas"
+            />
+            {inputErrors.Harga && (
+              <FormErrorMessage>{inputErrors.Harga}</FormErrorMessage>
+            )}
+          </FormControl>
 
-            <div className="flex flex-col">
-              <label htmlFor="img">Images</label>
-              <div className="py-4 bg-[#ebf3fc63] flex flex-col gap-4 justify-center items-center border-2 border-dashed- w-full h-[300px] pointer rounded-lg">
-                <div className="border-4 border-dashed border-[#D0D0D0] rounded-lg h-[70%] w-[90%] flex flex-col items-center justify-center">
-                  <input
-                    className="opacity-0 translate-y-[3rem] translate-x-8"
-                    onChange={handleFileChange}
-                    type="file"
-                    accept="image/*"
-                  />
-                  <FaCloudArrowUp size={60} />
-                  <p>Upload Your Image Here</p>
-                </div>
-                <div className="flex justify-between items-center border-4 rounded-lg border-[#D0D0D0] h-[30%] w-[90%]">
-                  <div className="px-4 flex items-center text-xl gap-4">
-                    {selectedFile && (
-                      <>
-                        <img width={70} height={40} alt="" src={selectedFile} />
-                        <p>{fileName}</p>
-                      </>
-                    )}
-                  </div>
+          <div className="flex flex-col gap-1">
+            <FormLabel>Images</FormLabel>
+            <div className="py-4 bg-[#ebf3fc63] flex flex-col gap-4 justify-center items-center border-2 border-dashed- w-full h-[300px] pointer rounded-lg">
+              <div className="border-4 border-dashed border-[#D0D0D0] rounded-lg h-[70%] w-[90%] flex flex-col items-center justify-center">
+                <input
+                  className="opacity-0 translate-y-[3rem] translate-x-8"
+                  onChange={handleFileChange}
+                  type="file"
+                  accept="image/*"
+                />
+                <FaCloudArrowUp size={60} />
+                <p>Upload Your Image Here</p>
+              </div>
+              <div className="flex justify-between items-center border-4 rounded-lg border-[#D0D0D0] h-[30%] w-[90%]">
+                <div className="px-4 flex items-center text-xl gap-4">
                   {selectedFile && (
-                    <div className="bg-red-500 p-2 mx-5 rounded-lg  cursor-pointer">
-                      <FaTrash onClick={handleDeleteImage} />
-                    </div>
+                    <>
+                      <img width={70} height={40} alt="" src={selectedFile} />
+                      <p>{fileName}</p>
+                    </>
                   )}
                 </div>
+                {selectedFile && (
+                  <div className="bg-red-500 p-2 mx-5 rounded-lg  cursor-pointer">
+                    <FaTrash onClick={handleDeleteImage} />
+                  </div>
+                )}
               </div>
             </div>
+          </div>
 
-            <div className="flex flex-col ">
-              <label htmlFor="">Link Grup Telegram</label>
-              <input
-                id="LinkKelas"
-                type="text"
-                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
-                value={LinkKelas}
-                onChange={handleOnchange}
-              />
-            </div>
+          <FormControl isInvalid={inputErrors.LinkKelas !== ""}>
+            <FormLabel>Link Kelas</FormLabel>
+            <Input
+              id="LinkKelas"
+              value={LinkKelas}
+              onChange={(e) => {
+                handleOnchange(e);
+                setInputErrors((prevErrors) => ({
+                  ...prevErrors,
+                  LinkKelas: "",
+                }));
+              }}
+              onBlur={validateForm}
+              placeholder="Link Kelas"
+            />
+            {inputErrors.LinkKelas && (
+              <FormErrorMessage>{inputErrors.LinkKelas}</FormErrorMessage>
+            )}
+          </FormControl>
 
-            <div className="flex flex-col ">
-              <label htmlFor="">Description</label>
-              <input
-                id="description"
-                type="text"
-                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
-                value={Description}
-                onChange={handleOnchange}
-              />
-            </div>
+          <FormControl isInvalid={inputErrors.Description !== ""}>
+            <FormLabel>Deskripsi</FormLabel>
+            <Textarea
+              id="description"
+              value={Description}
+              onChange={(e) => {
+                handleOnchange(e);
+                setInputErrors((prevErrors) => ({
+                  ...prevErrors,
+                  Description: "",
+                }));
+              }}
+              onBlur={validateForm}
+              placeholder="Deskripsi Kelas"
+            />
+            {inputErrors.Description && (
+              <FormErrorMessage>{inputErrors.Description}</FormErrorMessage>
+            )}
+          </FormControl>
 
-            <div className="text-white flex gap-2 font-bold text-sm sm:text-base my-4">
-              <button
-                type="submit"
-                onClick={handleKelas}
-                className="bg-[#6148FF] w-1/2 rounded-[25px] p-3"
-              >
-                Simpan
-              </button>
-              <button
-                type="submit"
-                onClick={handleKelas}
-                className="bg-gray-200 w-1/2 text-black rounded-lg p-3"
-              >
-                Cancel
-              </button>
-            </div>
+          <div className="text-white flex gap-4 font-bold text-sm sm:text-base my-4">
+            <button
+              type="submit"
+              className="bg-[#6148FF] w-1/2 rounded-lg p-3"
+            >
+              Simpan
+            </button>
+            <button
+              onClick={() => handleClose()}
+              className="bg-gray-200 w-1/2 text-black rounded-lg p-3"
+            >
+              Cancel
+            </button>
           </div>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
+  </div>
   );
 };

@@ -9,15 +9,19 @@ import { useGetPembayaran } from "../../../services/Admin/transaksi/get-status-p
 import { FaUserCheck } from "react-icons/fa6";
 import { FaDollarSign } from "react-icons/fa";
 import { FaSackDollar } from "react-icons/fa6";
+import { FaListCheck } from "react-icons/fa6";
+import { useGetCategory } from "../../../services/Admin/category/get-data-category";
 export const DataDashboard = () => {
   const { data: AllUser } = useGetUsers();
+  const {data : Category} = useGetCategory()
   const { data: transaksi } = useGetPembayaran({
     limit: 100,
   });
   const { data: Kelas } = useGetCourse({
     limit: 100,
   });
-
+  
+  const totalCategory = Category?.data?.length || 0;
   const totalAmountPaid = transaksi?.data?.transactions
     ? transaksi.data.transactions
         .filter((transaksi) => transaksi.payDone === true)
@@ -107,10 +111,12 @@ export const DataDashboard = () => {
       </div>
       <div className="bg-[#e13e3e] h-[6.75rem] shadow-xl md:h-[10rem] md:w-full sm:w-full rounded-[15px] ">
         <div className="flex items-center h-full gap-4 w-3/4 justify-center">
-          <img className="rounded-[25px] bg-white p-4" src={ImgUsers} alt="" />
+        <span className="text-5xl text-white p-5 ">
+            <FaListCheck />
+          </span>
           <div className="flex flex-col text-white">
-            <p className="sm:text-2xl font-normal">{totalPremiumClasses}</p>
-            <h1 className="font-bold  sm:text-xl">Premium Class</h1>
+            <p className="sm:text-2xl font-normal">{totalCategory}</p>
+            <h1 className="font-bold  sm:text-xl">Kategori Kelas</h1>
           </div>
         </div>
       </div>
