@@ -149,7 +149,7 @@ export const Backend = () => {
                                 </span>
                               </div>
                               <div>
-                                <h2 onClick={() => navigate(`/detail-kelas/${value.id}`)} className="font-bold truncate-3-lines cursor-pointer text-xs sm:text-sm">
+                                <h2 onClick={() => navigate(`/detail-kelas/${value.id}`)} className="font-semibold truncate-3-lines cursor-pointer text-xs sm:text-sm">
                                   {capitalizeFirstLetter(value.title)}
                                 </h2>
                                 <span className="opacity-50 text-xs sm:text-sm truncate-2-lines">by {value?.mentor[0]?.author?.profile?.name}</span>

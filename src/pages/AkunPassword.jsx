@@ -14,22 +14,20 @@ import { CookieKeys, CookieStorage } from "../utils/cookies";
 
 export const AkunPassword = () => {
   const [Akun, setAkun] = useState("changepass");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleAccount = (item) => {
     setAkun(item);
   };
 
-  const {mutate: logoutUser} = useLogoutUser()
+  const { mutate: logoutUser } = useLogoutUser();
 
   const handleLogout = () => {
-    logoutUser()
-    CookieStorage.remove(CookieKeys.AccessToken)
+    logoutUser();
+    CookieStorage.remove(CookieKeys.AccessToken);
     CookieStorage.remove(CookieKeys.RefreshToken);
     navigate("/login");
-  }
-
-  console.log(logoutUser, "ini logout")
+  };
 
   return (
     <div className="flex flex-col w-full sm:bg-white overflow-x-hidden">
@@ -54,7 +52,7 @@ export const AkunPassword = () => {
               <h1 className="flex w-[90%] sm:hidden text-[1.5rem] font-extrabold">Akun</h1>
             </div>
             <div className="flex w-full justify-center sm:gap-4 mt-2 sm:mt-0 overflow-hidden">
-            {/* Bagian Kiri */}
+              {/* Bagian Kiri */}
               <div className="hidden sm:flex flex-row justify-center sm:justify-start w-[90%] sm:w-[18rem] bg-white sm:bg-transparent shadow-lg sm:shadow-none rounded-xl">
                 <div className="hidden sm:flex flex-col justify-start w-[90%] gap-3 sm:ml-4 mt-4 sm:w-[18rem]">
                   <div onClick={() => handleAccount("profile")} className="flex items-center space-x-3 cursor-pointer">

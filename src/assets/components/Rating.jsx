@@ -1,5 +1,5 @@
 import { Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, useToast } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { useDataRatings } from "../../services/post-Datas-ratings";
 
@@ -10,21 +10,33 @@ export const Rating = ({ courseId }) => {
   const [Rating, setRating] = useState(null);
   const [Hover, setHover] = useState(null);
 
-  const { mutate: postRating } = useDataRatings();
+  const { mutate: postRating, error, isSuccess } = useDataRatings();
 
-  const handleKirimRating = () => {
-    postRating({
+  const handleKirimRating = async () => {
+    await postRating({
       courseId: courseId,
       rating: Rating,
     });
-    toast({
-      title: "Berhasil",
-      description: "Terimakasih atas penilainnya",
-      duration: 3000,
-      status: "success",
-      position: "top-right",
-    });
   };
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        description: "Maaf penilaian gagal dikirim",
+        duration: 3000,
+        status: "error",
+        position: "top",
+      });
+    }
+    if (isSuccess) {
+      toast({
+        description: "Terimakasih atas penilainnya",
+        duration: 3000,
+        status: "success",
+        position: "top",
+      });
+    }
+  }, [error, isSuccess, toast]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [overlay, setOverlay] = React.useState(<OverlayOne />);

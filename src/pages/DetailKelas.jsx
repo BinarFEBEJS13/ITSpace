@@ -15,7 +15,7 @@ import playgredient from "../assets/svg/play-gredient.svg";
 import successgreen from "../assets/svg/success-green.svg";
 import gembok from "../assets/svg/gembok.svg";
 import { KelasPremium } from "../assets/components/KelasPremium";
-import { Onboarding } from "../assets/components/Onboarding";
+// import { Onboarding } from "../assets/components/Onboarding";
 import { useNavigate, useParams } from "react-router-dom";
 import { Footer } from "../assets/components/Footer";
 import ReactPlayer from "react-player";
@@ -41,8 +41,10 @@ export const DetailKelas = () => {
   const [toggleKelas, setToggleKelas] = useState("tentang");
 
   // GET API ALL
-  const { data: dataChptrs } = useGetDataChapters({ query: courseId });
+  const { data: dataChptrs, isSuccess: successChapter } = useGetDataChapters({ query: courseId });
   const dataChapters = dataChptrs?.data;
+
+  // console.log(successChapter);
 
   const { data: dataCrsId } = useGetDataCoursesId({ query: courseId });
   const dataCoursesId = dataCrsId?.data;
@@ -53,7 +55,7 @@ export const DetailKelas = () => {
   const { data: dataCheckEnrollment } = useGetDataCheckEnrollment({ query: courseId });
 
   const { mutate: postProgress } = useDataProgress();
-  const { mutate: postEnrollments } = useDataEnrollments();
+  const { mutate: postEnrollments, error: errorenrolment, isSuccess: successenrolment } = useDataEnrollments();
 
   const { data: dataDecode } = useGetDecode();
 
@@ -86,24 +88,33 @@ export const DetailKelas = () => {
     if (dataCheckEnrollment?.data === true || cekPremium === false) {
       setVideoId(vidId);
       setchaptersId(chptId);
-      postProgress({
-        videoId: vidId,
-      });
     } else {
       setActivePremium(!ActivePremium);
     }
   };
 
-  const handleSimpanKelas = () => {
-    postEnrollments({ courseId });
-    toast({
-      title: "Berhasil",
-      description: "Kursus telah disimpan ke dalam kelas",
-      duration: 3000,
-      status: "success",
-      position: "top-right",
-    });
+  const handleSimpanKelas = async () => {
+    await postEnrollments({ courseId });
   };
+
+  useEffect(() => {
+    if (errorenrolment?.response?.status === 400) {
+      toast({
+        description: errorenrolment?.response?.data?.message,
+        duration: 3000,
+        status: "error",
+        position: "top",
+      });
+    }
+    if (successenrolment === true) {
+      toast({
+        description: "kursus sudah ditambahkan kedalam kelas",
+        duration: 3000,
+        status: "success",
+        position: "top",
+      });
+    }
+  }, [errorenrolment, toast, successenrolment]);
 
   const handleClosePremium = () => {
     setActivePremium(!ActivePremium);
@@ -114,9 +125,23 @@ export const DetailKelas = () => {
   }, [datavideoId]);
 
   useEffect(() => {
-    setchaptersId(dataChapters?.map((chpt) => chpt?.id)[0]);
-    setVideoId(dataChapters?.map((chpt) => chpt?.video)[0]?.map((vid) => vid?.id)[0]);
-  }, [dataChapters]);
+    if (successChapter) {
+      setchaptersId(dataChapters?.map((chpt) => chpt?.id)[0]);
+      setVideoId(dataChapters?.map((chpt) => chpt?.video)[0]?.map((vid) => vid?.id)[0]);
+    }
+  }, [dataChapters, successChapter]);
+
+  const handleVideoProgressMobile = (videoId) => {
+    postProgress({
+      videoId: videoId,
+    });
+  };
+
+  const handleVideoProgressDesktop = (videoId) => {
+    postProgress({
+      videoId: videoId,
+    });
+  };
 
   return (
     <>
@@ -128,7 +153,7 @@ export const DetailKelas = () => {
             <div className="px-6 sm:px-12 pt-4 sm:pt-8">
               <button onClick={() => navigate("/kursus/all")} className="flex gap-2 font-semibold items-center">
                 <img src={arrow} alt="" />
-                Kelas Lainnya
+                Kursus Lainnya
               </button>
             </div>
           </div>
@@ -142,7 +167,7 @@ export const DetailKelas = () => {
                 <div className="w-full sm:w-4/6 xl:w-8/12 flex flex-col gap-4">
                   {/* Video Belajar Ukuran Mobile */}
                   <div className="block sm:hidden w-full rounded-md bg-biru-0 h-[240px] sm:h-[280px] lg:h-[350px] xl:h-[500px]">
-                    <ReactPlayer controls={true} url={UrlVideos} width="100%" height="100%" className="h-[240px] sm:h-[280px] lg:h-[350px] xl:h-[500px]" />
+                    <ReactPlayer onEnded={() => handleVideoProgressMobile(videoId)} controls={true} url={UrlVideos} width="100%" height="100%" className="h-[240px] sm:h-[280px] lg:h-[350px] xl:h-[500px]" />
                   </div>
                   <div className="flex flex-col gap-2 ">
                     {/* Header detail per kelas */}
@@ -151,19 +176,18 @@ export const DetailKelas = () => {
                         <div className="flex items-center">
                           {dataCoursesId?.courseCategory?.map((category, index) => (
                             <React.Fragment key={index}>
-                              <h6 className="text-ungu-0 font-bold text-xs xl:text-sm">{category?.category?.name}</h6>
+                              <h6 className="text-ungu-0 font-semibold text-xs xl:text-sm">{category?.category?.name}</h6>
                               {index < dataCoursesId.courseCategory.length - 1 && <span className="pr-2">,</span>}
                             </React.Fragment>
                           ))}
                         </div>
                         <span className="flex items-center">
                           <img src={star} alt="" className="w-6" />
-                          {/* {value?.rate !== null ? value.rate?.toFixed(1) : "0.0"} */}
                           {dataCoursesId?.rate !== null ? dataCoursesId?.rate?.toFixed(1) : "0.0"}
                         </span>
                       </div>
                       <div className="flex flex-col gap-2">
-                        <h2 className="font-bold cursor-pointer">{dataCoursesId?.title}</h2>
+                        <h2 className="font-semibold cursor-pointer">{dataCoursesId?.title}</h2>
                         <div className="flex items-center">
                           {dataCoursesId?.mentor?.map((mentor, index) => (
                             <React.Fragment key={index}>
@@ -220,10 +244,10 @@ export const DetailKelas = () => {
                   {/*/////////////////////////// Toggle Tentang & Materi Kelas Pada Mobile ////////////////////////////////*/}
                   <div className="block sm:hidden w-full ">
                     <div className="flex w-full">
-                      <button onClick={() => handleToggleKelas("tentang")} className={`w-1/2 py-4 ${toggleKelas === "tentang" ? "bg-biru-0 text-white" : "bg-birumuda-0"}`}>
+                      <button onClick={() => handleToggleKelas("tentang")} className={`w-1/2 py-4 rounded-l-md ${toggleKelas === "tentang" ? "bg-biru-0 text-white" : "bg-birumuda-0"}`}>
                         Tentang
                       </button>
-                      <button onClick={() => handleToggleKelas("materi")} className={`w-1/2  py-4 ${toggleKelas === "materi" ? "bg-biru-0 text-white" : "bg-birumuda-0"}`}>
+                      <button onClick={() => handleToggleKelas("materi")} className={`w-1/2 py-4 rounded-r-md ${toggleKelas === "materi" ? "bg-biru-0 text-white" : "bg-birumuda-0"}`}>
                         Materi Kelas
                       </button>
                     </div>
@@ -232,12 +256,12 @@ export const DetailKelas = () => {
                   <div className="flex flex-col gap-4 w-full">
                     {/* Video Belajar ukuran Desktop*/}
                     <div className="hidden sm:block w-full rounded-md bg-biru-0 h-[240px] sm:h-[280px] lg:h-[350px] xl:h-[500px]">
-                      <ReactPlayer controls={true} url={UrlVideos} width="100%" height="100%" />
+                      <ReactPlayer onEnded={() => handleVideoProgressDesktop(videoId)} controls={true} url={UrlVideos} width="100%" height="100%" />
                     </div>
                     {/* Detail Belajar */}
                     <div className="hidden sm:flex flex-col gap-4">
                       <div className="flex flex-col gap-2">
-                        <h2 className="font-bold">Tentang Kelas</h2>
+                        <h2 className="font-semibold">Tentang Kelas</h2>
                         <div className="">
                           <p className="text-xs xl:text-sm text-justify indent-12">{dataCoursesId?.description}</p>
                         </div>
@@ -247,7 +271,7 @@ export const DetailKelas = () => {
                       /*///////////////////////////////  Tentang Untuk Mobile ////////////////////////////////////////////// */
                       <div className="flex sm:hidden flex-col gap-4">
                         <div className="flex flex-col gap-2">
-                          <h2 className="font-bold">Tentang Kelas</h2>
+                          <h2 className="font-semibold">Tentang Kelas</h2>
                           <div className="">
                             <p className="text-xs xl:text-sm text-justify indent-12">{dataCoursesId?.description}</p>
                           </div>
@@ -257,8 +281,8 @@ export const DetailKelas = () => {
                       /*///////////////////////////////////////// Materi Kelas Versi Mobile Phone ///////////////////////////////////////////////////////*/
                       <div className="flex sm:hidden flex-col gap-2 px-4 py-2 pb-6 shadow-sm-button rounded-md">
                         {/* Header & Progress */}
-                        <div className="lg:flex gap-2">
-                          <h2 className="w-full lg:w-1/2 xl:w-1/3 font-bold">Materi Belajar</h2>
+                        <div className="lg:flex lg:items-center gap-2">
+                          <h2 className="w-full lg:w-1/2 xl:w-1/3 font-semibold">Materi Belajar</h2>
                           <div className="text-sm flex gap-1 w-full lg:w-2/3 xl:w-2/3">
                             <img src={complete} alt="" className="w-6" />
                             <div className="w-full bg-biru-0 bg-opacity-20 rounded-md">
@@ -321,8 +345,8 @@ export const DetailKelas = () => {
                 <div className="hidden sm:block w-2/6 xl:w-4/12 ">
                   <div className="flex flex-col gap-2 px-4 py-2 pb-6 shadow-sm-button rounded-md">
                     {/* Header & Progress */}
-                    <div className="lg:flex gap-2">
-                      <h2 className="w-full lg:w-1/2 xl:w-1/3 font-bold">Materi Belajar</h2>
+                    <div className="lg:flex lg:items-center gap-2">
+                      <h2 className="w-full lg:w-1/2 xl:w-1/3 font-semibold text-sm">Materi Belajar</h2>
                       <div className="text-sm flex gap-1 w-full lg:w-2/3 xl:w-2/3">
                         <img src={complete} alt="" className="w-6" />
                         <div className="w-full bg-biru-0 bg-opacity-20 rounded-md">

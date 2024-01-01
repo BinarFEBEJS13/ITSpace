@@ -235,7 +235,7 @@ export const Beranda = () => {
                                   </span>
                                 </div>
                                 <div>
-                                  <h2 onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="font-bold truncate-3-lines cursor-pointer text-xs sm:text-base">
+                                  <h2 onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="font-semibold truncate-3-lines cursor-pointer text-xs sm:text-base">
                                     {capitalizeFirstLetter(value.title)}
                                   </h2>
                                   <span className="opacity-50 text-xs sm:text-sm">by {value?.mentor[0]?.author?.profile?.name}</span>
@@ -314,7 +314,7 @@ export const Beranda = () => {
                                   </span>
                                 </div>
                                 <div>
-                                  <h2 onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="font-bold cursor-pointer text-xs sm:text-base">
+                                  <h2 onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="font-semibold cursor-pointer text-xs sm:text-base">
                                     {capitalizeFirstLetter(value.title)}
                                   </h2>
                                   <span className="opacity-50 text-xs sm:text-sm">by {value?.mentor[0]?.author?.profile?.name}</span>

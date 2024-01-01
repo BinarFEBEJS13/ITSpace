@@ -1,7 +1,7 @@
 export const API_ENDPOINT = {
   //Courses
   COURSES: "/courses",
-  COURSES_IMG : "/courses/images",
+  COURSES_IMG: "/courses/images",
   //Authentication
   REGISTER: "/auth/register",
   LOGIN: "/auth/login",
@@ -20,7 +20,7 @@ export const API_ENDPOINT = {
   //Categories
   CATEGORIES: "/categories",
   //TRANSACTION
-  TRANSACTION : "/transactions",
+  TRANSACTION: "/transactions",
   // Users
   USERS: "/users",
 
@@ -44,8 +44,7 @@ export const API_ENDPOINT = {
   PUT_USER: "/users",
   // Transactions
   MY_TRANSACTIONS: "/my-transactions",
-  // 
+  //
   MY_NOTIFICATIONS: "/my-notifications",
-  PUT_NOTIFICATIONS: "/my-notifications"
-
+  PUT_NOTIFICATIONS: "/my-notifications",
 };

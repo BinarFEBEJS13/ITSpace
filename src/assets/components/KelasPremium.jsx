@@ -19,8 +19,8 @@ export const KelasPremium = ({ onClose, values, totalModul, totalDuration }) => 
           </button>
           {/* Header */}
           <div className="flex flex-col justify-center items-center">
-            <h2 className="font-bold">Selangkah lagi menuju</h2>
-            <h2 className="font-bold text-ungu-0">Kelas Premium</h2>
+            <h2 className="font-semibold">Selangkah lagi menuju</h2>
+            <h2 className="font-semibold text-ungu-0">Kelas Premium</h2>
           </div>
           {/* Kelas Premium*/}
           <div className="w-full shadow-sm-button rounded-2xl">
@@ -29,14 +29,14 @@ export const KelasPremium = ({ onClose, values, totalModul, totalDuration }) => 
             </div>
             <div className="px-4 py-4 flex flex-col gap-2 rounded-2xl">
               <div className="flex items-center justify-between">
-                <h6 className="text-ungu-0 text-xs xl:text-sm">Android Development</h6>
+                <h6 className="text-ungu-0 text-xs xl:text-sm">{values?.courseCategory[0]?.category?.name}</h6>
                 <span className="flex items-center text-sm">
                   <img src={star} alt="" className="w-5" />
                   {values?.rate !== null ? values.rate?.toFixed(1) : "0.0"}
                 </span>
               </div>
               <div>
-                <h2 className="font-bold text-xs sm:text-base">{values?.title}</h2>
+                <h2 className="font-semibold truncate-3-lines text-xs sm:text-base">{values?.title}</h2>
                 <span className="opacity-50 text-xs sm:text-sm">by {values?.mentor[0]?.author?.profile?.name}</span>
               </div>
               <div className="flex flex-wrap w-full gap-2 text-xs sm:text-sm">

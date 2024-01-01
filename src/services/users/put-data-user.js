@@ -3,8 +3,6 @@ import { API_ENDPOINT } from "../../utils/api-endpoint"
 import http from "../../utils/http"
 
 const PutDataUser = async (id, input) => {
-    // console.log(id, "id put")
-    // console.log(input, "input put")
     return await http.put(`${API_ENDPOINT.PUT_USER}/${id}`, input)
 }
 

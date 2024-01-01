@@ -110,149 +110,155 @@ export const Payment = () => {
                 </div>
                 <div className="w-full sm:w-4/6 md:w-full lg:w-8/12 flex flex-col gap-4 bg-gray-100">
                   {/* Virtual Account */}
-                  {isExpired() ? (
-                    <ExpirationPayment courseId={courseId} />
-                  ) : pembayaran === "VIRTUAL_ACCOUNT" ? (
-                    <div className={`border rounded-md flex flex-col gap-2`}>
-                      <div className="flex text-white bg-black justify-between px-4 py-2 rounded-t-md">
-                        <p>Transfer Virtual Account</p>
-                      </div>
-                      <div className="flex flex-col gap-6 sm:gap-8 justify-center items-center p-4 pb-4 sm:pb-8 ">
-                        <div className="flex flex-col gap-4 sm:flex-row  w-full ">
-                          <div className="flex gap-2 w-full justify-center items-center order-1 md:order-2 ">
-                            <img src={bca} alt="bca" className="w-14 sm:w-16 xl:w-20" />
-                            <img src={bri} alt="bri" className="w-14 sm:w-16 xl:w-20" />
-                            <img src={bni} alt="bni" className="w-14 sm:w-16 xl:w-20" />
-                            <img src={mandiri} alt="mandiri" className="w-14 sm:w-16 xl:w-20" />
+                  {pembayaran === "VIRTUAL_ACCOUNT" ? (
+                    isExpired() ? (
+                      <ExpirationPayment courseId={courseId} />
+                    ) : (
+                      <div className={`border rounded-md flex flex-col gap-2`}>
+                        <div className="flex text-white bg-black justify-between px-4 py-2 rounded-t-md">
+                          <p>Transfer Virtual Account</p>
+                        </div>
+                        <div className="flex flex-col gap-6 sm:gap-8 justify-center items-center p-4 pb-4 sm:pb-8 ">
+                          <div className="flex flex-col gap-4 sm:flex-row  w-full ">
+                            <div className="flex gap-2 w-full justify-center items-center order-1 md:order-2 ">
+                              <img src={bca} alt="bca" className="w-14 sm:w-16 xl:w-20" />
+                              <img src={bri} alt="bri" className="w-14 sm:w-16 xl:w-20" />
+                              <img src={bni} alt="bni" className="w-14 sm:w-16 xl:w-20" />
+                              <img src={mandiri} alt="mandiri" className="w-14 sm:w-16 xl:w-20" />
+                            </div>
+                            <div className="w-full flex flex-col gap-2 justify-center items-start order-2 md:order-1">
+                              <div className="flex flex-col justify-center items-start">
+                                <h2 className="font-semibold">Virtual Account</h2>
+                                <span className="text-lg">{getDataTransactions?.data?.paymentCode}</span>
+                              </div>
+                              <div className="flex flex-col justify-center items-start">
+                                <h2 className="font-semibold">Nama Virtual Account</h2>
+                                <span className="text-lg">IT Space Indonesia</span>
+                              </div>
+                              <div className="flex flex-col justify-center items-start">
+                                <h2 className="font-semibold">Nomial yang harus dibayarkan</h2>
+                                <span className="text-lg">
+                                  {Number(totalPembayaran).toLocaleString("id-ID", {
+                                    style: "currency",
+                                    currency: "IDR",
+                                    minimumFractionDigits: 0,
+                                    maximumFractionDigits: 0,
+                                  })}
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                          <div className="w-full flex flex-col gap-2 justify-center items-start order-2 md:order-1">
-                            <div className="flex flex-col justify-center items-start">
-                              <h2 className="font-semibold">Virtual Account</h2>
-                              <span className="text-lg">{getDataTransactions?.data?.paymentCode}</span>
-                            </div>
-                            <div className="flex flex-col justify-center items-start">
-                              <h2 className="font-semibold">Nama Virtual Account</h2>
-                              <span className="text-lg">IT Space Indonesia</span>
-                            </div>
-                            <div className="flex flex-col justify-center items-start">
-                              <h2 className="font-semibold">Nomial yang harus dibayarkan</h2>
-                              <span className="text-lg">
-                                {Number(totalPembayaran).toLocaleString("id-ID", {
-                                  style: "currency",
-                                  currency: "IDR",
-                                  minimumFractionDigits: 0,
-                                  maximumFractionDigits: 0,
-                                })}
-                              </span>
+                          <div className="w-full flex justify-center items-center">
+                            <div onClick={() => handleBuatPesanan()} className="flex items-center justify-center gap-2 bg-black text-white px-4 py-2 rounded-md cursor-pointer">
+                              <h6>Bayar Sekarang</h6>
+                              <img src={arrowwhite} alt="arrowwhite" />
                             </div>
                           </div>
                         </div>
-                        <div className="w-full flex justify-center items-center">
-                          <div onClick={() => handleBuatPesanan()} className="flex items-center justify-center gap-2 bg-black text-white px-4 py-2 rounded-md cursor-pointer">
-                            <h6>Bayar Sekarang</h6>
-                            <img src={arrowwhite} alt="arrowwhite" />
-                          </div>
-                        </div>
                       </div>
-                    </div>
+                    )
                   ) : (
                     ""
                   )}
                   {/* Gerai Retail */}
-                  {isExpired() ? (
-                    <ExpirationPayment courseId={courseId} />
-                  ) : pembayaran === "GERAI_RETAIL" ? (
-                    <div className={`border rounded-md flex flex-col gap-2`}>
-                      <div className="flex text-white bg-biru-0 justify-between px-4 py-2 rounded-t-md">
-                        <p>Tunai di Gerai Retail</p>
-                      </div>
-                      <div className="flex flex-col gap-6 sm:gap-8 justify-center items-center p-4 pb-4 sm:pb-8 ">
-                        <div className="flex flex-col gap-4 sm:flex-row  w-full ">
-                          <div className="flex gap-2 w-full justify-center items-center order-1 md:order-2 ">
-                            <img src={alfamart} alt="alfamart" className="w-14 sm:w-16 xl:w-20" />
-                            <img src={alfamidi} alt="alfamidi" className="w-14 sm:w-16 xl:w-20" />
-                            <img src={indomaret} alt="indomaret" className="w-14 sm:w-16 xl:w-20" />
-                            <img src={dandan} alt="dandan" className="w-14 sm:w-16 xl:w-20" />
+                  {pembayaran === "GERAI_RETAIL" ? (
+                    isExpired() ? (
+                      <ExpirationPayment courseId={courseId} />
+                    ) : (
+                      <div className={`border rounded-md flex flex-col gap-2`}>
+                        <div className="flex text-white bg-biru-0 justify-between px-4 py-2 rounded-t-md">
+                          <p>Tunai di Gerai Retail</p>
+                        </div>
+                        <div className="flex flex-col gap-6 sm:gap-8 justify-center items-center p-4 pb-4 sm:pb-8 ">
+                          <div className="flex flex-col gap-4 sm:flex-row  w-full ">
+                            <div className="flex gap-2 w-full justify-center items-center order-1 md:order-2 ">
+                              <img src={alfamart} alt="alfamart" className="w-14 sm:w-16 xl:w-20" />
+                              <img src={alfamidi} alt="alfamidi" className="w-14 sm:w-16 xl:w-20" />
+                              <img src={indomaret} alt="indomaret" className="w-14 sm:w-16 xl:w-20" />
+                              <img src={dandan} alt="dandan" className="w-14 sm:w-16 xl:w-20" />
+                            </div>
+                            <div className="w-full flex flex-col gap-2 justify-center items-start order-2 md:order-1">
+                              <div className="flex flex-col justify-center items-start">
+                                <h2 className="font-semibold">Kode Pembayaran</h2>
+                                <span className="text-lg">{getDataTransactions?.data?.paymentCode}</span>
+                              </div>
+                              <div className="flex flex-col justify-center items-start">
+                                <h2 className="font-semibold">Nama kepada Merchant</h2>
+                                <span className="text-lg">IT Space Indonesia</span>
+                              </div>
+                              <div className="flex flex-col justify-center items-start">
+                                <h2 className="font-semibold">Nomial yang harus dibayarkan</h2>
+                                <span className="text-lg">
+                                  {Number(totalPembayaran).toLocaleString("id-ID", {
+                                    style: "currency",
+                                    currency: "IDR",
+                                    minimumFractionDigits: 0,
+                                    maximumFractionDigits: 0,
+                                  })}
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                          <div className="w-full flex flex-col gap-2 justify-center items-start order-2 md:order-1">
-                            <div className="flex flex-col justify-center items-start">
-                              <h2 className="font-semibold">Kode Pembayaran</h2>
-                              <span className="text-lg">{getDataTransactions?.data?.paymentCode}</span>
-                            </div>
-                            <div className="flex flex-col justify-center items-start">
-                              <h2 className="font-semibold">Nama kepada Merchant</h2>
-                              <span className="text-lg">IT Space Indonesia</span>
-                            </div>
-                            <div className="flex flex-col justify-center items-start">
-                              <h2 className="font-semibold">Nomial yang harus dibayarkan</h2>
-                              <span className="text-lg">
-                                {Number(totalPembayaran).toLocaleString("id-ID", {
-                                  style: "currency",
-                                  currency: "IDR",
-                                  minimumFractionDigits: 0,
-                                  maximumFractionDigits: 0,
-                                })}
-                              </span>
+                          <div className="w-full flex justify-center items-center">
+                            <div onClick={() => handleBuatPesanan()} className="flex items-center justify-center gap-2 bg-biru-0 text-white px-4 py-2 rounded-md cursor-pointer">
+                              <h6>Bayar Sekarang</h6>
+                              <img src={arrowwhite} alt="arrowwhite" />
                             </div>
                           </div>
                         </div>
-                        <div className="w-full flex justify-center items-center">
-                          <div onClick={() => handleBuatPesanan()} className="flex items-center justify-center gap-2 bg-biru-0 text-white px-4 py-2 rounded-md cursor-pointer">
-                            <h6>Bayar Sekarang</h6>
-                            <img src={arrowwhite} alt="arrowwhite" />
-                          </div>
-                        </div>
                       </div>
-                    </div>
+                    )
                   ) : (
                     ""
                   )}
                   {/* Dompet E_WALLET */}
-                  {isExpired() ? (
-                    <ExpirationPayment courseId={courseId} />
-                  ) : pembayaran === "E_WALLET" ? (
-                    <div className={`border rounded-md flex flex-col gap-2`}>
-                      <div className="flex text-white bg-ungu-0 justify-between px-4 py-2 rounded-t-md">
-                        <p>Dompet Digital (E_Wallet)</p>
-                      </div>
-                      <div className="flex flex-col gap-6 sm:gap-8 justify-center items-center p-4 pb-4 sm:pb-8 ">
-                        <div className="flex flex-col gap-4 sm:flex-row  w-full ">
-                          <div className="flex gap-2 w-full justify-center items-center order-1 md:order-2 ">
-                            <img src={shopeepay} alt="shopeepay" className="w-14 sm:w-16 xl:w-20" />
-                            <img src={ovo} alt="ovo" className="w-14 sm:w-16 xl:w-20" />
-                            <img src={dana} alt="dana" className="w-14 sm:w-16 xl:w-20" />
-                            <img src={gopay} alt="gopay" className="w-14 sm:w-16 xl:w-20" />
+                  {pembayaran === "E_WALLET" ? (
+                    isExpired() ? (
+                      <ExpirationPayment courseId={courseId} />
+                    ) : (
+                      <div className={`border rounded-md flex flex-col gap-2`}>
+                        <div className="flex text-white bg-ungu-0 justify-between px-4 py-2 rounded-t-md">
+                          <p>Dompet Digital (E_Wallet)</p>
+                        </div>
+                        <div className="flex flex-col gap-6 sm:gap-8 justify-center items-center p-4 pb-4 sm:pb-8 ">
+                          <div className="flex flex-col gap-4 sm:flex-row  w-full ">
+                            <div className="flex gap-2 w-full justify-center items-center order-1 md:order-2 ">
+                              <img src={shopeepay} alt="shopeepay" className="w-14 sm:w-16 xl:w-20" />
+                              <img src={ovo} alt="ovo" className="w-14 sm:w-16 xl:w-20" />
+                              <img src={dana} alt="dana" className="w-14 sm:w-16 xl:w-20" />
+                              <img src={gopay} alt="gopay" className="w-14 sm:w-16 xl:w-20" />
+                            </div>
+                            <div className="w-full flex flex-col gap-2 justify-center items-start order-2 md:order-1">
+                              <div className="flex flex-col justify-center items-start">
+                                <h2 className="font-semibold">Kode Pembayaran</h2>
+                                <span className="text-lg">{getDataTransactions?.data?.paymentCode}</span>
+                              </div>
+                              <div className="flex flex-col justify-center items-start">
+                                <h2 className="font-semibold">Nama kepada Merchant</h2>
+                                <span className="text-lg">IT Space Indonesia</span>
+                              </div>
+                              <div className="flex flex-col justify-center items-start">
+                                <h2 className="font-semibold">Nomial yang harus dibayarkan</h2>
+                                <span className="text-lg">
+                                  {Number(totalPembayaran).toLocaleString("id-ID", {
+                                    style: "currency",
+                                    currency: "IDR",
+                                    minimumFractionDigits: 0,
+                                    maximumFractionDigits: 0,
+                                  })}
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                          <div className="w-full flex flex-col gap-2 justify-center items-start order-2 md:order-1">
-                            <div className="flex flex-col justify-center items-start">
-                              <h2 className="font-semibold">Kode Pembayaran</h2>
-                              <span className="text-lg">{getDataTransactions?.data?.paymentCode}</span>
-                            </div>
-                            <div className="flex flex-col justify-center items-start">
-                              <h2 className="font-semibold">Nama kepada Merchant</h2>
-                              <span className="text-lg">IT Space Indonesia</span>
-                            </div>
-                            <div className="flex flex-col justify-center items-start">
-                              <h2 className="font-semibold">Nomial yang harus dibayarkan</h2>
-                              <span className="text-lg">
-                                {Number(totalPembayaran).toLocaleString("id-ID", {
-                                  style: "currency",
-                                  currency: "IDR",
-                                  minimumFractionDigits: 0,
-                                  maximumFractionDigits: 0,
-                                })}
-                              </span>
+                          <div className="w-full flex justify-center items-center">
+                            <div onClick={() => handleBuatPesanan()} className="flex items-center justify-center gap-2 bg-ungu-0 text-white px-4 py-2 rounded-md cursor-pointer">
+                              <h6>Bayar Sekarang</h6>
+                              <img src={arrowwhite} alt="arrowwhite" />
                             </div>
                           </div>
                         </div>
-                        <div className="w-full flex justify-center items-center">
-                          <div onClick={() => handleBuatPesanan()} className="flex items-center justify-center gap-2 bg-ungu-0 text-white px-4 py-2 rounded-md cursor-pointer">
-                            <h6>Bayar Sekarang</h6>
-                            <img src={arrowwhite} alt="arrowwhite" />
-                          </div>
-                        </div>
                       </div>
-                    </div>
+                    )
                   ) : (
                     ""
                   )}
