@@ -84,17 +84,16 @@ export const Register = () => {
           title: "tautan terkirim",
           status: "success",
           duration: 3000,
-          position: "bottom",
+          position: "top",
           isClosable: true,
         });
       })
       .catch((err) => {
-        console.log(err, "error");
         toast({
           title: err?.response?.data?.message,
           status: "error",
           duration: 3000,
-          position: "bottom",
+          position: "top",
           isClosable: true,
         });
       });
@@ -110,33 +109,15 @@ export const Register = () => {
           {/* INPUTAN NAMA */}
           <div className="w-full md:w-[35rem] flex flex-col relative">
             <label className="mb-1">Nama</label>
-            <input
-              id="name"
-              type="text"
-              className="h-[3rem] w-full rounded-xl border border-gray-300 pl-3"
-              placeholder="Nama Lengkap"
-              onChange={handleInput}
-            />
+            <input id="name" type="text" className="h-[3rem] w-full rounded-xl border border-gray-300 pl-3" placeholder="Nama Lengkap" onChange={handleInput} />
           </div>
 
           {/*INPUTAN EMAIL*/}
           <div className="w-full md:w-[35rem] flex flex-col">
             <label className="mb-1">Email</label>
             <div className="relative">
-              <input
-                id="email"
-                type="email"
-                className="h-[3rem] w-full rounded-xl border border-gray-300 pl-3"
-                placeholder="Contoh:sayahuman@gmail.com"
-                onChange={handleInput}
-              />
-              {isEmailValid && (
-                <img
-                  src={check}
-                  alt="check"
-                  className="top-3 right-5 absolute"
-                />
-              )}
+              <input id="email" type="email" className="h-[3rem] w-full rounded-xl border border-gray-300 pl-3" placeholder="Contoh:sayahuman@gmail.com" onChange={handleInput} />
+              {isEmailValid && <img src={check} alt="check" className="top-3 right-5 absolute" />}
             </div>
           </div>
 
@@ -144,20 +125,8 @@ export const Register = () => {
           <div className="w-full md:w-[35rem] flex flex-col relative">
             <label className="mb-1">Nomor Telepon</label>
             <div className="flex items-center">
-              <input
-                id="telp"
-                type="text"
-                className="h-[3rem] w-full rounded-xl border border-gray-300 pl-3"
-                placeholder="+62"
-                onChange={handleInput}
-              />
-              {isPhoneValid && (
-                <img
-                  src={check}
-                  alt="check"
-                  className="top-10 right-5 absolute"
-                />
-              )}
+              <input id="telp" type="text" className="h-[3rem] w-full rounded-xl border border-gray-300 pl-3" placeholder="+62" onChange={handleInput} />
+              {isPhoneValid && <img src={check} alt="check" className="top-10 right-5 absolute" />}
             </div>
           </div>
 
@@ -167,19 +136,8 @@ export const Register = () => {
               <label>Buat Password</label>
             </div>
             <div className="relative">
-              <input
-                id="password"
-                type={PasswordVisible ? "text" : "password"}
-                className="h-[3rem] w-full rounded-xl border border-gray-300 pl-3"
-                placeholder="Buat Password"
-                onChange={handleInput}
-              />
-              <img
-                src={PasswordVisible ? passClose : pass}
-                alt={PasswordVisible ? "passClose" : "pass"}
-                className="top-3 right-5 absolute cursor-pointer"
-                onClick={togglePasswordVisibility}
-              />
+              <input id="password" type={PasswordVisible ? "text" : "password"} className="h-[3rem] w-full rounded-xl border border-gray-300 pl-3" placeholder="Buat Password" onChange={handleInput} />
+              <img src={PasswordVisible ? passClose : pass} alt={PasswordVisible ? "passClose" : "pass"} className="top-3 right-5 absolute cursor-pointer" onClick={togglePasswordVisibility} />
             </div>
           </div>
 
@@ -189,37 +147,20 @@ export const Register = () => {
               <label>Ulangi Password</label>
             </div>
             <div className="relative">
-              <input
-                id="validPass"
-                type={ValidPassVisible ? "text" : "password"}
-                className="h-[3rem] w-full rounded-xl border border-gray-300 pl-3"
-                placeholder="Ulangi Password"
-                onChange={handleInput}
-              />
-              <img
-                src={ValidPassVisible ? passClose : pass}
-                alt={ValidPassVisible ? "passClose" : "pass"}
-                className="top-3 right-5 absolute cursor-pointer"
-                onClick={toggleValidPassVisibility}
-              />
+              <input id="validPass" type={ValidPassVisible ? "text" : "password"} className="h-[3rem] w-full rounded-xl border border-gray-300 pl-3" placeholder="Ulangi Password" onChange={handleInput} />
+              <img src={ValidPassVisible ? passClose : pass} alt={ValidPassVisible ? "passClose" : "pass"} className="top-3 right-5 absolute cursor-pointer" onClick={toggleValidPassVisibility} />
             </div>
           </div>
 
           {/*BUTTON REGISTER */}
-          <button
-            className="h-[3rem] w-full md:w-[35rem] rounded-xl bg-gradientkanan text-white"
-            onClick={handleRegister}
-          >
+          <button className="h-[3rem] w-full md:w-[35rem] rounded-xl bg-gradientkanan text-white" onClick={handleRegister}>
             Daftar
           </button>
 
           {/* PERTANYAAN */}
           <span>
             Sudah punya akun?{" "}
-            <a
-              className="text-purple-800 font-semibold hover:underline"
-              href="/login"
-            >
+            <a className="text-purple-800 font-semibold hover:underline" href="/login">
               Masuk di sini
             </a>
           </span>

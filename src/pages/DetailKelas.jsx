@@ -15,7 +15,7 @@ import playgredient from "../assets/svg/play-gredient.svg";
 import successgreen from "../assets/svg/success-green.svg";
 import gembok from "../assets/svg/gembok.svg";
 import { KelasPremium } from "../assets/components/KelasPremium";
-import { Onboarding } from "../assets/components/Onboarding";
+// import { Onboarding } from "../assets/components/Onboarding";
 import { useNavigate, useParams } from "react-router-dom";
 import { Footer } from "../assets/components/Footer";
 import ReactPlayer from "react-player";

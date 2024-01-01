@@ -55,7 +55,7 @@ export const Login = () => {
         title: "Login Berhasil",
         status: "success",
         duration: 3000,
-        position: "bottom",
+        position: "top",
         isClosable: true,
       });
     } else if (error) {
@@ -66,7 +66,7 @@ export const Login = () => {
           title: "Akun belum terverifikasi",
           status: "error",
           duration: 3000,
-          position: "bottom",
+          position: "top",
           isClosable: true,
         });
       } else {
@@ -74,7 +74,7 @@ export const Login = () => {
           title: "Email atau Password salah",
           status: "error",
           duration: 3000,
-          position: "bottom",
+          position: "top",
           isClosable: true,
         });
       }
