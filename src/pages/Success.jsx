@@ -7,9 +7,6 @@ import selamat from "../assets/img/payment-success.png";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetDataTransactionsId } from "../services/get-Datas-Transactions";
 
-
-
-
 export const Success = () => {
   const { courseId, idTransactions } = useParams();
   const navigate = useNavigate();
