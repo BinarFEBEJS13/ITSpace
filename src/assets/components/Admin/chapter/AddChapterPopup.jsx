@@ -1,11 +1,22 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
-import { usePostDataChapters,postDataChapter } from "../../../../services/Admin/chapters/post-chapters";
+import {
+  postDataChapter,
+} from "../../../../services/Admin/chapters/post-chapters";
 import { useGetDataChapters } from "../../../../services/Admin/chapters/get-chapters";
 import { useParams } from "react-router-dom";
-import { useUpdateChapter,updateChapter } from "../../../../services/Admin/chapters/edit-chapter";
+import {
+  updateChapter,
+} from "../../../../services/Admin/chapters/edit-chapter";
 import { useGetDataChaptersID } from "../../../../services/Admin/chapters/get-chapterID";
-import { useToast } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  useToast,
+  Input,
+  Select
+} from "@chakra-ui/react";
 
 export const AddChapterPopup = ({
   setAddChapters,
@@ -15,7 +26,7 @@ export const AddChapterPopup = ({
   reloadData,
 }) => {
   const [Judul, setJudul] = useState("");
-  const [TipeKelas, setTipeKelas] = useState("0");
+  const [TipeKelas, setTipeKelas] = useState("");
   const [Chapter, setChapter] = useState(0);
   const [inputErrors, setInputErrors] = useState({
     judul: "",
@@ -36,14 +47,12 @@ export const AddChapterPopup = ({
     courseId: id,
   });
 
-
-
   const dataType = useMemo(() => (Type ? Type : "add"), [Type]);
 
   useEffect(() => {
     if (selectedChapter.id && dataType === "edit") {
       setJudul(selectedChapter.title);
-      setTipeKelas(selectedChapter.isPremium === true? "1" : "0");
+      setTipeKelas(selectedChapter.isPremium === true ? "1" : "0");
       setChapter(selectedChapter.number);
       // setEdit()
     }
@@ -63,21 +72,22 @@ export const AddChapterPopup = ({
     }
 
     if (TipeKelas !== "0" && TipeKelas !== "1") {
-      errors.tipeKelas = "Invalid Tipe Kelas";
+      errors.tipeKelas = "Pilh Tipe Kelas";
       isValid = false;
     }
 
-    if (!String(Chapter).trim()) {
+    if (Chapter === 0) {
       errors.chapter = "Chapter tidak boleh kosong";
       isValid = false;
     }
+
     setInputErrors(errors);
     return isValid;
   };
 
-  const handleonChange = (e) => {
+  const HandleOnchange = (e) => {
     if (e) {
-      if (e.target.id === "Judul") {
+      if (e.target.id === "judul") {
         setJudul(e.target.value);
       }
       if (e.target.id === "TipeKelas") {
@@ -124,7 +134,7 @@ export const AddChapterPopup = ({
             position: "top",
             colorScheme: "orange",
           });
-        reloadData()
+          reloadData();
         })
         .catch((err) => {
           toast({
@@ -137,27 +147,28 @@ export const AddChapterPopup = ({
           });
         });
     } else {
-      postDataChapter(chapterData).then((result) => {
-        toast({
-          title: result?.data?.message,
-          description: `Anda Telah Membuat chapter Dengan judul ${result?.data?.data?.title} `,
-          status: "success",
-          duration: 9000,
-          size: "lg",
-          position: "bottom-right",
+      postDataChapter(chapterData)
+        .then((result) => {
+          toast({
+            title: result?.data?.message,
+            description: `Anda Telah Membuat chapter Dengan judul ${result?.data?.data?.title} `,
+            status: "success",
+            duration: 9000,
+            size: "lg",
+            position: "top",
+          });
+          reloadData();
+        })
+        .catch((err) => {
+          toast({
+            title: err?.response?.data?.message,
+            description: "Ada Terjadi Kesalahan Tolong Periksa Kembali",
+            status: "error",
+            duration: 9000,
+            size: "lg",
+            position: "top",
+          });
         });
-        reloadData()
-      }).catch((err) => {
-        toast({
-          title: err?.response?.data?.message,
-          description: "Ada Terjadi Kesalahan Tolong Periksa Kembali",
-          status: "error",
-          duration: 9000,
-          size: "lg",
-          position: "bottom-right",
-        });
-      });;
-     
     }
 
     toggleClose();
@@ -168,7 +179,7 @@ export const AddChapterPopup = ({
       <form
         onSubmit={handleSubmit}
         encType="multipart/form-data"
-        className="pop-up overflow-y-auto  mt-[3rem]  rounded-lg w-[50%] xl:w-[25%] bg-white absolute"
+        className="pop-up overflow-y-auto  mt-[3rem]  rounded-lg w-[80%] xl:w-[25%] bg-white absolute"
       >
         <FaXmark
           onClick={toggleClose}
@@ -176,52 +187,70 @@ export const AddChapterPopup = ({
         />
         <div className="flex items-center justify-center flex-col sm:gap-5">
           <h1 className="font-bold sm:text-xl text-[#6148FF] my-2">
-          {dataType === "edit" ? "Edit Chapter" : "Tambah Chapter"}
+            {dataType === "edit" ? "Edit Chapter" : "Tambah Chapter"}
           </h1>
           <div className="flex flex-col gap-2 w-4/5 sm:w-4/5 ">
-            <div className="flex flex-col ">
-              <label htmlFor="">Judul Chapter</label>
-              <input
-                onChange={handleonChange}
-                id="Judul"
-                type="text"
-                className={`px-3 py-2 rounded-2xl border ${
-                  inputErrors.judul ? "border-red-500" : "border-[#D0D0D0]"
-                }`}
+            <FormControl  isInvalid={inputErrors.judul !== ""}>
+              <FormLabel>Judul Chapter</FormLabel>
+              <Input
+                size="lg"
+                id="judul"
                 value={Judul}
+                onChange={(e) => {
+                  HandleOnchange(e);
+                  setInputErrors((prevErrors) => ({
+                    ...prevErrors,
+                    judul: "",
+                  }));
+                }}
+                placeholder="Nama Kelas"
               />
               {inputErrors.judul && (
-                <p className="text-red-500 text-sm">{inputErrors.judul}</p>
+                <FormErrorMessage>{inputErrors.judul}</FormErrorMessage>
               )}
-            </div>
-
-            <div className="flex flex-col ">
-              <label htmlFor="TipeKelas">Tipe Kelas</label>
-              <select
+            </FormControl>
+            <FormControl isInvalid={inputErrors.tipeKelas !== "" && (inputErrors.tipeKelas !== "1" || inputErrors.tipeKelas !== "0")}>
+              <FormLabel>Tipe Chapter</FormLabel>
+              <Select
+                size="lg"
                 id="TipeKelas"
-                className="px-3 py-2 rounded-2xl border border-[#D0D0D0]"
-                onChange={handleonChange}
                 value={TipeKelas}
+                onChange={(e) => {
+                  HandleOnchange(e);
+                  setInputErrors((prevErrors) => ({
+                    ...prevErrors,
+                    tipeKelas: "",
+                  }));
+                }}
+                placeholder='Tipe Chapter'
               >
                 <option value="0">GRATIS</option>
                 <option value="1">PREMIUM</option>
-              </select>
-            </div>
-            <div className="flex flex-col ">
-              <label htmlFor="">Chapter</label>
-              <input
+              </Select>
+              {inputErrors.tipeKelas && (
+                <FormErrorMessage>{inputErrors.tipeKelas}</FormErrorMessage>
+              )}
+            </FormControl>
+            <FormControl isInvalid={inputErrors.chapter !==  ""}>
+              <FormLabel>Nomor Chapter</FormLabel>
+              <Input
+                size="lg"
                 id="Chapter"
-                onChange={handleonChange}
-                type="text"
-                className={`px-3 py-2 rounded-2xl border ${
-                  inputErrors.chapter ? "border-red-500" : "border-[#D0D0D0]"
-                }`}
                 value={Chapter}
+                onChange={(e) => {
+                  HandleOnchange(e);
+                  setInputErrors((prevErrors) => ({
+                    ...prevErrors,
+                    chapter: "",
+                  }));
+                }}
+                placeholder="Nomor chapter"
               />
               {inputErrors.chapter && (
-                <p className="text-red-500 text-sm">{inputErrors.chapter}</p>
+                <FormErrorMessage>{inputErrors.chapter}</FormErrorMessage>
               )}
-            </div>
+            </FormControl>
+
             <div className="text-white flex justify-end gap-2 font-bold text-sm sm:text-base my-4">
               <button
                 type="submit"

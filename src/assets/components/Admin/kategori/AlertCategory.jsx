@@ -33,8 +33,8 @@ export const AlertCategory = ({ setAlertDelete,CategoryID, reloadData}) => {
   };
 
   return (
-    <div className="w-full  z-40 h-full fixed top-0 left-0 bg-[rgba(0,0,0,0.4)] flex items-start justify-center">
-      <div className="bg-white flex rounded-lg shadow-lg flex-col items-center justify-center mt-[5rem]">
+    <div className="w-full p-5  z-40 h-full fixed top-0 left-0 bg-[rgba(0,0,0,0.4)] flex items-start justify-center">
+      <div className="bg-white  flex rounded-lg shadow-lg flex-col items-center justify-center mt-[5rem]">
         <div className="flex justify-between w-full px-6 my-4">
           <h1 className="font-bold text-2xl">Delete Kategori</h1>
           <FaXmark

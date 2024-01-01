@@ -61,7 +61,7 @@ export const Category = () => {
         .then((result) => {
           console.log(result, "KOCAK");
           toast({
-            title: result?.message,
+            title: "Berhasil menambah kategori baru",
             duration: 9000,
             status: "success",
             isClosable: true,
@@ -93,10 +93,12 @@ export const Category = () => {
     setCategoryID(data?.id);
     setAlertDelete(true);
   };
-const handleBack = () => {
-  setCategoryID("")
-  setaddCategory("")
-}
+
+  const handleBack = () => {
+    setCategoryID("");
+    setaddCategory("");
+  };
+
   return (
     <div className="flex h-screen flex-col bg-[rgba(208,208,208,0.21)] sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
       {AlertDelete && (
@@ -115,7 +117,7 @@ const handleBack = () => {
         <div className="flex flex-col gap-5 items-center  mx-[2rem] md:mx-[4rem] border-r-indigo-50 my-[2rem]">
           <form
             onSubmit={handleSubmit}
-            className="bg-white shadow-xl h-[300px] w-[40%] rounded-lg flex justify-center flex-col gap-3 py-4 px-10"
+            className="bg-white shadow-xl h-[300px] sm:w-[40%] rounded-lg flex justify-center flex-col gap-3 py-4 px-10"
           >
             <h1 className="font-bold text-center text-xl">
               Tambah Kategori Kelas
@@ -133,14 +135,14 @@ const handleBack = () => {
             <div className="flex gap-3 ">
               <button
                 type="submit"
-                className="bg-[#6148FF] w-1/4 text-white font-bold rounded-lg p-3"
+                className="bg-[#6148FF] sm:w-1/4 text-white font-bold rounded-lg p-3"
               >
                 {CategoryID ? "Edit" : "Tambah"}
               </button>
               {CategoryID && (
                 <button
                   onClick={handleBack}
-                  className="bg-gray-200 text-black w-1/4 font-bold rounded-lg p-3"
+                  className="bg-gray-200 text-black sm:w-1/4 font-bold rounded-lg p-3"
                 >
                   Cancel
                 </button>
