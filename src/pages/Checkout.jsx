@@ -247,7 +247,7 @@ export const Checkout = () => {
                               <h6 className="text-ungu-0 text-sm">{dataCourseId?.courseCategory[0]?.category?.name}</h6>
                             </div>
                             <div>
-                              <h2 className="font-bold cursor-pointer text-sm sm:text-base ">{dataCourseId?.title}</h2>
+                              <h2 className="font-semibold truncate-3-lines cursor-pointer text-sm sm:text-base ">{dataCourseId?.title}</h2>
                               <span className="opacity-50 text-xs xl:text-sm">by {dataCourseId?.mentor[0]?.author?.profile?.name}</span>
                             </div>
                           </div>
@@ -263,7 +263,7 @@ export const Checkout = () => {
                         </div>
                         <div className="flex flex-col gap-2">
                           <div className="w-full flex justify-between">
-                            <h6 className="font-semibold">Harga Kursus</h6>
+                            <h6 className="font-medium">Harga Kursus</h6>
                             <p className="">
                               {hargaKursus.toLocaleString("id-ID", {
                                 style: "currency",
@@ -276,7 +276,7 @@ export const Checkout = () => {
                         </div>
                         <div className="flex flex-col gap-2">
                           <div className="w-full flex justify-between">
-                            <h6 className="font-semibold">PPN 11%</h6>
+                            <h6 className="font-medium">PPN 11%</h6>
                             <p>
                               {Number(Ppn).toLocaleString("id-ID", {
                                 style: "currency",
@@ -290,7 +290,7 @@ export const Checkout = () => {
                         <div className="flex flex-col gap-2">
                           <div className="w-full flex justify-between">
                             <h6 className="font-bold">Total Pembayaran</h6>
-                            <p className="text-ungu-0 font-semibold">
+                            <p className="text-ungu-0 font-bold">
                               {Number(totalPembayaran).toLocaleString("id-ID", {
                                 style: "currency",
                                 currency: "IDR",

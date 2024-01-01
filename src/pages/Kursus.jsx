@@ -244,7 +244,7 @@ export const Kursus = () => {
                       </div>
                       {/* Berdasarkan Kategori */}
                       <div className="flex flex-col gap-2">
-                        <h2 className="font-bold text-lg">Kategori</h2>
+                        <h2 className="font-semibold text-lg">Kategori</h2>
                         <div className="flex flex-col gap-1">
                           <div className="flex gap-2">
                             <input ref={(el) => kategoriCheckboxRef.current.push(el)} onChange={handleChangeKategori} value={"ui/ux"} type="checkbox" className="accent-biru-0 w-4"></input>
@@ -274,7 +274,7 @@ export const Kursus = () => {
                       </div>
                       {/* Berdasarkan Level kesulitan */}
                       <div className="flex flex-col gap-2">
-                        <h2 className="font-bold text-lg">Level Kesulitan</h2>
+                        <h2 className="font-semibold text-lg">Level Kesulitan</h2>
                         <div className="flex flex-col gap-1">
                           <div className="flex gap-2">
                             <input ref={(el) => levelCheckboxRef.current.push(el)} onChange={handleChangeLevel} value={"BEGINNER"} type="checkbox" className="accent-biru-0 w-4"></input>
@@ -352,7 +352,7 @@ export const Kursus = () => {
                                     </span>
                                   </div>
                                   <div>
-                                    <h2 onClick={() => navigate(`/detail-kelas/${value.id}`)} className="font-bold truncate-3-lines cursor-pointer text-xs sm:text-sm">
+                                    <h2 onClick={() => navigate(`/detail-kelas/${value.id}`)} className="font-semibold truncate-3-lines cursor-pointer text-xs sm:text-sm">
                                       {capitalizeFirstLetter(value.title)}
                                     </h2>
                                     <span className="opacity-50 text-xs sm:text-sm">by {value?.mentor[0]?.author?.profile?.name}</span>
