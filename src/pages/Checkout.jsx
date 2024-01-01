@@ -66,7 +66,7 @@ export const Checkout = () => {
         description: "Silahkan pilih kursus yang lain",
         duration: 3000,
         status: "error",
-        position: "top-right",
+        position: "top",
       });
     }
   };
@@ -81,7 +81,7 @@ export const Checkout = () => {
         description: "Silahkan login terlebih dahulu",
         duration: 3000,
         status: "error",
-        position: "top-right",
+        position: "top",
       });
     }
     if (error?.response?.status === 400) {
@@ -90,7 +90,7 @@ export const Checkout = () => {
         description: error?.response?.data?.message,
         duration: 3000,
         status: "error",
-        position: "top-right",
+        position: "top",
       });
     }
   }, [isSuccess, error, courseId, getDataTransactions, toast]);
