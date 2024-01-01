@@ -100,7 +100,6 @@ export const DetailKelas = () => {
   useEffect(() => {
     if (errorenrolment?.response?.status === 400) {
       toast({
-        title: "Gagal",
         description: errorenrolment?.response?.data?.message,
         duration: 3000,
         status: "error",
@@ -109,8 +108,7 @@ export const DetailKelas = () => {
     }
     if (successenrolment === true) {
       toast({
-        title: "Berhasil",
-        description: "Course sudah ditambahkan kedalam kelas",
+        description: "kursus sudah ditambahkan kedalam kelas",
         duration: 3000,
         status: "success",
         position: "top",
@@ -283,8 +281,8 @@ export const DetailKelas = () => {
                       /*///////////////////////////////////////// Materi Kelas Versi Mobile Phone ///////////////////////////////////////////////////////*/
                       <div className="flex sm:hidden flex-col gap-2 px-4 py-2 pb-6 shadow-sm-button rounded-md">
                         {/* Header & Progress */}
-                        <div className="lg:flex gap-2">
-                          <h2 className="w-full lg:w-1/2 xl:w-1/3 font-bold">Materi Belajar</h2>
+                        <div className="lg:flex lg:items-center gap-2">
+                          <h2 className="w-full lg:w-1/2 xl:w-1/3 font-semibold">Materi Belajar</h2>
                           <div className="text-sm flex gap-1 w-full lg:w-2/3 xl:w-2/3">
                             <img src={complete} alt="" className="w-6" />
                             <div className="w-full bg-biru-0 bg-opacity-20 rounded-md">
@@ -347,8 +345,8 @@ export const DetailKelas = () => {
                 <div className="hidden sm:block w-2/6 xl:w-4/12 ">
                   <div className="flex flex-col gap-2 px-4 py-2 pb-6 shadow-sm-button rounded-md">
                     {/* Header & Progress */}
-                    <div className="lg:flex gap-2">
-                      <h2 className="w-full lg:w-1/2 xl:w-1/3 font-bold">Materi Belajar</h2>
+                    <div className="lg:flex lg:items-center gap-2">
+                      <h2 className="w-full lg:w-1/2 xl:w-1/3 font-semibold text-sm">Materi Belajar</h2>
                       <div className="text-sm flex gap-1 w-full lg:w-2/3 xl:w-2/3">
                         <img src={complete} alt="" className="w-6" />
                         <div className="w-full bg-biru-0 bg-opacity-20 rounded-md">

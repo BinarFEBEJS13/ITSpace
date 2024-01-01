@@ -22,7 +22,6 @@ export const Rating = ({ courseId }) => {
   useEffect(() => {
     if (error) {
       toast({
-        title: "Gagal",
         description: "Maaf penilaian gagal dikirim",
         duration: 3000,
         status: "error",
@@ -31,7 +30,6 @@ export const Rating = ({ courseId }) => {
     }
     if (isSuccess) {
       toast({
-        title: "Berhasil",
         description: "Terimakasih atas penilainnya",
         duration: 3000,
         status: "success",
