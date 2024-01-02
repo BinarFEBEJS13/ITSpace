@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import LogoBg from "../../assets/img/LogoBg.jpg";
 import pass from "../../assets/svg/pass.svg";
 import passClose from "../../assets/svg/passClose.svg";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
-import { useLoginUser } from "../../services/auth/login_user";
+import { LoginUser } from "../../services/auth/login_user";
 import { resendOtp } from "../../services/auth/resend_otp";
-// import { GoogleLogin } from "@react-oauth/google";
 import LoginGoogle from "../../assets/components/LoginGoogle";
 
 export const Login = () => {
   const navigate = useNavigate();
   const toast = useToast();
-  const { mutate: loginData, isSuccess, error } = useLoginUser();
 
   //EMAIL
   const [Email, setEmail] = useState("");
@@ -40,46 +38,43 @@ export const Login = () => {
   };
 
   //FUNGSI BUTTON MASUK
-
   const handleLogin = () => {
-    loginData({
+    LoginUser({
       email: Email,
       password: Password,
-    });
-  };
-
-  useEffect(() => {
-    if (isSuccess) {
-      navigate("/");
-      toast({
-        title: "Login Berhasil",
-        status: "success",
-        duration: 3000,
-        position: "top",
-        isClosable: true,
+    })
+      .then((result) => {
+        navigate("/");
+        toast({
+          title: "Login Berhasil",
+          status: "success",
+          duration: 3000,
+          position: "top",
+          isClosable: true,
+        });
+      })
+      .catch((err) => {
+        if (err?.response?.status === 403) {
+          navigate("/otp", { state: { email: Email } });
+          resendOtp({ email: Email });
+          toast({
+            title: "Akun belum terverifikasi",
+            status: "error",
+            duration: 3000,
+            position: "top",
+            isClosable: true,
+          });
+        } else {
+          toast({
+            title: err?.response?.data?.message,
+            status: "error",
+            duration: 3000,
+            position: "top",
+            isClosable: true,
+          });
+        }
       });
-    } else if (error) {
-      if (error.response && error.response.status === 403) {
-        navigate("/otp", { state: { email: Email } });
-        resendOtp({ email: Email });
-        toast({
-          title: "Akun belum terverifikasi",
-          status: "error",
-          duration: 3000,
-          position: "top",
-          isClosable: true,
-        });
-      } else {
-        toast({
-          title: "Email atau Password salah",
-          status: "error",
-          duration: 3000,
-          position: "top",
-          isClosable: true,
-        });
-      }
-    }
-  }, [Email, navigate, toast, isSuccess, error]);
+  };
 
   return (
     <div className="flex flex-row w-full h-screen">
