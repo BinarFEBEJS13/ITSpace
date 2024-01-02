@@ -3,14 +3,13 @@ import LogoBg from "../../assets/img/LogoBg.jpg";
 import pass from "../../assets/svg/pass.svg";
 import passClose from "../../assets/svg/passClose.svg";
 import { useNavigate } from "react-router-dom";
-import { useResetPassword } from "../../services/auth/resetPass";
+import { resetPassword } from "../../services/auth/resetPass";
 import { useToast } from "@chakra-ui/react";
 
 export const ResetPass = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [password2Visible, setPassword2Visible] = useState(false);
   const navigate = useNavigate();
-  const { mutate: reset } = useResetPassword();
   const [Password, setPassword] = useState("");
   const [validPass, setValidPass] = useState("");
   const token = window.location.search.slice(1);
@@ -34,28 +33,31 @@ export const ResetPass = () => {
       }
     }
   };
-
-  const handleChangePassword = async () => {
-    try {
-      const resetPass = {
-        newPassword: Password,
-        newPasswordValidation: validPass,
-        token: token,
-      };
-
-      await reset(resetPass);
-      toast({
-        title: "Password berhasil diubah",
-        status: "success",
-        duration: 3000,
-        position: "top",
+  const handleChangePassword = () => {
+    resetPassword({
+      newPassword: Password,
+      newPasswordValidation: validPass,
+      token: token,
+    })
+      .then((result) => {
+        navigate("/login");
+        toast({
+          title: "Password Berhasil diubah",
+          status: "success",
+          duration: 3000,
+          position: "top",
+          isClosable: true,
+        });
+      })
+      .catch((err) => {
+        toast({
+          title: err?.response?.data?.message,
+          status: "error",
+          duration: 3000,
+          position: "top",
+          isClosable: true,
+        });
       });
-      navigate("/login");
-      console.log(resetPass, "resetpass");
-    } catch (error) {
-      console.error("Error mengirim email reset:", error.message);
-      console.log("Email tidak terdaftar.");
-    }
   };
 
   return (
@@ -68,14 +70,14 @@ export const ResetPass = () => {
           {/* INPUTAN PASSWORD 1*/}
           <div className="w-full md:w-[35rem] flex flex-col relative">
             <label className="mb-1">Masukan Password Baru</label>
-            <input id="password" type={passwordVisible ? "text" : "password"} className="h-[3rem] w-[35rem] rounded-xl border border-gray-300 pl-3" placeholder="Masukkan Password" onChange={handleInput} />
+            <input id="password" type={passwordVisible ? "text" : "password"} className="h-[3rem] w-full sm:w-[35rem] rounded-xl border border-gray-300 pl-3" placeholder="Masukkan Password" onChange={handleInput} />
             <img src={passwordVisible ? passClose : pass} alt="pass" className="top-[2.5rem] right-5 absolute cursor-pointer" onClick={togglePasswordVisibility} />
           </div>
 
           {/* INPUTAN PASSWORD 2*/}
           <div className="w-full md:w-[35rem] flex flex-col relative">
             <label className="mb-1">Ulangi Password Baru</label>
-            <input id="validPass" type={password2Visible ? "text" : "password"} className="h-[3rem] w-[35rem] rounded-xl border border-gray-300 pl-3" placeholder="Masukkan Password" onChange={handleInput} />
+            <input id="validPass" type={password2Visible ? "text" : "password"} className="h-[3rem] w-full sm:w-[35rem] rounded-xl border border-gray-300 pl-3" placeholder="Masukkan Password" onChange={handleInput} />
             <img src={password2Visible ? passClose : pass} alt="pass" className="top-[2.5rem] right-5 absolute cursor-pointer" onClick={togglePassword2Visibility} />
           </div>
 
