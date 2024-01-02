@@ -7,8 +7,7 @@ import { useGetPembayaran } from "../../../services/Admin/transaksi/get-status-p
 import SearhIcon from "../../../assets/svg/search-admin.svg";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-datepicker/dist/react-datepicker-cssmodules.css";
-import 'rsuite/dist/rsuite-no-reset.min.css';
-
+import "rsuite/dist/rsuite-no-reset.min.css";
 
 import {
   Button,
@@ -21,15 +20,17 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import DatePicker from "react-datepicker";
-import { DateRangePicker } from 'rsuite';
+import { DateRangePicker } from "rsuite";
 
 const TabelTransaksi = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [Search, setSearch] = useState("");
   const [Status, setStatus] = useState("");
   const [Payment, setPayment] = useState("");
-  const [dateRange, setDateRange] = useState({ startDate: null, endDate: null });
+  const [dateRange, setDateRange] = useState({
+    startDate: null,
+    endDate: null,
+  });
   const { data: Transaksi, isLoading } = useGetPembayaran({
     // courseCode: courseCode,
     page: currentPage,
@@ -51,7 +52,6 @@ const TabelTransaksi = () => {
     setCurrentPage(currentPage + 1);
   };
 
-
   const handleFilterByPayment = (selectedCategory) => {
     setPayment(selectedCategory);
     setCurrentPage(1);
@@ -64,45 +64,22 @@ const TabelTransaksi = () => {
 
   console.log(Transaksi, "PAYMENT");
   return (
-    <div className="flex h-screen flex-col bg-[rgba(208,208,208,0.21)] sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
+    <div className="flex h-screen bg-[rgba(169,167,167,0.11)] flex-col sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
       <Sidebar />
 
-      <div className=" w-full lg:overflow-x-hidden">
+      <div className=" w-full bg-[rgba(169,167,167,0.11)] lg:overflow-x-hidden">
         {/* ========================= Header =========================  */}
         <Header />
         {/* ========================= User Data =========================  */}
         <DataDashboard />
 
-        <div>
           <div className="mx-[2rem] md:mx-[2rem] flex justify-between">
-            <h1 className="sm:w-full font-bold text-normal sm:text-xl">
+            <h1 className="w-full sm:w-full font-bold text-normal sm:text-xl">
               Status Pembayaran
             </h1>
-            <div className="text-center rounded-lg flex items-center gap-4 sm:gap-3">
-              {/* <DatePicker
-              wrapperClassName="datePicker"
-                popperPlacement="bottom"
-                showPopperArrow={false}
-                placeholderText="Filter Date"
-                className="border p-2 flex items-center gap-4 border-gray-300 rounded-md"
-                selectsRange={true}
-                startDate={startDate}
-                endDate={endDate}
-                onChange={(update) => {
-                  setDateRange(update);
-                }}
-                isClearable={true}
-              /> */}
-               <DateRangePicker
-                size="lg"
-                placement="leftStart"
-                appearance="default"
-                placeholder="dd/mm/yyyy"
-                onChange={(value) => setDateRange(value)}
-                value={dateRange}
-                className="custom-date-picker"
-              />
-              <div>
+
+            <div className="text-center rounded-lg flex  sm:flex-row items-center  sm:gap-3">
+              <div className="ml-[3rem] sm:m-0">
                 <Menu>
                   <MenuButton
                     border="1px"
@@ -164,6 +141,19 @@ const TabelTransaksi = () => {
               </div>
             </div>
           </div>
+          <div className="mx-[2rem] md:mx-[2rem]">
+            <DateRangePicker
+              size="lg"
+              editable={false}
+              placement="bottomStart"
+              appearance="default"
+              placeholder="dd/mm/yyyy"
+              onChange={(value) => setDateRange(value)}
+              value={dateRange}
+              className="rounded-lg"
+            />
+          </div>
+
           <div
             className="mx-[2rem] md:mx-[2rem] relative mt-5"
             onChange={(e) => setSearch(e.target.value)}
@@ -288,7 +278,7 @@ const TabelTransaksi = () => {
           </div>
           {Transaksi?.data?.transactions.length >= 0 && (
             <div className="flex mt-2 gap-2 justify-end mx-[4rem]">
-              <div className="flex bg-[rgba(0,0,0,0.4)] rounded-[50px] p-3 gap-3 text-white">
+              <div className="flex bg-gray-300 shadow-xl rounded-lg p-3 gap-3 text-white">
                 <div
                   onClick={handlePrev}
                   className={`p-1 rounded-[50px] bg-[#6048ff] ${
@@ -299,7 +289,7 @@ const TabelTransaksi = () => {
                 >
                   <IoIosArrowBack />
                 </div>
-                <p>{currentPage}</p>
+                <p className="text-black">{currentPage}</p>
                 <div
                   onClick={handleNext}
                   className={`p-1 rounded-[50px] bg-[#6148FF] ${
@@ -313,7 +303,6 @@ const TabelTransaksi = () => {
               </div>
             </div>
           )}
-        </div>
       </div>
     </div>
   );
