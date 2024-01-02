@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { useChangePassword } from "../../services/auth/change_password";
 import { useToast } from "@chakra-ui/react";
+import { useLogoutUser } from "../../services/auth/logout_user";
 
 export const UbahPassword = () => {
   const [oldPassword, setOldPassword] = useState("");
@@ -25,6 +26,8 @@ export const UbahPassword = () => {
   };
 
   const { mutate: changePassword, isSuccess, error } = useChangePassword();
+
+  const { mutate: postLogout, isSuccess: successLogout } = useLogoutUser();
 
   const handleChangePass = (e) => {
     if (e) {
@@ -50,6 +53,9 @@ export const UbahPassword = () => {
         position: "top",
         isClosable: true,
       });
+      setTimeout(() => {
+        postLogout();
+      }, 3000);
     } else if (error) {
       if (error.response && error.response.status === 400) {
         toast({
@@ -71,7 +77,13 @@ export const UbahPassword = () => {
         });
       }
     }
-  }, [isSuccess, error, toast]);
+  }, [isSuccess, error, toast, postLogout]);
+
+  useEffect(() => {
+    if (successLogout) {
+      window.location.href = "/login";
+    }
+  }, [successLogout]);
 
   const changePass = () => {
     changePassword({

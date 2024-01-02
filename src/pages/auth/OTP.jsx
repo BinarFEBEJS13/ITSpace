@@ -20,6 +20,7 @@ export const OTP = () => {
   const email = emailFromState || emailFromCookies;
   const toast = useToast();
   const inputRefs = createRefsArray(6);
+  const [loginClicked, setLoginClicked] = useState(false);
 
   // INPUT OTP
   const handleInputOtp = (e, index) => {
@@ -109,7 +110,7 @@ export const OTP = () => {
 
   //NOTIFIKASI BUAT MOBILE
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && !loginClicked) {
       toast({
         title: "Registrasi Berhasil",
         status: "success",
@@ -120,18 +121,18 @@ export const OTP = () => {
           <>
             <div className="fixed inset-0 bg-black bg-opacity-75 z-10 md:hidden"></div>
             <div className="fixed bottom-0 left-0 w-full h-[60%] bg-white z-20 md:hidden flex flex-col items-center justify-center rounded-t-[3rem]">
-              <p className="text-4xl font-bold text-ungu-0 mb-2">Registrasi</p>
-              <p className="text-4xl font-bold text-ungu-0 mb-4">Berhasil!!!</p>
+              <p className="text-2xl font-bold text-ungu-0 mb-2">Registrasi</p>
+              <p className="text-2xl font-bold text-ungu-0 mb-4">Berhasil!!!</p>
               <img src={check} alt="check" className="w-[6rem] h-[6rem] text-green-500 mb-2" />
               <div className="flex flex-col items-center mt-2">
                 <button
                   className="fixed bottom-8 bg-ungu-0 h-[3rem] w-[20rem] rounded-full text-white"
                   onClick={() => {
-                    navigate("/login");
+                    setLoginClicked(true);
                     onClose();
                   }}
                 >
-                  Beranda
+                  Login
                 </button>
               </div>
             </div>
@@ -139,7 +140,7 @@ export const OTP = () => {
         ),
       });
     }
-  }, [isSuccess, navigate, toast]);
+  }, [isSuccess, navigate, toast, loginClicked]);
 
   return (
     <div className="flex flex-col md:flex-row w-full h-screen">
@@ -148,10 +149,10 @@ export const OTP = () => {
         <h1 className="mb-[2rem] font-bold text-2xl text-purple-800">Masukan OTP</h1>
 
         <div className="flex flex-col items-center justify-center space-y-5">
-          <p>
+          <p className="text-center">
             Kode 6 digit dikirimkan ke <span style={{ fontWeight: "bold" }}>{email}</span>
           </p>
-          <div className="flex space-x-5">
+          <div className="flex space-x-1 sm:space-x-5">
             {OTP.map((value, index) => (
               <input
                 key={index}
