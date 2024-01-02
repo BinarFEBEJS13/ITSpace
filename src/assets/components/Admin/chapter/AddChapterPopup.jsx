@@ -175,7 +175,7 @@ export const AddChapterPopup = ({
   };
 
   return (
-    <div className="w-screen h-screen flex items-start justify-center fixed t-2 l-[50px] bg-[rgba(0,0,0,0.4)] ">
+    <div className="w-screen z-40 h-screen flex items-start justify-center fixed t-2 l-[50px] bg-[rgba(0,0,0,0.4)] ">
       <form
         onSubmit={handleSubmit}
         encType="multipart/form-data"

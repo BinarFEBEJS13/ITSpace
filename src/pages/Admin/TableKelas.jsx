@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Tambah from "../../../assets/svg/add-admin.svg";
+import Tambah from "../../assets/svg/add-admin.svg";
+import SearhIcon from "../../assets/svg/search-admin.svg";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
-import SearhIcon from "../../../assets/svg/search-admin.svg";
 import { FaTrash } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
 import { FaBook } from "react-icons/fa6";
@@ -26,18 +26,17 @@ import {
   MenuDivider,
   Table,
 } from "@chakra-ui/react";
-import { useGetCourse } from "../../../services/Admin/courses/get-data-courses";
-import { useDeleteCourse } from "../../../services/Admin/courses/delete-data-courses";
+import { useGetCourse } from "../../services/Admin/courses/get-data-courses";
+import { useDeleteCourse } from "../../services/Admin/courses/delete-data-courses";
 
 import { IoChevronDownCircleOutline } from "react-icons/io5";
-import { useGetCategory } from "../../../services/Admin/category/get-data-category";
-import { Header } from "./Header";
-import { DataDashboard } from "./DataDashboard";
-import { Sidebar } from "./Sidebar";
+import { useGetCategory } from "../../services/Admin/category/get-data-category";
+import { Header } from "../../assets/components/Admin/Header";
+import { DataDashboard } from "../../assets/components/Admin/DataDashboard";
+import { Sidebar } from "../../assets/components/Admin/Sidebar";
 import { useNavigate } from "react-router-dom";
-import { EditCourse } from "./course/EditCourse";
-import { AddCourse } from "./course/AddCourse";
-import { Category } from "./kategori/Category";
+import { EditCourse } from "../../assets/components/Admin/course/EditCourse";
+import { AddCourse } from "../../assets/components/Admin/course/AddCourse";
 
 export const TableKelas = () => {
   const [AddPopupForm, setAddPopupForm] = useState(false);

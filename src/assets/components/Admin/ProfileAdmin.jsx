@@ -29,10 +29,7 @@ export const ProfileAdmin = () => {
   const toast = useToast();
   const [inputErrors, setInputErrors] = useState({
     nama: "",
-    email: "",
-    telepon: "",
-    negara: "",
-    kota: "",
+    email: ""
   });
 
   const handleImageChange = (e) => {
@@ -50,9 +47,6 @@ export const ProfileAdmin = () => {
     const errors = {
       nama: "",
       email: "",
-      telepon: "",
-      negara: "",
-      kota: "",
     };
 
     if (!Nama.trim()) {
@@ -60,7 +54,7 @@ export const ProfileAdmin = () => {
       isValid = false;
     }
 
-    if (Email.trim()) {
+    if (!Email.trim()) {
       errors.tipeKelas = "Email tidak boleh kosong";
       isValid = false;
     }
@@ -101,6 +95,7 @@ export const ProfileAdmin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!validateForm()) {
       return;
     }
@@ -157,15 +152,15 @@ export const ProfileAdmin = () => {
     <div className="flex h-screen bg-[rgba(169,167,167,0.11)] flex-col sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
       <Sidebar />
 
-      <div className=" w-full lg:overflow-x-hidden">
+      <div className=" w-full lg:overflow-x-hidden overflow-y-auto">
         {/* ========================= Header =========================  */}
         <Header />
         {/* ========================= User Data =========================  */}
         <div className="mx-[2rem] md:mx-[4rem] mt-[3rem] flex justify-between ">
           <h1 className="font-bold text-normal sm:text-3xl">Profile Saya</h1>
         </div>
-        <div className="flex justify-center items-center mt-[4rem] ">
-          <div className="flex flex-col bg-white shadow-xl rounded-lg justify-center items mx-[2rem] md:mx-[4rem] w-[23rem] w-full px-5">
+        <div className="flex justify-center items-center mt-[2rem] ">
+          <form onSubmit={handleSubmit} className="flex flex-col bg-white shadow-xl rounded-lg justify-center items mx-[2rem] md:mx-[4rem]  w-full px-5">
             <div className=" flex item mt-3 mx-auto relative rounded-full border-[1.5px] border-ungu-0">
               <Wrap>
                 <WrapItem>
@@ -183,8 +178,8 @@ export const ProfileAdmin = () => {
                 <img className="w-4 h-4 fill-white" src={picture} alt=""></img>
               </div>
             </div>
-            <form
-              onSubmit={handleSubmit}
+            <div
+              
               className="flex flex-col justify-center gap-2"
             >
               <FormControl isInvalid={inputErrors.nama !== ""}>
@@ -234,11 +229,8 @@ export const ProfileAdmin = () => {
                   borderColor="gray.400"
                   size="lg"
                   id="telepon"
-                  type="tel"
                   value={Telepon}
-                  onChange={(e) => {
-                    handlePutProfile(e);
-                  }}
+                  onChange={handlePutProfile}
                   placeholder="Masukkan nomor telepon"
                 />
               </FormControl>
@@ -249,9 +241,7 @@ export const ProfileAdmin = () => {
                   size="lg"
                   id="negara"
                   value={Negara}
-                  onChange={(e) => {
-                    handlePutProfile(e);
-                  }}
+                  onChange={handlePutProfile}
                   placeholder="Masukkan negara Anda"
                 />
               </FormControl>
@@ -262,13 +252,11 @@ export const ProfileAdmin = () => {
                   size="lg"
                   id="kota"
                   value={Kota}
-                  onChange={(e) => {
-                    handlePutProfile(e);
-                  }}
+                  onChange={handlePutProfile}
                   placeholder="Masukkan kota tempat tinggal"
                 />
               </FormControl>
-              <div className="my-4 sm:mt-2 sm:w-[25%]">
+              <div className="my-4 sm:mt-2 sm:w-[40%]">
                 <button
                   type="submit"
                   className="w-full p-3 sm:py-3 bg-gradientkanan rounded-lg sm:rounded- text-white font-semibold text-sm tracking-[1px] hover:scale-110 transition-transform duration-300"
@@ -276,8 +264,8 @@ export const ProfileAdmin = () => {
                   Simpan profil saya
                 </button>
               </div>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>

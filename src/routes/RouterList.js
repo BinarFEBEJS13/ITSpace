@@ -15,9 +15,9 @@ import { Notifikasi } from "../pages/Notifikasi";
 import { Success } from "../pages/Success";
 import { Kursus } from "../pages/Kursus";
 import AdminLogin from "../pages/Admin/Login";
-import { TableKelas } from "../assets/components/Admin/TableKelas";
-import { TableUser } from "../assets/components/Admin/TableUser";
-import TabelTransaksi from "../assets/components/Admin/TabelTransaksi";
+import { TableKelas } from "../pages/Admin/TableKelas";
+import { TableUser } from "../pages/Admin/TableUser";
+import TabelTransaksi from "../pages/Admin/TabelTransaksi";
 
 import { Checkout } from "../pages/Checkout";
 import { Payment } from "../pages/Payment";
@@ -49,24 +49,69 @@ export const RouterList = () => {
         <Route path="/" element={<Beranda />}></Route>
         {/* Route Admin */}
         <Route path="/admin/login" element={<AdminLogin />}></Route>
-        <Route path="/admin/dashboard/course" element={<TokenProtectedAdmin><TableKelas /></TokenProtectedAdmin>}></Route>
+        <Route
+          path="/admin/dashboard/course"
+          element={
+            <TokenProtectedAdmin>
+              <TableKelas />
+            </TokenProtectedAdmin>
+          }
+        ></Route>
         <Route
           path="/admin/dashboard/transaksi"
-          element={<TokenProtectedAdmin><TabelTransaksi /></TokenProtectedAdmin>}
+          element={
+            <TokenProtectedAdmin>
+              <TabelTransaksi />
+            </TokenProtectedAdmin>
+          }
         ></Route>
-        <Route path="/admin/dashboard/users" element={<TokenProtectedAdmin><TableUser /></TokenProtectedAdmin>}></Route>
-        <Route path="/admin/dashboard/category" element={<TokenProtectedAdmin><Category/></TokenProtectedAdmin>}></Route>
-        <Route path="/admin/profile" element={<TokenProtectedAdmin><ProfileAdmin/></TokenProtectedAdmin>}></Route>
+        <Route
+          path="/admin/dashboard/users"
+          element={
+            <TokenProtectedAdmin>
+              <TableUser />
+            </TokenProtectedAdmin>
+          }
+        ></Route>
+        <Route
+          path="/admin/dashboard/category"
+          element={
+            <TokenProtectedAdmin>
+              <Category />
+            </TokenProtectedAdmin>
+          }
+        ></Route>
+        <Route
+          path="/admin/profile"
+          element={
+            <TokenProtectedAdmin>
+              <ProfileAdmin />
+            </TokenProtectedAdmin>
+          }
+        ></Route>
         <Route
           path="/admin/dashboard/course/:id/chapters"
-          element={<TokenProtected><Chapters /></TokenProtected>}
+          element={
+            <TokenProtected>
+              <Chapters />
+            </TokenProtected>
+          }
         ></Route>
-        <Route path="/kelassaya/:queryEnrollments" element={<BerandaKelasSaya />}></Route>
+        <Route
+          path="/kelassaya/:queryEnrollments"
+          element={<BerandaKelasSaya />}
+        ></Route>
         <Route path="/kursus/:querySearch" element={<Kursus />}></Route>
         <Route path="/detail-kelas/:courseId" element={<DetailKelas />}></Route>
         <Route path="/checkout/:courseId" element={<Checkout />}></Route>
-        <Route path="/payment/:courseId/:idTransactions" element={<Payment />}></Route>
-        <Route path="/success/payment/:courseId/:idTransactions" element={<Success />}></Route>
+        <Route
+          path="/payment/:courseId/:idTransactions"
+          element={<Payment />}
+        ></Route>
+        <Route
+          path="/success/payment/:courseId/:idTransactions"
+          element={<Success />}
+        ></Route>
         <Route
           path="/akun"
           element={
@@ -108,14 +153,15 @@ export const RouterList = () => {
           }
         ></Route>
 
-
-
         {/* category page */}
         <Route path="/category/uiux" element={<UIUX />}></Route>
         <Route path="/category/frontend" element={<Frontend />}></Route>
         <Route path="/category/backend" element={<Backend />}></Route>
         <Route path="/category/database" element={<Database />}></Route>
-        <Route path="/category/machinelearning" element={<MachineLearning />}></Route>
+        <Route
+          path="/category/machinelearning"
+          element={<MachineLearning />}
+        ></Route>
         <Route path="/category/datascience" element={<DataScience />}></Route>
       </Routes>
     </BrowserRouter>

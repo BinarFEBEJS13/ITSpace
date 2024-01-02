@@ -222,7 +222,7 @@ export const AddCourse = (props) => {
       <form
         encType="multipart/form-data"
         onSubmit={handleKelas}
-        className="pop-up overflow-y-auto max-h-[70%] lg:max-h-[95%] md:max-h-[95%] rounded-2xl w-[80%] xl:w-[65%] 2xl:w-[45%] bg-white absolute"
+        className="pop-up overflow-y-auto max-h-[85%] lg:max-h-[95%] md:max-h-[95%] rounded-2xl w-[80%] xl:w-[65%] 2xl:w-[45%] bg-white absolute"
       >
         <i
           onClick={props.handleClose}
@@ -252,7 +252,7 @@ export const AddCourse = (props) => {
                 <FormErrorMessage>{inputErrors.KodeKelas}</FormErrorMessage>
               )}
             </FormControl>
-            <FormControl isInvalid={inputErrors}>
+            <FormControl isInvalid={inputErrors.Kategori.length !== 0}>
               <FormLabel>Kategori</FormLabel>
               <Selectt
                 value={Kategori}
@@ -412,7 +412,7 @@ export const AddCourse = (props) => {
                   <div className="flex py-4 justify-between items-center border-2 rounded-lg border-[#D0D0D0] h-[30%] w-[95%]">
                     <div className="px-4 flex items-center text-xl gap-4">
                       <img width={70} height={40} alt="" src={selectedFile} />
-                      <p className="text-[12px]">{fileName}</p>
+                      <p className="text-[12px] ">{fileName}</p>
                     </div>
                     <div className="bg-red-500 p-2 mx-5 rounded-lg text-white  cursor-pointer">
                       <FaTrash onClick={handleDeleteImage} />
