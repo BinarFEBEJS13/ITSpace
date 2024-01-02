@@ -31,6 +31,8 @@ import { EmailResetPass } from "../pages/auth/EmailResetPass";
 import TokenProtected from "../assets/components/TokenProtected";
 import { Chapters } from "../assets/components/Admin/chapter/Chapters";
 import { Category } from "../assets/components/Admin/kategori/Category";
+import { ProfileAdmin } from "../assets/components/Admin/ProfileAdmin";
+import TokenProtectedAdmin from "../assets/components/Admin/TokenProtectedAdmin";
 
 export const RouterList = () => {
   return (
@@ -47,16 +49,17 @@ export const RouterList = () => {
         <Route path="/" element={<Beranda />}></Route>
         {/* Route Admin */}
         <Route path="/admin/login" element={<AdminLogin />}></Route>
-        <Route path="/admin/dashboard/course" element={<TokenProtected><TableKelas /></TokenProtected>}></Route>
+        <Route path="/admin/dashboard/course" element={<TokenProtectedAdmin><TableKelas /></TokenProtectedAdmin>}></Route>
         <Route
           path="/admin/dashboard/transaksi"
-          element={<TokenProtected><TabelTransaksi /></TokenProtected>}
+          element={<TokenProtectedAdmin><TabelTransaksi /></TokenProtectedAdmin>}
         ></Route>
-        <Route path="/admin/dashboard/users" element={<TokenProtected><TableUser /></TokenProtected>}></Route>
-        <Route path="/admin/dashboard/category" element={<TokenProtected><Category/></TokenProtected>}></Route>
+        <Route path="/admin/dashboard/users" element={<TokenProtectedAdmin><TableUser /></TokenProtectedAdmin>}></Route>
+        <Route path="/admin/dashboard/category" element={<TokenProtectedAdmin><Category/></TokenProtectedAdmin>}></Route>
+        <Route path="/admin/profile" element={<TokenProtectedAdmin><ProfileAdmin/></TokenProtectedAdmin>}></Route>
         <Route
           path="/admin/dashboard/course/:id/chapters"
-          element={<Chapters />}
+          element={<TokenProtected><Chapters /></TokenProtected>}
         ></Route>
         <Route path="/kelassaya/:queryEnrollments" element={<BerandaKelasSaya />}></Route>
         <Route path="/kursus/:querySearch" element={<Kursus />}></Route>
@@ -105,8 +108,7 @@ export const RouterList = () => {
           }
         ></Route>
 
-        {/* Route Admin */}
-        <Route path="/admin/login" element={<AdminLogin />}></Route>
+
 
         {/* category page */}
         <Route path="/category/uiux" element={<UIUX />}></Route>

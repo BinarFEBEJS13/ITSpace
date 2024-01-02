@@ -10,6 +10,7 @@ import Selectt from "react-select";
 import { Input } from "rsuite";
 
 export const EditCourse = (props) => {
+  const { handleClose, selectedCourseData, refetchData  } = props;
   const [NamaKelas, setNamaKelas] = useState("");
   const [Kategori, setKategori] = useState([]);
   const [KodeKelas, setKodeKelas] = useState("");
@@ -19,7 +20,7 @@ export const EditCourse = (props) => {
   const [Mentor, setMentor] = useState([]);
   const [Description, setDescription] = useState("");
   const [LinkKelas, setLinkKelas] = useState("");
-  const [fileName, setFileName] = useState("No selected file");
+  const [fileName, setFileName] = useState(selectedCourseData.fileName);
   const [selectedFile, setSelectedFile] = useState(null);
   const [Img, setImg] = useState(null);
   const [inputErrors, setInputErrors] = useState({
@@ -36,7 +37,6 @@ export const EditCourse = (props) => {
   const toast = useToast();
   const animatedComponents = makeAnimated();
 
-  const { handleClose, selectedCourseData, refetchData  } = props;
 
   const { data: Edit } = useGetCourseBYID({
     courseId: selectedCourseData.id,
@@ -88,6 +88,9 @@ export const EditCourse = (props) => {
       setSelectedFile(URL.createObjectURL(file));
       setFileName(file.name);
       setImg(file);
+    } else {
+      // Handle the case when no new file is selected
+      setFileName(selectedCourseData.fileName || "No selected file");
     }
   };
   const validateForm = () => {
@@ -245,15 +248,15 @@ export const EditCourse = (props) => {
     <form
       encType="multipart/form-data"
       onSubmit={handleKelas}
-      className="pop-up overflow-y-auto max-h-[70%] lg:max-h-[95%] rounded-2xl  md:w-[50%] lg:w-[] xl:w-[35%] bg-white absolute"
-    >
+      className="pop-up overflow-y-auto max-h-[70%] lg:max-h-[95%] md:max-h-[95%] rounded-2xl w-[70%] md:w-[78%] lg:w-[80%] xl:w-[65%] 2xl:w-[45%] bg-white absolute"
+      >
       <i
         onClick={props.handleClose}
         className="ri-close-fill absolute text-[#6148FF] right-3 top-3 font-bold text-3xl"
       ></i>
       <div className="flex items-center justify-center flex-col sm:gap-5">
         <h1 className="font-bold sm:text-xl text-[#6148FF] my-2">
-          Tambah Kelas
+          Edit Kelas
         </h1>
         <div className="flex flex-col gap-4 w-4/5 sm:w-4/5 ">
           <FormControl isInvalid={inputErrors.KodeKelas !== ""}>
@@ -319,8 +322,8 @@ export const EditCourse = (props) => {
             )}
           </FormControl>
 
-          <FormControl isInvalid={inputErrors.TipeKelas !== "1" || inputErrors.TipeKelas !== "0"}>
-            <FormLabel>Level</FormLabel>
+          <FormControl isInvalid={inputErrors.TipeKelas !== "" && (inputErrors.TipeKelas !== "1" || inputErrors.TipeKelas !== "0")}>
+            <FormLabel>Tipe Kelas</FormLabel>
             <Select
               id="level"
               value={TipeKelas}
@@ -342,7 +345,7 @@ export const EditCourse = (props) => {
             )}
           </FormControl>
 
-          <FormControl isInvalid={inputErrors.Level !== "BEGINNER" || inputErrors.Level !== "INTERMEDIATE" || inputErrors.Level !== "ADVANCED"}>
+          <FormControl isInvalid={inputErrors.Level !== "" && (inputErrors.Level !== "BEGINNER" || inputErrors.Level !== "INTERMEDIATE" || inputErrors.Level !== "ADVANCED")}>
             <FormLabel>Level</FormLabel>
             <Select
               id="TipeKelas"
@@ -407,35 +410,32 @@ export const EditCourse = (props) => {
           </FormControl>
 
           <div className="flex flex-col gap-1">
-            <FormLabel>Images</FormLabel>
-            <div className="py-4 bg-[#ebf3fc63] flex flex-col gap-4 justify-center items-center border-2 border-dashed- w-full h-[300px] pointer rounded-lg">
-              <div className="border-4 border-dashed border-[#D0D0D0] rounded-lg h-[70%] w-[90%] flex flex-col items-center justify-center">
-                <input
-                  className="opacity-0 translate-y-[3rem] translate-x-8"
-                  onChange={handleFileChange}
-                  type="file"
-                  accept="image/*"
-                />
-                <FaCloudArrowUp size={60} />
-                <p>Upload Your Image Here</p>
-              </div>
-              <div className="flex justify-between items-center border-4 rounded-lg border-[#D0D0D0] h-[30%] w-[90%]">
-                <div className="px-4 flex items-center text-xl gap-4">
-                  {selectedFile && (
-                    <>
-                      <img width={70} height={40} alt="" src={selectedFile} />
-                      <p>{fileName}</p>
-                    </>
-                  )}
+              <FormLabel>Images</FormLabel>
+              <div className="py-4 bg-[#e6e9ed36] flex flex-col gap-4 justify-center items-center border w-full h-[300px] pointer rounded-lg">
+                <div className="border-[3px] border-dashed border-[#D0D0D0] rounded-lg h-full w-[95%] flex flex-col items-center justify-center">
+                  <input
+                    className="opacity-0 translate-y-[3rem] translate-x-8"
+                    onChange={handleFileChange}
+                    type="file"
+                    accept="image/*"
+                  />
+                  <FaCloudArrowUp size={60} />
+                  <p>Upload Your Image Here</p>
                 </div>
                 {selectedFile && (
-                  <div className="bg-red-500 p-2 mx-5 rounded-lg  cursor-pointer">
-                    <FaTrash onClick={handleDeleteImage} />
+                  <div className="flex py-4 justify-between items-center border-2 rounded-lg border-[#D0D0D0] h-[30%] w-[95%]">
+                    <div className="px-4 flex items-center text-xl gap-4">
+                      <img width={70} height={40} alt="" src={selectedFile} />
+                      <p  className="text-[12px]">{fileName}</p>
+                      {console.log(fileName, "wokokeoke")}
+                    </div>
+                    <div className="bg-red-500 p-2 mx-5 rounded-lg text-white  cursor-pointer">
+                      <FaTrash onClick={handleDeleteImage} />
+                    </div>
                   </div>
                 )}
               </div>
             </div>
-          </div>
 
           <FormControl isInvalid={inputErrors.LinkKelas !== ""}>
             <FormLabel>Link Kelas</FormLabel>

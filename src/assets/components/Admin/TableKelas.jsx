@@ -154,7 +154,7 @@ export const TableKelas = () => {
   const cancelRef = React.useRef();
 
   return (
-    <div className="flex h-screen flex-col bg-[rgba(208,208,208,0.21)] sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
+    <div className="flex h-screen flex-col bg-[rgba(169,167,167,0.11)] sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
       <Sidebar setSidebarVisible={setSidebarVisible} />
 
       <div className=" w-full lg:overflow-x-hidden">
@@ -213,7 +213,7 @@ export const TableKelas = () => {
           <div className="flex gap-2 sm:gap-3">
             <h4
               onClick={handleOpen}
-              className="flex items-center gap-2 border-2 px-4 py-1 font-bold text-base rounded-2xl bg-[#6148FF] border-[#6148FF] text-white"
+              className="flex items-center gap-2 border-2 p-2  sm:px-4 sm:py-1 font-bold text-base rounded-2xl bg-[#6148FF] border-[#6148FF] text-white"
             >
               <img src={Tambah} alt="" />
               Add
@@ -450,7 +450,7 @@ export const TableKelas = () => {
         </div>
         {Kelas?.data?.courses.length >= 0 && (
           <div className="flex mt-2 gap-2 justify-end mx-[4rem]">
-            <div className="flex bg-[rgba(0,0,0,0.4)] rounded-[50px] p-3 gap-3 text-white">
+            <div className="flex bg-gray-300 shadow-xl rounded-lg p-3 gap-3 text-white">
               <div
                 onClick={handlePrev}
                 className={`p-1 rounded-[50px] bg-[#6048ff] ${
@@ -461,7 +461,7 @@ export const TableKelas = () => {
               >
                 <IoIosArrowBack />
               </div>
-              <p>{currentPage}</p>
+              <p className="text-black">{currentPage}</p>
               <div
                 onClick={handleNext}
                 className={`p-1 rounded-[50px] bg-[#6148FF] ${

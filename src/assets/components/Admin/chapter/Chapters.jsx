@@ -61,7 +61,7 @@ export const Chapters = () => {
   };
 
   return (
-    <div className="flex bg-[rgba(208,208,208,0.21)] h-screen flex-col sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
+    <div className="flex bg-[rgba(169,167,167,0.11)] h-screen flex-col sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
       {AddChapters && (
         <AddChapterPopup
           setAddChapters={setAddChapters}

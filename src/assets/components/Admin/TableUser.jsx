@@ -15,7 +15,6 @@ import { useGetUsers } from "../../../services/Admin/user/get-user";
 import { Header } from "./Header";
 import { DataDashboard } from "./DataDashboard";
 import { Sidebar } from "./Sidebar";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { IoChevronDownCircleOutline } from "react-icons/io5";
 
 export const TableUser = () => {
@@ -23,7 +22,7 @@ export const TableUser = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
 
   return (
-    <div className="flex h-screen bg-[rgba(208,208,208,0.21)] flex-col sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
+    <div className="flex h-screen bg-[rgba(169,167,167,0.11)] flex-col sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
       <Sidebar setSidebarVisible={setSidebarVisible} />
 
       <div className=" w-full lg:overflow-x-hidden">
@@ -34,31 +33,6 @@ export const TableUser = () => {
 
         <div className="mx-[2rem] md:mx-[2rem] flex justify-between ">
           <h1 className="font-bold text-normal sm:text-xl">Pengguna</h1>
-          <div className="flex gap-2 sm:gap-3">
-            <div>
-              <Menu>
-                <MenuButton
-                  border="1px"
-                  borderRadius="16px"
-                  color="#6148FF"
-                  borderColor="6148FF"
-                  colorScheme="white"
-                  as={Button}
-                  leftIcon={<IoChevronDownCircleOutline />}
-                >
-                  Filter
-                </MenuButton>
-                <MenuList>
-                  <MenuOptionGroup color="#6148FF" title="Level" type="radio">
-                    <MenuItemOption>Beginner</MenuItemOption>
-                    <MenuItemOption>Intermediate</MenuItemOption>
-                    <MenuItemOption>Advanced</MenuItemOption>
-                  </MenuOptionGroup>
-                  <MenuDivider />
-                </MenuList>
-              </Menu>
-            </div>
-          </div>
         </div>
         <form action="" className="mx-[2rem] md:mx-[2rem] relative mt-5">
           <input
