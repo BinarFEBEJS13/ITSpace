@@ -41,7 +41,7 @@ export const Sidebar = ({ setOpen, Open }) => {
       },
       loading: {
         title: "Logging Out...",
-        duration: 2500,
+        duration: 3000,
         isClosable: true,
         position: "top",
       },
@@ -52,9 +52,8 @@ export const Sidebar = ({ setOpen, Open }) => {
   };
 
   return (
-    <div>
       <div
-        className={`h-screen shadow-xl bg-white  ${
+        className={`h-screen  shadow-xl bg-white  ${
           Open ? "block z-50 bg-white fixed top-0 left-0" : "relative hidden"
         } xl:block  ${
           sidebarVisible ? "xl:w-[300px]" : "xl:w-28"
@@ -86,8 +85,8 @@ export const Sidebar = ({ setOpen, Open }) => {
           </span>
         </div>
         <hr className="border-2 border-[#D0D0D0] w-full mb-[3rem]" />
-        <div className="flex h-[70%] text-[#6148FF]">
-          <div className="w-full h-full justify-between ">
+        <div className="flex h-[60%] text-[#6148FF]">
+          <div className="w-full justify-between ">
             <div className="flex items-center flex-col w-full text-[1.2rem] h-full gap-2">
               <NavLink
                 to="/admin/dashboard/transaksi"
@@ -215,6 +214,5 @@ export const Sidebar = ({ setOpen, Open }) => {
           </div>
         </div>
       </div>
-    </div>
   );
 };

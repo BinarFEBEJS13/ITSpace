@@ -113,7 +113,7 @@ export const Chapters = () => {
         {Chapter?.data?.length === 0 ? (
           <div className="flex flex-col gap-6 items-center justify-center h-[60%] ">
             <img className="w-[70%] sm:w-[30%]" src={chapterImg} alt="" />
-            <h1 className="sm:text-xl font-bold text-[#6148FF]">Maaf Chapter untuk course ini tidak ada</h1>
+            <h1 className="sm:text-xl font-bold text-[#6148FF]">Maff chapter belum ada</h1>
           </div>
         ) : (
           <div>
@@ -124,7 +124,7 @@ export const Chapters = () => {
               <div className="flex items-center gap-3">
                 <h1 className="uppercase font-bold">{courses?.code}</h1>
                 <h1
-                  className={`rounded-[50px] font-bold px-3 text-white ${
+                  className={`rounded-[50px] text-[1.1rem] font-bold px-3 text-white ${
                     courses?.level === "BEGINNER"
                       ? " bg-[#73CA5C] "
                       : courses?.level === "INTERMEDIATE"
@@ -135,7 +135,7 @@ export const Chapters = () => {
                   {courses?.level}
                 </h1>
                 <h1
-                  className={`text-white rounded-full sm:px-3 px-2 py-1 font-bold ${
+                  className={`text-white text-[1.1rem] rounded-full sm:px-3 px-2 py-1 font-bold ${
                     Chapter?.data?.course?.isPremium === 1
                       ? "bg-[#6148FF]"
                       : "bg-[#73CA5C]"

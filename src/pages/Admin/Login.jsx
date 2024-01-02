@@ -4,7 +4,7 @@ import { FiEye } from "react-icons/fi";
 import { FiEyeOff } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { useLoginAdmin } from "../../services/Admin/auth/post-login-admin";
-import { useToast } from "@chakra-ui/react";
+import { Spinner, useToast } from "@chakra-ui/react";
 import { API_ENDPOINT } from "../../utils/api-endpoint";
 import http from "../../utils/http";
 
@@ -33,6 +33,7 @@ const Login = () => {
   const {
     mutate: loginAdmin,
     data,
+    isPending
   } = useLoginAdmin();
   
   // console.log(data, "pekep");
@@ -94,10 +95,6 @@ const Login = () => {
 
   }, [data]);
 
-  const googleLogin = () => {
-    window.open(`${process.env.REACT_APP_SERVER}/auth/google`)
-  }
-
   const handleLogin = () => {
     loginAdmin({
       email: Email,
@@ -157,7 +154,7 @@ const Login = () => {
               onClick={handleLogin}
               className="mt-3 text-white px-3 py-4 bg-gradientkanan rounded-2xl"
             >
-              Masuk
+              {isPending ? <Spinner size="md" /> : "Masuk"}
             </button>
           </div>
         </div>

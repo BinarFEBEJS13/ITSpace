@@ -1,22 +1,9 @@
 import React, { useState } from "react";
-import Filter from "../../../assets/svg/filter.svg";
-import SearhIcon from "../../../assets/svg/search-admin.svg";
-import {
-  Button,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItemOption,
-  MenuList,
-  MenuOptionGroup,
-  Spinner,
-} from "@chakra-ui/react";
-import { useGetUsers } from "../../../services/Admin/user/get-user";
-import { Header } from "./Header";
-import { DataDashboard } from "./DataDashboard";
-import { Sidebar } from "./Sidebar";
-import { IoChevronDownCircleOutline } from "react-icons/io5";
-
+import { Spinner } from "@chakra-ui/react";
+import { useGetUsers } from "../../services/Admin/user/get-user";
+import { Header } from "../../assets/components/Admin/Header";
+import { DataDashboard } from "../../assets/components/Admin/DataDashboard";
+import { Sidebar } from "../../assets/components/Admin/Sidebar";
 export const TableUser = () => {
   const { data: getUsers, isLoading } = useGetUsers();
   const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -31,23 +18,9 @@ export const TableUser = () => {
         {/* ========================= User Data =========================  */}
         <DataDashboard />
 
-        <div className="mx-[2rem] md:mx-[2rem] flex justify-between ">
-          <h1 className="font-bold text-normal sm:text-xl">Pengguna</h1>
+        <div className="mx-[2rem] md:mx-[2rem]">
+          <h1 className="font-bold text-normal sm:text-xl">Daftar Pengguna</h1>
         </div>
-        <form action="" className="mx-[2rem] md:mx-[2rem] relative mt-5">
-          <input
-            type="text"
-            placeholder="Search Nama Kelas"
-            className="sm pl-5 pr-10 border border-[#6148FF] w-full rounded-md py-2 flex items-center"
-          />
-          <button type="submit" className="flex justify-end items-center">
-            <img
-              className=" p-2 absolute right-2 top-0"
-              src={SearhIcon}
-              alt=""
-            />
-          </button>
-        </form>
         <div
           className={
             isLoading
@@ -72,7 +45,7 @@ export const TableUser = () => {
             //   </div>
             // )
             <div className="bg-white my-[2rem] px-[3rem] py-[1rem] rounded-[20px] overflow-x-auto">
-              <table className="w-full mt-5">
+              <table className="w-full">
                 <thead className="bg-[#EBF3FC] font-light md:font-normal text-md text-center">
                   <tr>
                     <th>ID</th>

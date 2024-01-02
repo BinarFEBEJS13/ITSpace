@@ -21,7 +21,7 @@ export const Header = () => {
   };
 
   return (
-    <div className="w-full flex items-center justify-between px-[2rem]  h-[100px] bg-gradientkanan">
+    <div className="w-full z-0 flex items-center justify-between px-[2rem]  h-[100px] bg-gradientkanan">
       {Open && (
         <div className="h-full bg-[rgba(0,0,0,0.8)] ">
           <Sidebar Open={Open} setOpen={setOpen} />
@@ -36,10 +36,10 @@ export const Header = () => {
           Hi {UsersID?.data?.profile?.name}
         </h1>
       </div>
-      <div className="flex justify-center mt-3 items-center mb-5">
+      <div className="flex  justify-center mt-3 items-center mb-5">
         <Wrap>
           <WrapItem>
-            <Avatar outline="blue" size="lg" src={UsersID?.data?.profile?.profilePicture} />
+            <Avatar  outline="blue" size="lg" src={UsersID?.data?.profile?.profilePicture} />
           </WrapItem>
         </Wrap>
       </div>
