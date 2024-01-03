@@ -296,7 +296,7 @@ export const Beranda = () => {
                       <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
                     </div>
                   ) : datasCourses?.length > 0 ? (
-                    <div className="w-full sm:hidden grid grid-cols-2 gap-4">
+                    <div className="w-full sm:hidden grid grid-cols-2 gap-3 sm:gap-4">
                       {/* Card Premium */}
                       {datasCourses?.slice(0, 10).map((value) => {
                         return (

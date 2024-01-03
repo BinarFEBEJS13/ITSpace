@@ -347,7 +347,7 @@ export const BerandaKelasSaya = () => {
                         <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
                       </div>
                     ) : SortDataMyEnrollment?.length > 0 ? (
-                      <div className=" w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+                      <div className=" w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
                         {/* Card Beli */}
                         {dataKelas?.map((value) => {
                           const totalVideos = value?.chapter?.reduce((acc, chapter) => acc + chapter.video.length, 0);
