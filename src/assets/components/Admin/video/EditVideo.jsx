@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import { usePostDataVideos } from "../../../../services/Admin/videos/post-data-videos";
-import { FormControl, FormErrorMessage, FormLabel, useToast } from "@chakra-ui/react";
-import { useGetDataChaptersID } from "../../../../services/Admin/chapters/get-chapterID";
+import { FormControl, FormErrorMessage, FormLabel, Input, useToast } from "@chakra-ui/react";
 import { useGetDataVideoId } from "../../../../services/Admin/videos/get-data-videoID";
 import { EditVideos, useEditVideo } from "../../../../services/Admin/videos/put-data-videos";
-import { Input } from "rsuite";
 import { duration } from "@mui/material";
 
 export const EditVideo = ({
@@ -38,12 +36,12 @@ export const EditVideo = ({
     setNumber(selectVideo.number);
   }, []);
 
-  const { data: videoID } = useGetDataVideoId({
+  const { data: videoID, refetch } = useGetDataVideoId({
     courseId: courseId,
     chapterId: chapterId,
     videoId: selectVideo.id,
   });
-
+console.log(videoID, "ooeooe");
   const validateForm = () => {
     let isValid = true;
     const errors = {
@@ -98,7 +96,6 @@ export const EditVideo = ({
     }
   };
 
-//    
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -122,7 +119,7 @@ export const EditVideo = ({
         status: "success",
         position: "top",
       });
-      reloadData()
+      refetch()
     }).catch((err) => {
       toast({
         title: err?.response?.data?.message,

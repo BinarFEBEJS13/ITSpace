@@ -150,7 +150,7 @@ const TabelTransaksi = () => {
             placeholder="dd/mm/yyyy"
             onChange={(value) => setDateRange(value)}
             value={dateRange}
-            className="rounded-lg"
+            className="date-picker-popover rounded-lg"
           />
         </div>
 

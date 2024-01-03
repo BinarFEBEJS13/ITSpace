@@ -19,4 +19,4 @@ const useDeleteVideo = () => {
     })
 }
 
-export {useDeleteVideo}
+export {useDeleteVideo,deleteVideo}

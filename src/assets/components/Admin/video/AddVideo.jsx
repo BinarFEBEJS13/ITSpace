@@ -112,6 +112,8 @@ export const AddVideo = ({
         toast({
           title: result?.data?.message,
           duration: 9000,
+        isClosable: true,
+
           status: "success",
           position: "top",
         });
@@ -123,6 +125,8 @@ export const AddVideo = ({
           title: err?.response?.data?.message,
           duration: 9000,
           status: "error",
+        isClosable: true,
+
           position: "top",
         });
         return err;
