@@ -161,7 +161,7 @@ export const AddCourse = (props) => {
       .then((result) => {
         toast({
           title: result?.message || "Berhasil Menambah Kelas Baru",
-          duration: 9000,
+          duration: 5000,
           status: "success",
           isClosable: true,
           position: "top",
@@ -171,10 +171,9 @@ export const AddCourse = (props) => {
       .catch((err) => {
         toast({
           title: err?.response?.data?.message,
-          duration: 9000,
+          duration: 5000,
           status: "error",
           isClosable: true,
-
           position: "top",
         });
       });

@@ -129,7 +129,8 @@ export const AddChapterPopup = ({
             title: result?.data?.message,
             description: `Anda Telah Membuat chapter Dengan judul ${result?.data?.data?.title} `,
             status: "info",
-            duration: 9000,
+            duration: 5000,
+            isClosable: true,
             size: "lg",
             position: "top",
             colorScheme: "orange",
@@ -141,8 +142,9 @@ export const AddChapterPopup = ({
             title: err?.response?.data?.message,
             description: "Maaf terjadi kesalahan tolong cek kembali",
             status: "error",
-            duration: 9000,
+            duration: 5000,
             size: "lg",
+            isClosable: true,
             position: "top",
           });
         });
@@ -179,7 +181,7 @@ export const AddChapterPopup = ({
       <form
         onSubmit={handleSubmit}
         encType="multipart/form-data"
-        className="pop-up overflow-y-auto  mt-[3rem]  rounded-lg w-[80%] xl:w-[25%] bg-white absolute"
+        className="pop-up overflow-y-auto  mt-[3rem]  rounded-lg w-[70%] lg:w-[40%] xl:w-[25%] bg-white absolute"
       >
         <FaXmark
           onClick={toggleClose}

@@ -5,7 +5,6 @@ import http from "../../../utils/http"
 
 const deleteVideo = async ({courseId, chapterId, videoId}) => {
     const {data} =  await http.delete(`${API_ENDPOINT.COURSES}/${courseId}/chapters/${chapterId}/videos/${videoId}`).then((result) => {
-        console.log(result, "ress");
        return result 
     }).catch((err) => {
         return err

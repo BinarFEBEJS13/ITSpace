@@ -10,7 +10,6 @@ export const EditVideo = ({
   chapterId,
   selectVideo,
   settoggleForm,
-  reloadData
 }) => {
   const [Judul, setJudul] = useState("");
   const [Deskripsi, setDeskripsi] = useState("");
@@ -119,7 +118,7 @@ export const EditVideo = ({
         status: "success",
         position: "top",
       });
-      refetch()
+      return result
     }).catch((err) => {
       toast({
         title: err?.response?.data?.message,
@@ -139,7 +138,7 @@ export const EditVideo = ({
     <div className="w-full z-40 h-full fixed top-0 left-0 bg-[rgba(0,0,0,0.4)] flex items-start justify-center">
     <form
       onSubmit={handleSubmit}
-      className="bg-white flex rounded-lg shadow-lg flex-col items-center justify-center w-[80%] md:w-[70%] xl:w-[30%] mt-[5rem]"
+      className="bg-white flex rounded-lg shadow-lg flex-col max-h-[60%] overflow-y-auto w-[80%] md:w-[70%] xl:w-[30%] mt-[5rem]"
     >
       <div className="flex justify-between w-full px-6 my-4">
         <h1 className="font-bold text-2xl">Edit Video</h1>

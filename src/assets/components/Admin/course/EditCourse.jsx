@@ -184,7 +184,7 @@ export const EditCourse = (props) => {
     editDataCourse({ id: selectedCourseData.id, input: formData }).then((result) => {
       toast({
         title: result?.message,
-        duration: 9000,
+        duration: 5000,
         status: "success",
         position: "top",
         isClosable: true,
@@ -193,7 +193,7 @@ export const EditCourse = (props) => {
     }).catch((err) => {
       toast({
         title: err?.response?.data?.message,
-        duration: 9000,
+        duration: 5000,
         status: "error",
         position: "top",
         isClosable: true,

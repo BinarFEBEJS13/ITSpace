@@ -8,16 +8,11 @@ export const DeleteVideo = ({
   chapterId,
   settoggleAlert,
   selectVideo,
-  reloadData
 }) => {
   const toggleClose = () => {
     settoggleAlert(false);
   };
   const toast = useToast()
-  
-  const { mutate: deleteVideosID, } = useDeleteVideo({
-
-  });
 
   const handleDelete = (id) => {
     deleteVideo({
@@ -27,7 +22,7 @@ export const DeleteVideo = ({
     }).then((result) => {
       console.log(result, "rrr");
       toast({
-        title: result?.data?.message,
+        title: result?.message,
         duration: 5000,
         status: "success",
         isClosable: true,
@@ -43,7 +38,6 @@ export const DeleteVideo = ({
         position: "top",
       });
     });;
-    reloadData()
     settoggleAlert(false)
   };
 
@@ -51,7 +45,7 @@ export const DeleteVideo = ({
     <div className="w-full p-5 z-40 h-full fixed top-0 left-0 bg-[rgba(0,0,0,0.4)] flex items-start justify-center">
       <div className="bg-white flex rounded-lg shadow-lg flex-col items-center justify-center mt-[5rem]">
         <div className="flex justify-between w-full px-6 my-4">
-          <h1 className="font-bold text-2xl">Delete Video</h1>
+          <h1 className="font-bold text-2xl">Hapus Video</h1>
           <FaXmark
             className="font-bold text-2xl cursor-pointer"
             onClick={toggleClose}
@@ -59,19 +53,19 @@ export const DeleteVideo = ({
         </div>
         <div className="flex flex-col gap-2 w-full px-6">
           <div className="flex flex-col text-lg">
-            <label htmlFor="">Are You Sure You Want To Delete This</label>
+            <label htmlFor="">Apakah yakin ingin menghapus video ini?</label>
           </div>
         </div>
         <div className="flex gap-3 justify-end items-end w-full px-5 my-5">
           <button
             onClick={() => handleDelete(selectVideo.id)}
-            className="bg-[#FF0000] text-white rounded-lg px-5 py-3"
+            className="font-bold bg-[#FF0000] text-white rounded-lg px-5 py-3"
           >
             Delete
           </button>
           <button
             onClick={toggleClose}
-            className="bg-gray-200 text-black rounded-lg p-3"
+            className="font-bold bg-gray-200 text-black rounded-lg p-3"
           >
             Cancel
           </button>
