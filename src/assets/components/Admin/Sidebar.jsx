@@ -35,21 +35,21 @@ export const Sidebar = ({ setOpen, Open }) => {
     toast.promise(examplePromise, {
       success: {
         title: "Berhasil Keluar",
-        duration: 3000,
+        duration: 4000,
         isClosable: true,
         position: "top",
       },
       error: { title: 'Promise rejected', description: 'Something wrong' },
       loading: {
         title: "Tunggu Proses...",
-        duration: 3000,
+        duration: 4000,
         isClosable: true,
         position: "top",
       },
     });
     setTimeout(() => {
       navigate("/admin/login");
-    }, 3000);
+    }, 4000);
   };
 
   return (

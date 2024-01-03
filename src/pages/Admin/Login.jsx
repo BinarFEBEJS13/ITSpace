@@ -36,7 +36,6 @@ const Login = () => {
     isPending
   } = useLoginAdmin();
   
-  // console.log(data, "pekep");
 
   useEffect(() => {
       if (data?.data?.data?.profile?.role === "ADMIN") {
@@ -54,7 +53,7 @@ const Login = () => {
       }
       else if (data?.data?.data?.profile?.role === "USER") {
         toast({
-          title: "Your Account is not an Admin",
+          title: "Akun anda bukan Admin",
           status : "error",
           position : "top-right",
           isClosable : true,
@@ -64,7 +63,7 @@ const Login = () => {
       }
       else if (data?.response?.status === 400){
         toast({
-          title : "Please Fill All Input",
+          title : "Kolom masih ada yang kosong",
           status: "error",
           position : "top-right",
           duration : 4000,
@@ -74,7 +73,7 @@ const Login = () => {
       }
       else if (data?.response?.status === 401){
         toast({
-          title : "",
+          title : "Email atau password salah",
           status: "error",
           duration : 4000,
           position : "top-right",
@@ -84,7 +83,7 @@ const Login = () => {
       }
       else if (data?.response?.status === 403){
         toast({
-          title : "Unauthorized Account",
+          title : "Akun anda tidak memiliki akses",
           status: "error",
           duration : 4000,
           position : "top-right",
@@ -113,19 +112,19 @@ const Login = () => {
           <h1 className="text-[#6148FF] font-bold text-2xl">Login</h1>
           <div className="flex flex-col w-4/5 px-[1rem] md:w-3/4 lg:w-2/3 mt-10 gap-4">
             <div className="flex flex-col">
-              <label htmlFor="">ID Admin</label>
+              <label htmlFor="">Email Admin</label>
               <input
                 id="email"
                 onChange={handleInput}
                 className="px-3 py-4 rounded-2xl border border-[#D0D0D0]"
                 type="text"
-                placeholder="ID Admin"
+                placeholder="Masukkan email admin"
                 required
               />
             </div>
             <div className="flex flex-col relative">
               <div className="flex justify-between">
-                <label htmlFor="">Password</label>
+                <label htmlFor="">Password Admin</label>
                 <Link className="text-[#6148FF]" to="">
                   Lupa Kata Sandi
                 </Link>
@@ -135,7 +134,7 @@ const Login = () => {
                 onChange={handleInput}
                 className=" px-3 py-4 rounded-2xl border border-[#D0D0D0]"
                 type={showPassword ? "text" : "password"}
-                placeholder="Password"
+                placeholder="Masukkan password admin"
                 required
               />
               {showPassword ? (
