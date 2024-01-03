@@ -49,6 +49,7 @@ export const TableKelas = () => {
   const [levelFilter, setlevelFilter] = useState("");
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [tipeKelasFilter, settipeKelasFilter] = useState("");
+  const [isFilterActive, setIsFilterActive] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -107,18 +108,42 @@ export const TableKelas = () => {
     },
   });
 
-  const handleFilterByLevel = (selectedLevel) => {
-    setlevelFilter(selectedLevel);
-    setCurrentPage(1);
-  };
-
   const handleFilterByTipeKelas = (selectedLevel) => {
-    settipeKelasFilter(selectedLevel);
+    if (tipeKelasFilter === selectedLevel) {
+      // Jika filter sudah aktif, reset filter
+      settipeKelasFilter("");
+      setIsFilterActive(false);
+    } else {
+      // Jika filter belum aktif, set filter
+      settipeKelasFilter(selectedLevel);
+      setIsFilterActive(true);
+    }
     setCurrentPage(1);
   };
-
+  
+  const handleFilterByLevel = (selectedLevel) => {
+    if (levelFilter === selectedLevel) {
+      // Jika filter sudah aktif, reset filter
+      setlevelFilter("");
+      setIsFilterActive(false);
+    } else {
+      // Jika filter belum aktif, set filter
+      setlevelFilter(selectedLevel);
+      setIsFilterActive(true);
+    }
+    setCurrentPage(1);
+  };
+  
   const handleFilterByCategory = (selectedCategory) => {
-    setCategoryFilter(selectedCategory);
+    if (CategoryFilter === selectedCategory) {
+      // Jika filter sudah aktif, reset filter
+      setCategoryFilter("");
+      setIsFilterActive(false);
+    } else {
+      // Jika filter belum aktif, set filter
+      setCategoryFilter(selectedCategory);
+      setIsFilterActive(true);
+    }
     setCurrentPage(1);
   };
 
@@ -152,6 +177,13 @@ export const TableKelas = () => {
   const handleClose = () => {
     setAddPopupForm(false);
     setPopupEdit(false);
+  };
+  const handleResetFilter = () => {
+    settipeKelasFilter("");
+    setlevelFilter("");
+    setCategoryFilter("");
+    setIsFilterActive(false);
+    setCurrentPage(1);
   };
   const cancelRef = React.useRef();
   return (
@@ -230,7 +262,7 @@ export const TableKelas = () => {
                   as={Button}
                   leftIcon={<IoChevronDownCircleOutline />}
                 >
-                  Filter
+                  {isFilterActive ? "Reset Filter" : "Filter"}
                 </MenuButton>
                 <MenuList>
                   <MenuOptionGroup
