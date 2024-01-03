@@ -220,7 +220,7 @@ export const TableKelas = () => {
               Add
             </h4>
             <div>
-              <Menu>
+              <Menu flip preventOverflow placement="auto">
                 <MenuButton
                   border="1px"
                   borderRadius="16px"
@@ -236,7 +236,7 @@ export const TableKelas = () => {
                   <MenuOptionGroup
                     color="#6148FF"
                     title="Tipe Kelas"
-                    type="radio"
+                    type="checkbox"
                   >
                     <MenuItemOption
                       onClick={() => handleFilterByTipeKelas("1")}
@@ -251,7 +251,7 @@ export const TableKelas = () => {
                       GRATIS
                     </MenuItemOption>
                   </MenuOptionGroup>
-                  <MenuOptionGroup color="#6148FF" title="Level" type="radio">
+                  <MenuOptionGroup color="#6148FF" title="Level" type="checkbox">
                     <MenuItemOption
                       onClick={() => handleFilterByLevel("BEGINNER")}
                       value="BEGINNER"
@@ -274,7 +274,7 @@ export const TableKelas = () => {
                   <MenuDivider />
                   <MenuOptionGroup
                     color="#6148FF"
-                    type="radio"
+                    type="checkbox"
                     title="Category"
                   >
                     {categoryCourse?.data?.map((filterCategory, index) => (
