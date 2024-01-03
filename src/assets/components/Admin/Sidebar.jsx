@@ -34,21 +34,22 @@ export const Sidebar = ({ setOpen, Open }) => {
     logoutAdmin();
     toast.promise(examplePromise, {
       success: {
-        title: "Logout Success",
-        duration: 3000,
+        title: "Berhasil Keluar",
+        duration: 4000,
         isClosable: true,
         position: "top",
       },
+      error: { title: 'Promise rejected', description: 'Something wrong' },
       loading: {
-        title: "Logging Out...",
-        duration: 3000,
+        title: "Tunggu Proses...",
+        duration: 4000,
         isClosable: true,
         position: "top",
       },
     });
     setTimeout(() => {
       navigate("/admin/login");
-    }, 3000);
+    }, 4000);
   };
 
   return (
