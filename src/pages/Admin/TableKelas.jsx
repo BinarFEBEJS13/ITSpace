@@ -345,7 +345,6 @@ export const TableKelas = () => {
                     <th>Mentor</th>
                     <th>Harga Kelas</th>
                     <th>Image</th>
-                    <th>Description</th>
                     <th className="text-center">EDIT</th>
                     <th className="text-center">DELETE</th>
                     <th className="text-center">Chapters</th>
@@ -412,7 +411,6 @@ export const TableKelas = () => {
                             alt=""
                           />
                         </td>
-                        <td className="truncate-4-lines">{kelas.description}</td>
                         <td>
                           <button
                             onClick={() => handleEdit(kelas.id)}
