@@ -184,3 +184,10 @@ input[type="radio"] {
     max-width: 80% !important;  
   }
 }
+
+.truncate-4-lines {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4; /* Atur jumlah maksimal baris yang ingin ditampilkan */
+}

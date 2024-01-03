@@ -451,6 +451,7 @@ export const AddCourse = (props) => {
             <FormControl isInvalid={inputErrors.Description !== ""}>
               <FormLabel>Deskripsi</FormLabel>
               <Textarea
+              size= "lg"
                 id="description"
                 value={Description}
                 onChange={(e) => {

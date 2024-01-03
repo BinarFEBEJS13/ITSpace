@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
-import { usePostDataVideos } from "../../../../services/Admin/videos/post-data-videos";
+
 import { FormControl, FormErrorMessage, FormLabel, Input, Textarea, useToast } from "@chakra-ui/react";
 import { useGetDataVideoId } from "../../../../services/Admin/videos/get-data-videoID";
 import { EditVideos, useEditVideo } from "../../../../services/Admin/videos/put-data-videos";
-import { duration } from "@mui/material";
 
 export const EditVideo = ({
   courseId,
@@ -41,7 +40,7 @@ export const EditVideo = ({
     chapterId: chapterId,
     videoId: selectVideo.id,
   });
-console.log(videoID, "ooeooe");
+
   const validateForm = () => {
     let isValid = true;
     const errors = {

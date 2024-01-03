@@ -412,7 +412,7 @@ export const TableKelas = () => {
                             alt=""
                           />
                         </td>
-                        <td>{kelas.description}</td>
+                        <td className="truncate-4-lines">{kelas.description}</td>
                         <td>
                           <button
                             onClick={() => handleEdit(kelas.id)}
