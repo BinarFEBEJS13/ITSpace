@@ -374,8 +374,8 @@ export const Kursus = () => {
                                   <div className="text-xs sm:text-sm">
                                     <div className="flex text-white items-center">
                                       {value?.isPremium === true ? (
-                                        <div className="flex gap-1 sm:gap-2 bg-ungu-0 px-4 py-1 rounded-md">
-                                          <img src={diamond} alt="" className="hidden sm:block w-4" />
+                                        <div className="flex gap-2 bg-ungu-0 px-4 py-1 rounded-md">
+                                          <img src={diamond} alt="" className="w-[0.9rem] sm:w-4" />
                                           <span className="text-xs sm:text-sm">
                                             {value?.price &&
                                               Number(value.price).toLocaleString("id-ID", {
