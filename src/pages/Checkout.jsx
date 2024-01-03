@@ -30,7 +30,6 @@ import { useToast } from "@chakra-ui/react";
 import { useDataTransactions } from "../services/post-Datas-transactions";
 
 export const Checkout = () => {
-  // const navigate = useNavigate();
   const toast = useToast();
   const { courseId } = useParams();
   const [pembayaran, setPembayaran] = useState("");
@@ -62,7 +61,6 @@ export const Checkout = () => {
       });
     } else {
       toast({
-        title: "Gagal",
         description: "Silahkan pilih kursus yang lain",
         duration: 3000,
         status: "error",
@@ -77,7 +75,6 @@ export const Checkout = () => {
     }
     if (error?.response?.status === 401) {
       toast({
-        title: "Gagal",
         description: "Silahkan login terlebih dahulu",
         duration: 3000,
         status: "error",
@@ -89,7 +86,6 @@ export const Checkout = () => {
     }
     if (error?.response?.status === 400) {
       toast({
-        title: "Gagal",
         description: error?.response?.data?.message,
         duration: 3000,
         status: "error",
@@ -108,10 +104,6 @@ export const Checkout = () => {
     setPembayaran(pembayaran === item ? "" : item);
   };
 
-  // const handleGoBack = () => {
-  //   // untuk kembali ke halaman sebelumnya
-  //   navigate(-1);
-  // };
   return (
     <>
       <div className="overflow-x-hidden ">

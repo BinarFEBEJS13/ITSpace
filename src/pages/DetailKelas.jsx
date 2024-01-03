@@ -108,7 +108,7 @@ export const DetailKelas = () => {
     }
     if (successenrolment === true) {
       toast({
-        description: "kursus sudah ditambahkan kedalam kelas",
+        description: "Daftar Kelas Berhasil",
         duration: 3000,
         status: "success",
         position: "top",
@@ -153,7 +153,7 @@ export const DetailKelas = () => {
             <div className="px-6 sm:px-12 pt-4 sm:pt-8">
               <button onClick={() => navigate("/kursus/all")} className="flex gap-2 font-semibold items-center">
                 <img src={arrow} alt="" />
-                Kursus Lainnya
+                Kelas Lainnya
               </button>
             </div>
           </div>
@@ -229,7 +229,7 @@ export const DetailKelas = () => {
                           } `}
                           disabled={dataCheckEnrollment?.data === true}
                         >
-                          <img src={simpankelas} alt="simpankelas" /> Simpan Kelas
+                          <img src={simpankelas} alt="simpankelas" /> Daftar Kelas
                         </button>
                         <button
                           className={`${dataCheckEnrollment?.data === false ? "opacity-50 cursor-not-allowed" : ""} bg-yellow-500 rounded-md px-4 py-1 text-white text-xs xl:text-sm flex gap-1 items-center`}

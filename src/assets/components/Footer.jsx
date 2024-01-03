@@ -25,7 +25,7 @@ export const Footer = () => {
                 </div>
               </div>
               <div className="flex flex-col gap-3">
-                <h2 className="text-white font-bold">Kursus IT Space</h2>
+                <h2 className="text-white font-bold">Kelas IT Space</h2>
                 <div className="text-white opacity-80 flex flex-col gap-2 text-xs sm:text-sm">
                   <h6>UI/UX Design</h6>
                   <h6>FrontEnd</h6>

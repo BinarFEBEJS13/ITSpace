@@ -136,7 +136,7 @@ export const Frontend = () => {
                   <p>Jelajahi seluruh aspek menarik dalam profesi frontend developer, dan ditempat ini saatnya Anda memulai perjalanan dalam merambah dunia kode yang penuh kreativitas dan tantangan!</p>
                 </div>
               </div>
-              <div className="flex justify-center items-center font-semibold text-2xl sm:text-3xl">Kursus Rekomendasi</div>
+              <div className="flex justify-center items-center font-semibold text-2xl sm:text-3xl">Kelas Rekomendasi</div>
               <div className="flex w-full">
                 {isLoading ? (
                   // Display a loading indicator while the search is in progress

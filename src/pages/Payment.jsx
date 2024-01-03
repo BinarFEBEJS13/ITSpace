@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 // png kategori belajar
 import logo from "../assets/img/logo-navbar.png";
 // svg checkout
+import arrow from "../assets/svg/arrow-left-black.svg";
 import arrowwhite from "../assets/svg/arrow-right-white.svg";
 // png card e-wallet
 import dana from "../assets/img/payment/e-wallet/dana.png";
@@ -95,6 +96,18 @@ export const Payment = () => {
               <div className="flex sm:flex items-center w-2/6 sm:w-1/6  md:w-2/6">
                 <img src={logo} alt="" className="w-[12rem] sm:w-5/6 md:w-5/6 lg:w-[12rem]" />
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Button arrow kelas lainnnya */}
+        <div className="w-screen">
+          <div className="container mx-auto">
+            <div className="px-6 sm:px-20 pt-4 sm:pt-8">
+              <button onClick={() => (window.location.href = `/`)} className="flex gap-2 font-semibold items-center">
+                <img src={arrow} alt="kembali" />
+                Kembali Ke Beranda
+              </button>
             </div>
           </div>
         </div>
