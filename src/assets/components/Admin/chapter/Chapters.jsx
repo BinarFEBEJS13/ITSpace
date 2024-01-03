@@ -113,7 +113,7 @@ export const Chapters = () => {
         {Chapter?.data?.length === 0 ? (
           <div className="flex flex-col gap-6 items-center justify-center h-[60%] ">
             <img className="w-[70%] sm:w-[30%]" src={chapterImg} alt="" />
-            <h1 className="sm:text-xl font-bold text-[#6148FF]">Maff chapter belum ada</h1>
+            <h1 className="sm:text-xl font-bold text-[#6148FF]">Maaf chapter belum ada</h1>
           </div>
         ) : (
           <div>
