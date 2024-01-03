@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import {
-  GetDataVideoDirect, useGetDataVideo,
+  GetDataVideoDirect
 } from "../../../../services/Admin/videos/get-data-video";
 import { FaTrash } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
@@ -75,33 +75,26 @@ export const Video = ({ courseId, chapterId, fetchData }) => {
   const [toggleForm, settoggleForm] = useState("");
   const [toggleAlert, settoggleAlert] = useState("");
 
-const {data : GetVideo, refetch : reloadData } = useGetDataVideo({
-  courseId: courseId,
-  chapterId: chapterId
-})
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (courseId && chapterId) {
-          // Memanggil fungsi GetDataVideoDirect dengan queryKey yang sesuai
-          // await reloadData();
-          const videoData = await GetDataVideoDirect({
-            queryKey: [{ courseId, chapterId }],
-          });
-          setVideos(videoData);
-        } else {
-          // Handle kasus di mana courseId dan/atau chapterId tidak terdefinisi atau kosong
-          // Misalnya, setVideos([]) atau tindakan lain yang sesuai
-        }
-      } catch (error) {
-        console.error("Error fetching video data:", error);
-        // Handle error fetching data, misalnya menampilkan pesan kesalahan
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      if (courseId && chapterId) {
+        const videoData = await GetDataVideoDirect({
+          queryKey: [{ courseId, chapterId }],
+        });
+        
+        setVideos(videoData);
+      } else {
+        // Handle kasus di mana courseId dan/atau chapterId tidak terdefinisi atau kosong
+        // Misalnya, setVideos([]) atau tindakan lain yang sesuai
       }
-    };
+    } catch (error) {
+      console.error("Error fetching video data:", error);
+    }
+  };
 
-    // Memanggil fetchData saat komponen pertama kali dimuat atau saat courseId atau chapterId berubah
-    fetchData();
-  }, [courseId, chapterId]);
+  fetchData();
+}, [courseId, chapterId, videos]);
 
 
   const handleEdit = (videoId) => {
@@ -116,7 +109,6 @@ const {data : GetVideo, refetch : reloadData } = useGetDataVideo({
     settoggleAlert(true)
   };
 
-console.log(videos, "olollololo");
   const renderVideo = () => {
     if (videos) {
       if (videos?.data?.length > 0) {
@@ -153,10 +145,10 @@ console.log(videos, "olollololo");
   return (
     <div>
       {toggleAlert && (
-        <DeleteVideo reloadData={reloadData}  settoggleAlert={settoggleAlert} selectVideo={selectVideo} courseId={courseId} chapterId={chapterId} />
+        <DeleteVideo  settoggleAlert={settoggleAlert} selectVideo={selectVideo} courseId={courseId} chapterId={chapterId} />
       )}
       {toggleForm && (
-        <EditVideo reloadData={reloadData} settoggleForm={settoggleForm} selectVideo={selectVideo} courseId={courseId} chapterId={chapterId}/> 
+        <EditVideo  settoggleForm={settoggleForm} selectVideo={selectVideo} courseId={courseId} chapterId={chapterId}/> 
       ) 
       }
       <h1 className="mx-[2rem] md:mx-[1.5rem] font-bold text-lg mb-2">

@@ -17,8 +17,7 @@ export const AddVideo = ({
   setaddLinkPopUp,
   courseId,
   selectedChapter,
-  selectVideo,
-  reloadData,
+
 }) => {
   const [Judul, setJudul] = useState("");
   const [Deskripsi, setDeskripsi] = useState("");
@@ -39,8 +38,6 @@ export const AddVideo = ({
     courseId: courseId,
     chapterId: selectedChapter.id,
   });
-
-  console.log(selectVideo, "selectVideo");
 
   const handleonChange = (e) => {
     if (e) {
@@ -110,6 +107,7 @@ export const AddVideo = ({
       duration: Durasi,
       number: Number,
     }).then((result) => {
+      console.log(result, "QUACKK");
         toast({
           title: result?.data?.message,
           duration: 5000,
@@ -118,7 +116,6 @@ export const AddVideo = ({
           position: "top",
         });
         return result
-        reloadData();
       })
       .catch((err) => {
         toast({
@@ -137,10 +134,10 @@ export const AddVideo = ({
     setaddLinkPopUp(false);
   };
   return (
-    <div className="w-full z-40 h-full fixed top-0 left-0 bg-[rgba(0,0,0,0.4)] flex items-start justify-center">
+    <div className="w-full z-40 h-screen fixed top-0 left-0 bg-[rgba(0,0,0,0.4)] flex items-start justify-center">
       <form
         onSubmit={handleSubmit}
-        className="bg-white flex rounded-lg shadow-lg flex-col items-center justify-center w-[80%] md:w-[70%] xl:w-[30%]  mt-[5rem]"
+        className="bg-white flex rounded-lg max-h-[60%] shadow-lg flex-col overflow-y-auto  w-[80%] md:w-[70%] xl:w-[30%]  mt-[5rem]"
       >
         <div className="flex justify-between w-full px-6 my-4">
           <h1 className="font-bold text-2xl">Tambah Video</h1>

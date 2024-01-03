@@ -47,6 +47,7 @@ export const RouterList = () => {
         {/* Route Main */}
         {/* <Route path="/" element={<Beranda/>}></Route> */}
         <Route path="/" element={<Beranda />}></Route>
+
         {/* Route Admin */}
         <Route path="/admin/login" element={<AdminLogin />}></Route>
         <Route
@@ -92,11 +93,12 @@ export const RouterList = () => {
         <Route
           path="/admin/dashboard/course/:id/chapters"
           element={
-            <TokenProtected>
+            <TokenProtectedAdmin>
               <Chapters />
-            </TokenProtected>
+            </TokenProtectedAdmin>
           }
         ></Route>
+        
         <Route
           path="/kelassaya/:queryEnrollments"
           element={<BerandaKelasSaya />}

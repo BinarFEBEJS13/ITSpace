@@ -89,9 +89,9 @@ export const Chapters = () => {
         />
       )}
 
-      <div className="w-full lg:overflow-x-hidden">
+      <div className="w-full lg:overflow-x-hidden ">
         <Header />
-        <div className="mx-[2rem] my-[2rem] md:mx-[2rem] flex justify-between">
+        <div className="mx-[2rem] my-[2rem] md:mx-[2rem] flex justify-between ">
           <div className="flex text-3xl items-center gap-4">
             <FaArrowLeftLong
               onClick={() => navigate("/admin/dashboard/course")}
@@ -103,10 +103,10 @@ export const Chapters = () => {
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 sm:mx-[3rem]">
             <div
               onClick={toggleAddChapters}
-              className="flex items-center gap-2 py-1 px-2 border-2 sm:px-4 sm:py-2 font-bold text-base rounded-2xl bg-[#6148FF] border-[#6148FF] text-white"
+              className="flex items-center gap-2 py-2 px-3 border-2 sm:px-4 sm:py-2 font-bold text-base rounded-2xl bg-[#6148FF] border-[#6148FF] text-white"
             >
               <img src={Tambah} alt="" />
-              New Chapter
+              Tambah Chapter
             </div>
           </div>
         </div>
@@ -155,7 +155,7 @@ export const Chapters = () => {
                 >
                   <div className="flex justify-between">
                     <div className="w-full justify-center p-6 flex flex-col gap-3">
-                      <h1 className="text-xl font-semibold sm:text-4xl text-[#6148FF]">
+                      <h1 className="text-xl font-semibold sm:text-4xl text-black">
                         Chapter {chapter.number}
                       </h1>
                       <div className="capitalize  flex items-center gap-3">
@@ -171,10 +171,10 @@ export const Chapters = () => {
                           Tipe Chapter :
                         </label>
                         <span
-                          className={`px-2 py-1 sm:px-7 sm:py-3 text-white font-bold text-sm rounded-[25px] ${
+                          className={`font-semibold text-lg rounded-[25px] ${
                             chapter.isPremium === true
-                              ? "bg-[#6148FF]"
-                              : "bg-[#73CA5C]"
+                              ? "text-[#6148FF]"
+                              : "text-[#73CA5C]"
                           }`}
                         >
                           {chapter.isPremium === true ? "PREMIUM" : "GRATIS"}
