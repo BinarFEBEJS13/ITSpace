@@ -126,7 +126,7 @@ const TabelTransaksi = () => {
                       value="GERAI_RETAIL"
                       onClick={() => handleFilterByPayment("GERAI_RETAIL")}
                     >
-                      Kartu Kredit
+                      Gerai Retail
                     </MenuItemOption>
                     <MenuItemOption
                       value="E_WALLET"

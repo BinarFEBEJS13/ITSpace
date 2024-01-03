@@ -36,7 +36,7 @@ export const Category = () => {
           console.log(result);
           toast({
             title: result?.message,
-            duration: 9000,
+            duration: 5000,
             status: "success",
             isClosable: true,
             position: "top",
@@ -48,7 +48,7 @@ export const Category = () => {
         .catch((err) => {
           toast({
             title: err?.response?.data?.message,
-            duration: 9000,
+            duration: 5000,
             status: "error",
             isClosable: true,
             position: "top",
@@ -62,7 +62,7 @@ export const Category = () => {
           console.log(result, "KOCAK");
           toast({
             title: "Berhasil menambah kategori baru",
-            duration: 9000,
+            duration: 5000,
             status: "success",
             isClosable: true,
             position: "top",
@@ -73,7 +73,7 @@ export const Category = () => {
         .catch((err) => {
           toast({
             title: err?.response?.data?.message,
-            duration: 9000,
+            duration: 5000,
             status: "error",
             isClosable: true,
             position: "top",

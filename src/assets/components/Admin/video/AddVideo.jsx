@@ -8,6 +8,7 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  Textarea,
   useToast,
 } from "@chakra-ui/react";
 import { useGetDataChaptersID } from "../../../../services/Admin/chapters/get-chapterID";
@@ -111,9 +112,8 @@ export const AddVideo = ({
     }).then((result) => {
         toast({
           title: result?.data?.message,
-          duration: 9000,
+          duration: 5000,
         isClosable: true,
-
           status: "success",
           position: "top",
         });
@@ -123,10 +123,9 @@ export const AddVideo = ({
       .catch((err) => {
         toast({
           title: err?.response?.data?.message,
-          duration: 9000,
+          duration: 5000,
           status: "error",
         isClosable: true,
-
           position: "top",
         });
         return err;
@@ -228,7 +227,7 @@ export const AddVideo = ({
           </FormControl>
           <FormControl isInvalid={inputErrors.Deskripsi !== ""}>
             <FormLabel>Video Description</FormLabel>
-            <Input
+            <Textarea
               size="lg"
               id="desc"
               onChange={(e) => {

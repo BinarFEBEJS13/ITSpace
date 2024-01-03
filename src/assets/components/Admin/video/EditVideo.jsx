@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 import { usePostDataVideos } from "../../../../services/Admin/videos/post-data-videos";
-import { FormControl, FormErrorMessage, FormLabel, Input, useToast } from "@chakra-ui/react";
+import { FormControl, FormErrorMessage, FormLabel, Input, Textarea, useToast } from "@chakra-ui/react";
 import { useGetDataVideoId } from "../../../../services/Admin/videos/get-data-videoID";
 import { EditVideos, useEditVideo } from "../../../../services/Admin/videos/put-data-videos";
 import { duration } from "@mui/material";
@@ -115,7 +115,8 @@ console.log(videoID, "ooeooe");
     }).then((result) => {
       toast({
         title: result?.data?.message,
-        duration: 9000,
+        duration: 5000,
+        isClosable: true,
         status: "success",
         position: "top",
       });
@@ -123,8 +124,9 @@ console.log(videoID, "ooeooe");
     }).catch((err) => {
       toast({
         title: err?.response?.data?.message,
-        duration: 9000,
+        duration: 5000,
         status: "error",
+        isClosable: true,
         position: "top",
       });
     });
@@ -229,7 +231,7 @@ console.log(videoID, "ooeooe");
           </FormControl>
           <FormControl isInvalid={inputErrors.Deskripsi !== ""}>
             <FormLabel>Video Description</FormLabel>
-            <Input
+            <Textarea
             value={Deskripsi}
               size="lg"
               id="desc"

@@ -131,13 +131,14 @@ export const EditCourse = (props) => {
       errors.Level = "Pilih level Kelas";
       isValid = false;
     }
-    if (Harga === 0) {
-      errors.Harga = "Harga tidak boleh kosong";
+    if (Harga > 0 && TipeKelas === "0") {
+      errors.Harga = "Kelas Gratis tidak berbayar";
       isValid = false;
-    } else if (!Number.isInteger(Number(Harga))) {
-      errors.Harga = "Harga harus berupa angka bulat";
+    } else if (TipeKelas === "1" && Harga === 0) {
+      errors.Harga = "Masukkan harga untuk kelas premium";
       isValid = false;
     }
+
     if (!Mentor.length) {
       errors.Mentor = "Mentor tidak boleh kosong";
       isValid = false;
@@ -323,7 +324,7 @@ console.log(KodeKelas, "kodededededed");
               (inputErrors.TipeKelas !== "1" || inputErrors.TipeKelas !== "0")
             }
           >
-            <FormLabel>Level</FormLabel>
+            <FormLabel>Tipe Kelas</FormLabel>
             <Select
               id="TipeKelas"
               value={TipeKelas}
