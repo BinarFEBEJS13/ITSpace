@@ -141,7 +141,7 @@ const TabelTransaksi = () => {
             </div>
           </div>
         </div>
-        <div className="mx-[2rem] md:mx-[2rem]">
+        <div className="mx-[2rem] md:mx-[2rem] hidden sm:block">
           <DateRangePicker
             size="lg"
             editable={false}

@@ -208,6 +208,7 @@ export const ProfileAdmin = () => {
                 <Input
                   borderColor="gray.400"
                   size="lg"
+                  readOnly
                   id="email"
                   value={Email}
                   onChange={(e) => {
