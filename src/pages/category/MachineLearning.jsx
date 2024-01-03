@@ -136,7 +136,7 @@ export const MachineLearning = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex justify-center items-center font-semibold text-2xl sm:text-3xl">Kursus Rekomendasi</div>
+              <div className="flex justify-center items-center font-semibold text-2xl sm:text-3xl">Kelas Rekomendasi</div>
               <div className="flex w-full">
                 {isLoading ? (
                   // Display a loading indicator while the search is in progress

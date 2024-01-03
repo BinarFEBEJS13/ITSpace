@@ -72,12 +72,12 @@ export const Beranda = () => {
                     for Skills Up
                   </h2>
                   <p className="w-full xl:w-3/4 text-xs sm:text-sm xl:text-base text-center sm:text-start text-white opacity-90">
-                    Dengan kursus yang berkualitas dan fasilitas pembelajaran yang mendukung, membuka peluang untuk mengasah kemampuan dan meraih kesuksesan di dunia teknologi.
+                    Dengan kelas yang berkualitas dan fasilitas pembelajaran yang mendukung, membuka peluang untuk mengasah kemampuan dan meraih kesuksesan di dunia teknologi.
                   </p>
                 </div>
                 <div className="w-full flex justify-center sm:justify-start">
                   <button onClick={() => (window.location.href = "/kursus/all")} className="w-5/6 sm:w-3/4 md:w-3/4 lg:w-2/3 xl:w-1/2 bg-gradientbutton text-white px-8 py-2 rounded-md shadow-sm-button">
-                    Ikuti Kursus Sekarang
+                    Daftar Kelas Sekarang
                   </button>
                 </div>
               </div>
@@ -130,7 +130,7 @@ export const Beranda = () => {
             <div className="flex flex-col gap-6 px-6 sm:px-12 sm:py-8">
               {/* Judul Kursus Populer */}
               <div className="flex justify-between items-center">
-                <h1 className="text-xl sm:text-2xl font-bold">Kursus Populer</h1>
+                <h1 className="text-xl sm:text-2xl font-bold">Kelas Populer</h1>
                 <h6 onClick={() => (window.location.href = "/kursus/all")} className="text-ungu-0 text-sm cursor-pointer">
                   Lihat Semua...
                 </h6>

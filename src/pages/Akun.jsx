@@ -8,10 +8,11 @@ import { Profile } from "../assets/components/Profile";
 import { Pembayaran } from "../assets/components/Pembayaran";
 import { UbahPassword } from "../assets/components/UbahPassword";
 import { Link, useNavigate } from "react-router-dom";
-import { useLogoutUser } from "../services/auth/logout_user";
-import { CookieKeys, CookieStorage } from "../utils/cookies";
+import { postAuthLogout } from "../services/post-auth-logout";
+import { useToast } from "@chakra-ui/react";
 
 export const Akun = () => {
+  const toast = useToast();
   const [Akun, setAkun] = useState("profile");
   const navigate = useNavigate();
 
@@ -19,13 +20,19 @@ export const Akun = () => {
     setAkun(item);
   };
 
-  const { mutate: logoutUser } = useLogoutUser();
-
   const handleLogout = () => {
-    logoutUser();
-    CookieStorage.remove(CookieKeys.AccessToken);
-    CookieStorage.remove(CookieKeys.RefreshToken);
-    navigate("/login");
+    postAuthLogout()
+      .then((result) => {
+        navigate("/login");
+        toast({
+          description: "Logout Berhasil",
+          duration: 3000,
+          status: "success",
+          isClosable: true,
+          position: "top",
+        });
+      })
+      .catch((err) => {});
   };
 
   return (

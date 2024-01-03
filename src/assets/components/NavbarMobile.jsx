@@ -2,24 +2,29 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import masuk from "../svg/log-in.svg";
 import keluar from "../svg/log-out-white.svg";
-import { useAuthLogout } from "../../services/post-auth-logout";
+import { postAuthLogout } from "../../services/post-auth-logout";
+import { useToast } from "@chakra-ui/react";
 
 export const NavbarMobile = ({ onClose, isSuccessDecode }) => {
+  const toast = useToast();
   const navigate = useNavigate();
   const location = useLocation();
   const [dataToggle, setDataToggle] = useState(false);
 
-  const { mutate: logoutUser, data: dataLogout } = useAuthLogout();
-
   const handleLogoutUser = () => {
-    logoutUser();
+    postAuthLogout()
+      .then((result) => {
+        navigate("/login");
+        toast({
+          description: "Logout Berhasil",
+          duration: 3000,
+          status: "success",
+          isClosable: true,
+          position: "top",
+        });
+      })
+      .catch((err) => {});
   };
-
-  useEffect(() => {
-    if (dataLogout?.data?.success === true) {
-      window.location.href = "/login";
-    }
-  }, [dataLogout]);
 
   const handleActiveItem = (item) => {
     const cleanedPathname = location.pathname.slice(1);
@@ -70,10 +75,10 @@ export const NavbarMobile = ({ onClose, isSuccessDecode }) => {
                     Beranda
                   </button>
                   <button onClick={() => handleActiveItem("kursus")} className=" text-sm">
-                    Kursus
+                    Kelas
                   </button>
                   <button onClick={() => handleActiveItem("kelas")} className=" text-sm">
-                    Kelas
+                    Kelas Saya
                   </button>
                   <button onClick={() => handleActiveItem("notifikasi")} className=" text-sm">
                     Notifikasi
@@ -92,7 +97,7 @@ export const NavbarMobile = ({ onClose, isSuccessDecode }) => {
                     Beranda
                   </button>
                   <button onClick={() => handleActiveItem("kursus")} className=" text-sm">
-                    Kursus
+                    Kelas
                   </button>
                   <div onClick={() => navigate("/login")} className="flex gap-1 border border-white px-4 py-2 rounded-md text-sm">
                     <img src={masuk} alt="masuk" />

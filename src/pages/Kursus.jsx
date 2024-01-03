@@ -219,7 +219,7 @@ export const Kursus = () => {
           <div className="container mx-auto">
             <div className="flex flex-col gap-4 px-6 sm:px-12 py-4 sm:py-8">
               <div className="flex justify-between items-center">
-                <h1 className="text-xl sm:text-2xl font-bold">Daftar Kursus</h1>
+                <h1 className="text-xl sm:text-2xl font-bold">Daftar Kelas</h1>
                 <PencarianPageKursus />
                 <div onClick={handleFilter} className="flex gap-1 border border-ungu-0 rounded-md px-2 sm:hidden">
                   <img src={filterungu} alt="filter" className="w-4" />
@@ -314,14 +314,14 @@ export const Kursus = () => {
                       className={`${ActivePremium === "1" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
                       onClick={() => handleActivePremium("1")}
                     >
-                      Kursus Premium
+                      Kelas Premium
                     </button>
                     <button
                       value={"0"}
                       className={`${ActivePremium === "0" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
                       onClick={() => handleActivePremium("0")}
                     >
-                      Kursus Gratis
+                      Kelas Gratis
                     </button>
                   </div>
                   {/* Tampilin State Hasil pencarian dari search */}

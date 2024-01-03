@@ -94,7 +94,7 @@ export const Navbar = () => {
             <div className="flex items-center justify-center w-2/3 sm:w-2/6">
               <div className="relative w-full">
                 <form onSubmit={handleSubmit}>
-                  <input value={querySearch} onChange={(e) => setQuerySearch(e.target.value)} placeholder="cari kursus terbaik.." className="hidden sm:block pl-4 pr-14 w-full py-3 rounded-2xl"></input>
+                  <input value={querySearch} onChange={(e) => setQuerySearch(e.target.value)} placeholder="cari kelas terbaik.." className="hidden sm:block pl-4 pr-14 w-full py-3 rounded-2xl"></input>
                 </form>
                 <img onClick={handleSubmit} src={searchnav} alt="" className="hidden sm:block bg-biru-0 absolute top-1/2 transform -translate-y-1/2 right-3 rounded-md cursor-pointer p-1" />
                 {/* Pencarian untuk mobile */}
@@ -124,7 +124,7 @@ export const Navbar = () => {
                     {activeItem === "kursus" ? (
                       <div className="flex text-white gap-2 bg-gradientbutton px-4 py-1 rounded-md shadow-sm-button">
                         <img src={kursus} alt="" />
-                        Kursus
+                        Kelas
                       </div>
                     ) : (
                       <img src={kursus} alt="" className="" />
@@ -135,7 +135,7 @@ export const Navbar = () => {
                     {activeItem === "kelas" ? (
                       <div className="flex text-white gap-2 bg-gradientbutton px-4 py-1 rounded-md shadow-sm-button">
                         <img src={list} alt="" />
-                        Kelas
+                        Kelas Saya
                       </div>
                     ) : (
                       <img src={list} alt="" className="" />
@@ -183,7 +183,7 @@ export const Navbar = () => {
                     {activeItem === "kursus" ? (
                       <div className="flex text-white gap-2 bg-gradientbutton px-4 py-1 rounded-md shadow-sm-button">
                         <img src={kursus} alt="" />
-                        Kursus
+                        Kelas
                       </div>
                     ) : (
                       <img src={kursus} alt="" className="" />

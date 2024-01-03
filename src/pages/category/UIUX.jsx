@@ -151,7 +151,7 @@ export const UIUX = () => {
                   <p>Jelajahi aspek-aspek kreatif dari UI/UX tanpa terlibat dalam pengembangan frontend. Ditempat ini saatnya Anda untuk memulai perjalanan Anda dalam merancang pengalaman pengguna yang menarik dan efektif!!</p>
                 </div>
               </div>
-              <div className="flex justify-center items-center font-semibold text-2xl sm:text-3xl">Kursus Rekomendasi</div>
+              <div className="flex justify-center items-center font-semibold text-2xl sm:text-3xl">Kelas Rekomendasi</div>
               <div className="flex w-full">
                 {isLoading ? (
                   // Display a loading indicator while the search is in progress
