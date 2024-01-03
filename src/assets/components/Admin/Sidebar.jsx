@@ -34,14 +34,14 @@ export const Sidebar = ({ setOpen, Open }) => {
     logoutAdmin();
     toast.promise(examplePromise, {
       success: {
-        title: "Logout Success",
+        title: "Berhasil Keluar",
         duration: 3000,
         isClosable: true,
         position: "top",
       },
       error: { title: 'Promise rejected', description: 'Something wrong' },
       loading: {
-        title: "Logging Out...",
+        title: "Tunggu Proses...",
         duration: 3000,
         isClosable: true,
         position: "top",
