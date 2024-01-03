@@ -13,7 +13,7 @@ export const ExpirationPayment = ({ courseId }) => {
           </div>
           <div className="flex flex-col w-2/3 lg:w-1/3 gap-2">
             <button onClick={() => (window.location.href = `/detail-kelas/${courseId}`)} className="bg-ungu-0 text-white px-4 py-2 rounded-md">
-              Kembali ke Kursus
+              Kembali ke Kelas
             </button>
           </div>
         </div>
