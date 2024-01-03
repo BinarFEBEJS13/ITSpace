@@ -215,7 +215,7 @@ export const DetailKelas = () => {
                       <div className={`${dataDecode?.message === "jwt verify succes" ? "flex flex-wrap w-full gap-2 text-xs xl:text-sm" : "hidden"}  `}>
                         <button
                           className={`${dataCoursesId?.groupUrl === undefined ? "opacity-50 cursor-not-allowed" : ""} bg-[#2AABEE] rounded-md px-4 py-1 text-white text-xs xl:text-sm flex gap-2 items-center`}
-                          disabled={dataCoursesId?.groupUrl === undefined}
+                          disabled={dataCheckEnrollment?.data === false}
                         >
                           <a href={dataCoursesId?.groupUrl} target="_blank" rel="noopener noreferrer" className="flex gap-1  items-center">
                             <img src={tele} alt="telegram" className="w-5" />
