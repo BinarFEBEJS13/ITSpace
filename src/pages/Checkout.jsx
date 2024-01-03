@@ -24,13 +24,13 @@ import bni from "../assets/img/payment/virtual-account/bni.png";
 import bri from "../assets/img/payment/virtual-account/bri.png";
 import mandiri from "../assets/img/payment/virtual-account/mandiri.png";
 
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useGetDataCoursesId } from "../services/get-Datas-CoursesId";
 import { useToast } from "@chakra-ui/react";
 import { useDataTransactions } from "../services/post-Datas-transactions";
 
 export const Checkout = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const toast = useToast();
   const { courseId } = useParams();
   const [pembayaran, setPembayaran] = useState("");
@@ -108,10 +108,10 @@ export const Checkout = () => {
     setPembayaran(pembayaran === item ? "" : item);
   };
 
-  const handleGoBack = () => {
-    // untuk kembali ke halaman sebelumnya
-    navigate(-1);
-  };
+  // const handleGoBack = () => {
+  //   // untuk kembali ke halaman sebelumnya
+  //   navigate(-1);
+  // };
   return (
     <>
       <div className="overflow-x-hidden ">
@@ -131,7 +131,7 @@ export const Checkout = () => {
         <div className="w-screen">
           <div className="container mx-auto">
             <div className="px-6 sm:px-20 pt-4 sm:pt-8">
-              <button onClick={handleGoBack} className="flex gap-2 font-semibold items-center">
+              <button onClick={() => (window.location.href = `/detail-kelas/${courseId}`)} className="flex gap-2 font-semibold items-center">
                 <img src={arrow} alt="kembali" />
                 Kembali
               </button>
