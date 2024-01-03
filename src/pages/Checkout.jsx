@@ -83,6 +83,9 @@ export const Checkout = () => {
         status: "error",
         position: "top",
       });
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1500);
     }
     if (error?.response?.status === 400) {
       toast({
