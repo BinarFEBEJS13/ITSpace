@@ -402,7 +402,7 @@ export const AddCourse = (props) => {
 
             <div className="flex flex-col gap-1">
               <FormLabel>Images</FormLabel>
-              <div className="py-4 bg-[#e6e9ed36] flex flex-col gap-4 justify-center items-center border w-full h-[300px] pointer rounded-lg">
+              <div className="py-4 bg-[#e6e9ed36] flex flex-col gap-4 justify-center items-center border w-full h-[500px] sm:h-[300px] pointer rounded-lg">
                 <div className="border-[3px] border-dashed border-[#D0D0D0] rounded-lg h-full w-[95%] flex flex-col items-center justify-center">
                   <input
                     className="opacity-0 translate-y-[3rem] translate-x-8"
@@ -417,7 +417,7 @@ export const AddCourse = (props) => {
                   <div className="flex py-4 justify-between items-center border-2 rounded-lg border-[#D0D0D0] h-[30%] w-[95%]">
                     <div className="px-4 flex items-center text-xl gap-4">
                       <img width={70} height={40} alt="" src={selectedFile} />
-                      <p className="text-[12px] ">{fileName}</p>
+                      <span className="text-xs md:text-lg max-w-[1000px] ">{fileName}</span>
                     </div>
                     <div className="bg-red-500 p-2 mx-5 rounded-lg text-white  cursor-pointer">
                       <FaTrash onClick={handleDeleteImage} />

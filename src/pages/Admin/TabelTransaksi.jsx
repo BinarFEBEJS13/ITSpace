@@ -27,6 +27,8 @@ const TabelTransaksi = () => {
   const [Search, setSearch] = useState("");
   const [Status, setStatus] = useState("");
   const [Payment, setPayment] = useState("");
+  const [isFilterActive, setIsFilterActive] = useState(false);
+
   const [dateRange, setDateRange] = useState({
     startDate: null,
     endDate: null,
@@ -51,14 +53,29 @@ const TabelTransaksi = () => {
   const handleNext = () => {
     setCurrentPage(currentPage + 1);
   };
-
   const handleFilterByPayment = (selectedCategory) => {
-    setPayment(selectedCategory);
+    if (Payment === selectedCategory) {
+      // Jika filter sudah aktif, reset filter
+      setPayment("");
+      setIsFilterActive(false);
+    } else {
+      // Jika filter belum aktif, set filter
+      setPayment(selectedCategory);
+      setIsFilterActive(true);
+    }
     setCurrentPage(1);
   };
-
+  
   const handleFilterByStatus = (selectedCategory) => {
-    setStatus(selectedCategory);
+    if (Status === selectedCategory) {
+      // Jika filter sudah aktif, reset filter
+      setStatus("");
+      setIsFilterActive(false);
+    } else {
+      // Jika filter belum aktif, set filter
+      setStatus(selectedCategory);
+      setIsFilterActive(true);
+    }
     setCurrentPage(1);
   };
 
@@ -90,13 +107,13 @@ const TabelTransaksi = () => {
                   as={Button}
                   leftIcon={<IoChevronDownCircleOutline />}
                 >
-                  Filter
+                  {isFilterActive ? "Reset Filter" : "Filter"}
                 </MenuButton>
                 <MenuList>
                   <MenuOptionGroup
                     color="#6148FF"
                     title="Status Pembayaran"
-                    type="radio"
+                    type="checkbox"
                   >
                     <MenuItemOption
                       value="SUDAH BAYAR"
@@ -114,7 +131,7 @@ const TabelTransaksi = () => {
                   <MenuOptionGroup
                     color="#6148FF"
                     title="Metode Pembayaran"
-                    type="radio"
+                    type="checkbox"
                   >
                     <MenuItemOption
                       value="VIRTUAL_ACCOUNT"
