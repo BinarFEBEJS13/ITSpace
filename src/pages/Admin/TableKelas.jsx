@@ -24,7 +24,6 @@ import {
   MenuOptionGroup,
   MenuItemOption,
   MenuDivider,
-  Table,
 } from "@chakra-ui/react";
 import { useGetCourse } from "../../services/Admin/courses/get-data-courses";
 import { useDeleteCourse } from "../../services/Admin/courses/delete-data-courses";
@@ -95,11 +94,15 @@ export const TableKelas = () => {
   const { mutate: deleteCourse } = useDeleteCourse({
     onSuccess: () => {
       refetchData();
-      toast.promise(examplePromise, {
-        success: { title: "Course Deleted", description: "Done" },
-        error: { title: "Error :(", description: "Something wrong" },
-        loading: { title: "Deleting Course...", description: "Please wait" },
+      toast({
+        title: "Berhasil Menghapus Course",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        size: "lg",
+        position: "top",
       });
+
       onClose();
     },
   });
@@ -151,7 +154,6 @@ export const TableKelas = () => {
     setPopupEdit(false);
   };
   const cancelRef = React.useRef();
-
   return (
     <div className="flex h-screen flex-col bg-[rgba(169,167,167,0.11)] sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
       <Sidebar setSidebarVisible={setSidebarVisible} />
@@ -346,7 +348,7 @@ export const TableKelas = () => {
                     <th>Description</th>
                     <th className="text-center">EDIT</th>
                     <th className="text-center">DELETE</th>
-                    <th className="text-center">ADD CHAPTER</th>
+                    <th className="text-center">Chapters</th>
                   </tr>
                 </thead>
                 <tbody className="font-bold text-sm">

@@ -1,6 +1,6 @@
 import React from "react";
 import { FaXmark } from "react-icons/fa6";
-import { deleteChapter, useDeleteChapter } from "../../../../services/Admin/chapters/delete-chapter";
+import { deleteChapter } from "../../../../services/Admin/chapters/delete-chapter";
 import { useToast } from "@chakra-ui/react";
 
 
@@ -12,7 +12,6 @@ export const AlertDeletePage = ({ setAlertDelete, selectedChapter, courseId, rel
   
   };
 
-  const { mutate: DeleteChapter } = useDeleteChapter();
   const handleDelete =  (hapusId) => {
     deleteChapter({
       courseId: courseId,
@@ -23,6 +22,7 @@ export const AlertDeletePage = ({ setAlertDelete, selectedChapter, courseId, rel
         description: ` Chapter Dengan judul (${result?.data?.data?.title}) berhasil di hapus `,
         status: "success",
         duration: 9000,
+        isClosable: true,
         size: "lg",
         position: "top",
       });

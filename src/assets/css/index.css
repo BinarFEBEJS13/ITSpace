@@ -179,3 +179,8 @@ input[type="radio"] {
   background-color: #73CA5C !important; /* Customize calendar cell hover color */
 }
 
+@media only screen and (max-width: 600px) {
+  .date-picker-popover {
+    max-width: 80% !important;  
+  }
+}

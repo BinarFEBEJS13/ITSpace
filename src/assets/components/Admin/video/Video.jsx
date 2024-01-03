@@ -116,7 +116,7 @@ const {data : GetVideo, refetch : reloadData } = useGetDataVideo({
     settoggleAlert(true)
   };
 
-
+console.log(videos, "olollololo");
   const renderVideo = () => {
     if (videos) {
       if (videos?.data?.length > 0) {

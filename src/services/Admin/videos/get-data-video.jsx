@@ -10,7 +10,6 @@ const GetDataVideo = async ({ queryKey }) => {
 
 const GetDataVideoDirect = async ({queryKey}) => {
     const [_params] = queryKey;
-    console.log(queryKey, "KEYYY");
     const { data } = await http.get(`${API_ENDPOINT.COURSES}/${_params.courseId}/chapters/${_params.chapterId}/videos`);
     return data;
   };

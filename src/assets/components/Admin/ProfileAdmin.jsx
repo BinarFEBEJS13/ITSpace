@@ -149,25 +149,25 @@ export const ProfileAdmin = () => {
     }
   };
   return (
-    <div className="flex h-screen bg-[rgba(169,167,167,0.11)] flex-col sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
+    <div className="flex h-screen bg-[rgba(169,167,167,0.11)] flex-col sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden ">
       <Sidebar />
 
       <div className=" w-full lg:overflow-x-hidden overflow-y-auto">
         {/* ========================= Header =========================  */}
         <Header />
         {/* ========================= User Data =========================  */}
-        <div className="mx-[2rem] md:mx-[4rem] mt-[3rem] flex justify-between ">
+        <div className="mx-[2rem] md:mx-[4rem] mt-[3rem] flex justify-between my-[1rem] ">
           <h1 className="font-bold text-normal sm:text-3xl">Profile Saya</h1>
         </div>
-        <div className="flex justify-center items-center mt-[2rem] ">
-          <form onSubmit={handleSubmit} className="flex flex-col bg-white shadow-xl rounded-lg justify-center items mx-[2rem] md:mx-[4rem]  w-full px-5">
+        <div className="flex justify-center items-center mb-[3rem]">
+          <form onSubmit={handleSubmit} className="flex flex-col  bg-white shadow-xl rounded-lg justify-center items mx-[2rem] md:mx-[4rem]  w-full px-5">
             <div className=" flex item mt-3 mx-auto relative rounded-full border-[1.5px] border-ungu-0">
               <Wrap>
                 <WrapItem>
                   <Avatar outline="blue" size="xl" src={showImage} />
                 </WrapItem>
               </Wrap>
-              <div className="absolute bottom-0 right-0 bg-white w-6 h-6 flex items-center justify-center rounded-md overflow-hidden cursor-pointer">
+              <div className="] absolute bottom-0 right-0 bg-white w-6 h-6 flex items-center justify-center rounded-md overflow-hidden cursor-pointer">
                 <input
                   id="image"
                   type="file"
@@ -208,6 +208,7 @@ export const ProfileAdmin = () => {
                 <Input
                   borderColor="gray.400"
                   size="lg"
+                  readOnly
                   id="email"
                   value={Email}
                   onChange={(e) => {

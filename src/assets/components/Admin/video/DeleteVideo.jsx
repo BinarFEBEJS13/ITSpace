@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { FaXmark } from "react-icons/fa6";
-import { useDeleteVideo } from "../../../../services/Admin/videos/delete-data-video";
+import { deleteVideo, useDeleteVideo } from "../../../../services/Admin/videos/delete-data-video";
 import { useToast } from "@chakra-ui/react";
 
 export const DeleteVideo = ({
@@ -15,30 +15,34 @@ export const DeleteVideo = ({
   };
   const toast = useToast()
   
-  const { mutate: deleteVideosID, data : deletes, isSuccess } = useDeleteVideo({
+  const { mutate: deleteVideosID, } = useDeleteVideo({
 
   });
-  console.log(deletes, "ppp");
-
-  useEffect(() => {
-   if(isSuccess){
-    toast({
-      title: "ppp",
-      duration: 9000,
-      colorScheme : "red",
-      status: "success",
-      position: "bottom-right",
-    });
-   }
-  }, [deletes, toast, isSuccess])
-  
 
   const handleDelete = (id) => {
-    deleteVideosID({
+    deleteVideo({
       courseId: courseId,
       chapterId: chapterId,
       videoId: id,
-    });
+    }).then((result) => {
+      console.log(result, "rrr");
+      toast({
+        title: result?.data?.message,
+        duration: 5000,
+        status: "success",
+        isClosable: true,
+        position: "top",
+      });
+    }).catch((err) => {
+      toast({
+        title: err?.response?.data?.message,
+        duration: 5000,
+        status: "error",
+        isClosable: true,
+
+        position: "top",
+      });
+    });;
     reloadData()
     settoggleAlert(false)
   };

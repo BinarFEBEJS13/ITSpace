@@ -104,10 +104,10 @@ export const AddCourse = (props) => {
       isValid = false;
     }
 
-    if (Harga === 0) {
+    if (TipeKelas === "1" && Harga === 0) {
       errors.Harga = "Harga tidak boleh kosong";
       isValid = false;
-    } else if (!Number.isInteger(Number(Harga))) {
+    } else if (!Number.isInteger(Number(Harga)) && TipeKelas !== "0") {
       errors.Harga = "Harga harus berupa angka bulat";
       isValid = false;
     }
@@ -160,20 +160,21 @@ export const AddCourse = (props) => {
     postDataCourse(formData)
       .then((result) => {
         toast({
-          title:
-            result?.response?.data?.message || "Berhasil Menambah Kelas Baru",
+          title: result?.message || "Berhasil Menambah Kelas Baru",
           duration: 9000,
           status: "success",
+          isClosable: true,
           position: "top",
         });
         refetchData();
       })
       .catch((err) => {
-        console.log(err, "err");
         toast({
           title: err?.response?.data?.message,
           duration: 9000,
           status: "error",
+          isClosable: true,
+
           position: "top",
         });
       });
@@ -193,6 +194,11 @@ export const AddCourse = (props) => {
       }
       if (e.target.id === "TipeKelas") {
         setTipeKelas(e.target.value);
+      setHarga(e.target.value === "0" ? 0 : Harga);
+      setInputErrors((prevErrors) => ({
+        ...prevErrors,
+        Harga: e.target.value === "0" ? "" : prevErrors.Harga,
+      }));
       }
       if (e.target.id === "level") {
         setLevel(e.target.value);

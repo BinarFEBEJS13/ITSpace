@@ -141,7 +141,7 @@ const TabelTransaksi = () => {
             </div>
           </div>
         </div>
-        <div className="mx-[2rem] md:mx-[2rem]">
+        <div className="mx-[2rem] md:mx-[2rem] hidden sm:block">
           <DateRangePicker
             size="lg"
             editable={false}
@@ -150,7 +150,7 @@ const TabelTransaksi = () => {
             placeholder="dd/mm/yyyy"
             onChange={(value) => setDateRange(value)}
             value={dateRange}
-            className="rounded-lg"
+            className="date-picker-popover rounded-lg"
           />
         </div>
 
