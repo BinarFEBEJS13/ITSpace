@@ -45,7 +45,7 @@ export const DetailKelas = () => {
   const { data: dataChptrs, isSuccess: successChapter, refetch } = useGetDataChapters({ query: courseId });
   const dataChapters = dataChptrs?.data;
 
-  const { data: dataCrsId } = useGetDataCoursesId({ query: courseId });
+  const { data: dataCrsId, refetch: refetchCourseId } = useGetDataCoursesId({ query: courseId });
   const dataCoursesId = dataCrsId?.data;
 
   const { data: dataVid } = useGetDataVideos({ courseId, chaptersId, videoId });
@@ -262,7 +262,7 @@ export const DetailKelas = () => {
                           disabled={dataCheckEnrollment?.data === false}
                         >
                           <img src={rating} alt="rating" />
-                          <Rating courseId={courseId} />
+                          <Rating courseId={courseId} refetchCourseId={refetchCourseId} />
                         </button>
                       </div>
                     </div>

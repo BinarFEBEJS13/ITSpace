@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { useDataRatings } from "../../services/post-Datas-ratings";
 
-export const Rating = ({ courseId }) => {
+export const Rating = ({ courseId, refetchCourseId }) => {
   const toast = useToast();
   const OverlayOne = () => <ModalOverlay bg="blackAlpha.800" backdropFilter="blur(10px)" />;
 
@@ -35,8 +35,9 @@ export const Rating = ({ courseId }) => {
         status: "success",
         position: "top",
       });
+      refetchCourseId();
     }
-  }, [error, isSuccess, toast]);
+  }, [error, isSuccess, toast, refetchCourseId]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [overlay, setOverlay] = React.useState(<OverlayOne />);
