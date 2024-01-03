@@ -39,6 +39,7 @@ export const Sidebar = ({ setOpen, Open }) => {
         isClosable: true,
         position: "top",
       },
+      error: { title: 'Promise rejected', description: 'Something wrong' },
       loading: {
         title: "Logging Out...",
         duration: 3000,

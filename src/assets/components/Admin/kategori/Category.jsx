@@ -117,7 +117,7 @@ export const Category = () => {
         <div className="flex  h-full flex-col gap-5 items-center  mx-[2rem] md:mx-[4rem]  my-[2rem]">
           <form
             onSubmit={handleSubmit}
-            className="bg-white shadow-xl h-[300px] w-full rounded-lg flex justify-center flex-col gap-3 py-4 px-10"
+            className="bg-white shadow-xl  h-[300px] w-full rounded-lg flex justify-center flex-col gap-3 py-4 px-10"
           >
             <h1 className="font-bold text-center sm:text-xl">
               Tambah Kategori Kelas
@@ -149,7 +149,7 @@ export const Category = () => {
               )}
             </div>
           </form>
-          <div className="bg-white shadow-xl rounded-lg w-full  py-4 px-10">
+          <div className="bg-white shadow-xl rounded-lg w-full py-4 px-10">
             <h1 className="text-center font-bold text-xl">Semua Kategori</h1>
             <TableContainer className="mt-3 capitalize text-xl">
               <Table variant="simple">
@@ -190,6 +190,7 @@ export const Category = () => {
               </Table>
             </TableContainer>
           </div>
+          <div className="mt-4 hidden">www</div>
         </div>
       </div>
     </div>
