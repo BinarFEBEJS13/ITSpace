@@ -38,13 +38,12 @@ export const DetailKelas = () => {
   const [UrlVideos, setUrlVideos] = useState("");
   const navigate = useNavigate();
   const [ActivePremium, setActivePremium] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const [toggleKelas, setToggleKelas] = useState("tentang");
 
   // GET API ALL
-  const { data: dataChptrs, isSuccess: successChapter } = useGetDataChapters({ query: courseId });
+  const { data: dataChptrs, isSuccess: successChapter, refetch } = useGetDataChapters({ query: courseId });
   const dataChapters = dataChptrs?.data;
-
-  // console.log(successChapter);
 
   const { data: dataCrsId } = useGetDataCoursesId({ query: courseId });
   const dataCoursesId = dataCrsId?.data;
@@ -52,9 +51,9 @@ export const DetailKelas = () => {
   const { data: dataVid } = useGetDataVideos({ courseId, chaptersId, videoId });
   const datavideoId = dataVid?.data;
 
-  const { data: dataCheckEnrollment } = useGetDataCheckEnrollment({ query: courseId });
+  const { data: dataCheckEnrollment, refetch: refetchEnrollment } = useGetDataCheckEnrollment({ query: courseId });
 
-  const { mutate: postProgress } = useDataProgress();
+  const { mutate: postProgress, isSuccess: successPostProgress, error: errorProgress } = useDataProgress();
   const { mutate: postEnrollments, error: errorenrolment, isSuccess: successenrolment } = useDataEnrollments();
 
   const { data: dataDecode } = useGetDecode();
@@ -113,8 +112,9 @@ export const DetailKelas = () => {
         status: "success",
         position: "top",
       });
+      refetchEnrollment();
     }
-  }, [errorenrolment, toast, successenrolment]);
+  }, [errorenrolment, toast, successenrolment, refetchEnrollment]);
 
   const handleClosePremium = () => {
     setActivePremium(!ActivePremium);
@@ -125,23 +125,49 @@ export const DetailKelas = () => {
   }, [datavideoId]);
 
   useEffect(() => {
-    if (successChapter) {
+    if (!isMounted && successChapter && dataChapters) {
       setchaptersId(dataChapters?.map((chpt) => chpt?.id)[0]);
       setVideoId(dataChapters?.map((chpt) => chpt?.video)[0]?.map((vid) => vid?.id)[0]);
+      setIsMounted(true);
     }
-  }, [dataChapters, successChapter]);
+  }, [isMounted, dataChapters, successChapter]);
 
-  const handleVideoProgressMobile = (videoId) => {
-    postProgress({
+  const handleVideoProgressMobile = async (videoId) => {
+    await postProgress({
       videoId: videoId,
     });
   };
 
-  const handleVideoProgressDesktop = (videoId) => {
-    postProgress({
+  const handleVideoProgressDesktop = async (videoId) => {
+    await postProgress({
       videoId: videoId,
     });
   };
+
+  useEffect(() => {
+    if (successPostProgress) {
+      refetch();
+    }
+  }, [refetch, successPostProgress]);
+
+  useEffect(() => {
+    if (errorProgress?.response?.status === 401) {
+      toast({
+        description: "Login untuk memperoleh progress",
+        duration: 3000,
+        status: "error",
+        position: "top",
+      });
+    }
+    if (errorProgress?.response?.status === 403) {
+      toast({
+        description: "Daftar atau Beli kelas untuk memperoleh progress",
+        duration: 3000,
+        status: "error",
+        position: "top",
+      });
+    }
+  }, [errorProgress, toast]);
 
   return (
     <>
