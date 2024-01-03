@@ -140,8 +140,9 @@ export const Profile = () => {
               id="email"
               onChange={handlePutProfile}
               value={Email || ""}
-              type="text"
-              className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px]"
+              type="email"
+              readOnly
+              className="w-full p-3 sm:p-2 text-[12px] rounded-2xl sm:rounded-xl outline outline-none bg-gray-50 shadow-lg shadow-gray-200 outline-[1.5px] placeholder:text-[12px] text-gray-400"
               placeholder="Masukkan email Anda"
             />
           </div>
