@@ -4,9 +4,24 @@ import { useGetUsers } from "../../services/Admin/user/get-user";
 import { Header } from "../../assets/components/Admin/Header";
 import { DataDashboard } from "../../assets/components/Admin/DataDashboard";
 import { Sidebar } from "../../assets/components/Admin/Sidebar";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 export const TableUser = () => {
-  const { data: getUsers, isLoading } = useGetUsers();
+ 
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data: getUsers, isLoading } = useGetUsers({
+    page : currentPage,
+    limit : 8
+  });
+  const handlePrev = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    setCurrentPage(currentPage + 1);
+  };
 
   return (
     <div className="flex h-screen bg-[rgba(169,167,167,0.11)] flex-col sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
@@ -76,24 +91,24 @@ export const TableUser = () => {
             </div>
           )}
         </div>
-        {/* {getUsers?.data?.users?.length > 0 && (
+        {getUsers?.data?.users.length > 0 && (
           <div className="flex mt-2 gap-2 justify-end mx-[4rem]">
-            <div className="flex bg-[rgba(0,0,0,0.4)] rounded-[50px] p-3 gap-3 text-white">
+            <div className="flex bg-gray-300 shadow-xl rounded-lg p-3 gap-3 text-white">
               <div
                 onClick={handlePrev}
-                className={`p-1 rounded-[50px] bg-[#6048ff]  ${
-                  !getUsers?.data?.pagination?.links.prev
+                className={`p-1 rounded-[50px] bg-[#6048ff] ${
+                  !getUsers?.data?.pagination?.links?.prev
                     ? "cursor-not-allowed opacity-50"
                     : ""
                 }`}
               >
                 <IoIosArrowBack />
               </div>
-              <p>{currentPage}</p>
+              <p className="text-black">{currentPage}</p>
               <div
                 onClick={handleNext}
                 className={`p-1 rounded-[50px] bg-[#6148FF] ${
-                  !getUsers?.data?.pagination?.links.next
+                  !getUsers?.data?.pagination?.links?.next
                     ? "cursor-not-allowed opacity-50"
                     : ""
                 }`}
@@ -102,7 +117,7 @@ export const TableUser = () => {
               </div>
             </div>
           </div>
-        )} */}
+        )}
       </div>
     </div>
   );
