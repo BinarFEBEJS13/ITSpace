@@ -262,7 +262,7 @@ console.log(KodeKelas, "kodededededed");
         </h1>
         <div className="flex flex-col gap-4 w-4/5 sm:w-4/5 ">
         <FormControl isInvalid={inputErrors.KodeKelas !== ""}>
-            <FormLabel>Nama Kelas</FormLabel>
+            <FormLabel>Kode Kelas</FormLabel>
             <Input
               id="KodeKelas"
               value={KodeKelas}
