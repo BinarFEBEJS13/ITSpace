@@ -240,7 +240,7 @@ export const DetailKelas = () => {
                       {/* Button Grup Tele, Join Kelas, Rating*/}
                       <div className={`${dataDecode?.success === true ? "flex flex-wrap w-full gap-2 text-xs xl:text-sm" : "hidden"}  `}>
                         <button
-                          className={`${dataCoursesId?.groupUrl === undefined ? "opacity-50 cursor-not-allowed" : ""} bg-[#2AABEE] rounded-md px-4 py-1 text-white text-xs xl:text-sm flex gap-2 items-center`}
+                          className={`${dataCheckEnrollment?.data === false ? "opacity-50 cursor-not-allowed" : ""} bg-[#2AABEE] rounded-md px-4 py-1 text-white text-xs xl:text-sm flex gap-2 items-center`}
                           disabled={dataCheckEnrollment?.data === false}
                         >
                           <a href={dataCoursesId?.groupUrl} target="_blank" rel="noopener noreferrer" className="flex gap-1  items-center">
