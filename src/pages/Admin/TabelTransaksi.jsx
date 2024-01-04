@@ -3,8 +3,8 @@ import { Sidebar } from "../../assets/components/Admin/Sidebar";
 import { IoChevronDownCircleOutline } from "react-icons/io5";
 import { Header } from "../../assets/components/Admin/Header";
 import SearhIcon from "../../assets/svg/search-admin.svg";
-import "react-datepicker/dist/react-datepicker.css";
-import "react-datepicker/dist/react-datepicker-cssmodules.css";
+// import 'react-date-range/dist/styles.css'; // main css file
+// import 'react-date-range/dist/theme/default.css'; // theme css file
 import "rsuite/dist/rsuite-no-reset.min.css";
 
 import {
@@ -28,11 +28,13 @@ const TabelTransaksi = () => {
   const [Status, setStatus] = useState("");
   const [Payment, setPayment] = useState("");
   const [isFilterActive, setIsFilterActive] = useState(false);
-
-  const [dateRange, setDateRange] = useState({
-    startDate: null,
-    endDate: null,
+  // const [startDate, setstartDate] = useState();
+  // const [endDate, setendDate] = useState();
+  const [state, setState] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
   });
+
   const { data: Transaksi, isLoading } = useGetPembayaran({
     // courseCode: courseCode,
     page: currentPage,
@@ -40,8 +42,8 @@ const TabelTransaksi = () => {
     status: Status,
     se: Search,
     method: Payment,
-    from: dateRange.startDate,
-    to: dateRange.endDate,
+    from: state.startDate,
+    to: state.endDate,
   });
   console.log(Transaksi, "Transaksi");
   const handlePrev = () => {
@@ -65,7 +67,11 @@ const TabelTransaksi = () => {
     }
     setCurrentPage(1);
   };
-  
+  // const handleFilterByDate = (startDate, endDate) => {
+  //   setDateRange({ startDate, endDate });
+  //   setCurrentPage(1);
+  // };
+
   const handleFilterByStatus = (selectedCategory) => {
     if (Status === selectedCategory) {
       // Jika filter sudah aktif, reset filter
@@ -160,14 +166,15 @@ const TabelTransaksi = () => {
         </div>
         <div className="mx-[2rem] md:mx-[2rem] hidden sm:block">
           <DateRangePicker
-            size="lg"
+            value={[state.startDate, state.endDate]}
+            onChange={(dates) => {
+              if (dates) {
+                setState({ startDate: dates[0], endDate: dates[1] });
+              } else {
+                setState({ startDate: null, endDate: null });
+              }
+            }}
             editable={false}
-            placement="bottomStart"
-            appearance="default"
-            placeholder="dd/mm/yyyy"
-            onChange={(value) => setDateRange(value)}
-            value={dateRange}
-            className="date-picker-popover rounded-lg"
           />
         </div>
 
