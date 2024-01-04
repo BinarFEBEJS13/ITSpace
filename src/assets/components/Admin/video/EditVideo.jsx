@@ -86,10 +86,13 @@ export const EditVideo = ({
         setLink(e.target.value);
       }
       if (e.target.id === "durasi") {
-        setDurasi(parseInt(e.target.value));
+        const durss = parseInt(e.target.value);
+        setDurasi(isNaN(durss) ? 0 : durss)
       }
+
       if (e.target.id === "number") {
-        setNumber(parseInt(e.target.value));
+        const numm = parseInt(e.target.value);
+        setNumber(isNaN(numm) ? 0 : numm)
       }
     }
   };
