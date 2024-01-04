@@ -215,6 +215,11 @@ export const EditCourse = (props) => {
       }
       if (e.target.id === "TipeKelas") {
         setTipeKelas(e.target.value);
+      setHarga(e.target.value === "0" ? 0 : Harga);
+      setInputErrors((prevErrors) => ({
+        ...prevErrors,
+        Harga: e.target.value === "0" ? "" : prevErrors.Harga,
+      }));
       }
       if (e.target.id === "level") {
         setLevel(e.target.value);
@@ -223,7 +228,8 @@ export const EditCourse = (props) => {
         setMentor(e.target.value);
       }
       if (e.target.id === "harga") {
-        setHarga(parseInt(e.target.value));
+        const hargaan = parseInt(e.target.value);
+        setHarga(isNaN(hargaan) ? 0 : hargaan)
       }
       if (e.target.id === "LinkKelas") {
         setLinkKelas(e.target.value);

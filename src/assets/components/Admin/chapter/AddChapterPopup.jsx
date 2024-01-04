@@ -94,7 +94,8 @@ export const AddChapterPopup = ({
         setTipeKelas(e.target.value);
       }
       if (e.target.id === "Chapter") {
-        setChapter(parseInt(e.target.value));
+        const chapterValue = parseInt(e.target.value);
+        setChapter(isNaN(chapterValue) ? 0 : chapterValue);
       }
     }
   };

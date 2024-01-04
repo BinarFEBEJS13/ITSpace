@@ -206,7 +206,8 @@ export const AddCourse = (props) => {
         setMentor(e.target.value);
       }
       if (e.target.id === "harga") {
-        setHarga(parseInt(e.target.value));
+        const hargaan = parseInt(e.target.value);
+        setHarga(isNaN(hargaan) ? 0 : hargaan)
       }
       if (e.target.id === "LinkKelas") {
         setLinkKelas(e.target.value);
