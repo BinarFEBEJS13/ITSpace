@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Navbar } from "../assets/components/Navbar";
+import ScrollToTop from "react-scroll-to-top";
 // svg card
 import star from "../assets/svg/star.svg";
 import level from "../assets/svg/kategori-level.svg";
@@ -172,6 +173,7 @@ export const DetailKelas = () => {
   return (
     <>
       <div className="overflow-x-hidden ">
+        <ScrollToTop smooth viewBox="0 0 24 22" svgPath="M12 18v-12h-3l4-4 4 4h-3v12h-2z" className="bg-white text-white p-2 shadow-sm-button flex items-center rounded-md fixed bottom-3 right-3 sm:bottom-6 sm:right-6 border border-white" />
         <Navbar />
         {/* Button arrow kelas lainnnya */}
         <div className="w-screen ">

@@ -18,7 +18,7 @@ export const PencarianPageKelasSaya = () => {
   return (
     <div className="hidden sm:block relative w-3/12">
       <form onSubmit={handleSubmit}>
-        <input value={queryEnrollments} onChange={(e) => setQueryEnrollments(e.target.value)} placeholder="cari Kelas..." className="pl-4 pr-14 w-full py-3 border rounded-2xl"></input>
+        <input value={queryEnrollments} onChange={(e) => setQueryEnrollments(e.target.value)} placeholder="Cari kelas..." className="pl-4 pr-14 w-full py-3 border rounded-2xl"></input>
         <img onClick={handleSubmit} src={searchkelas} alt="" className="bg-biru-0 absolute top-1/2 transform -translate-y-1/2 right-3 rounded-md cursor-pointer p-1" />
       </form>
     </div>

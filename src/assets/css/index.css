@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;700&display=swap");
 
 html::-webkit-scrollbar {
   width: 0.3rem;
@@ -22,7 +22,7 @@ html::-webkit-scrollbar-thumb {
     src: url("../../../public/Poppins-Regular.ttf") format("truetype");
   }
   html {
-    font-family: 'Poppins', sans-serif !important;
+    font-family: "Poppins", sans-serif !important;
   }
 }
 
@@ -60,12 +60,10 @@ html::-webkit-scrollbar-thumb {
 td {
   text-align: center;
   padding: 12px 20px;
-
 }
 
 th {
   padding: 12px 40px;
-  
 }
 
 /* .mySwiper .swiper-button-prev,
@@ -111,6 +109,10 @@ th {
   -webkit-line-clamp: 1; /* Atur jumlah maksimal baris yang ingin ditampilkan */
 }
 
+.filter-container {
+  height: calc(100vh - 8rem); /* Adjust as needed, considering the height of the header and other elements */
+}
+
 /* Rating */
 input[type="radio"] {
   display: none;
@@ -119,8 +121,8 @@ input[type="radio"] {
   cursor: pointer;
 }
 
-.file-btn{
-  background: #6148FF;
+.file-btn {
+  background: #6148ff;
   border-radius: 25px;
   color: #fff;
   padding: 3px 10px;
@@ -129,42 +131,43 @@ input[type="radio"] {
 }
 
 /* ===== Scrollbar CSS ===== */
-  /* Firefox */
-  * {
-    scrollbar-width: auto;
-    scrollbar-color: #b9b5ba #ffffff;
-  }
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #b9b5ba #ffffff;
+}
+
 
   /* Chrome, Edge, and Safari */
   *::-webkit-scrollbar {
     width: 1px;
   }
 
-  *::-webkit-scrollbar-track {
-    background: #ffffff;
-  }
+*::-webkit-scrollbar-track {
+  background: #ffffff;
+}
 
-  *::-webkit-scrollbar-thumb {
-    background-color: #b9b5ba67;
-    border-radius: 10px;
-    border: 3px double #ffffff;
-  }
+*::-webkit-scrollbar-thumb {
+  background-color: #b9b5ba67;
+  border-radius: 10px;
+  border: 3px double #ffffff;
+}
 
-  /* Add these styles to your CSS */
+/* Add these styles to your CSS */
 .custom-date-picker .rs-picker-toggle {
-  border-color: #6148FF; /* Customize border color */
+  border-color: #6148ff; /* Customize border color */
 }
 
 .custom-date-picker .rs-picker-toggle:hover {
-  background-color: #6148FF; /* Customize hover background color */
+  background-color: #6148ff; /* Customize hover background color */
 }
 
 .custom-date-picker .rs-picker-menu {
-  border-color: #6148FF; /* Customize menu border color */
+  border-color: #6148ff; /* Customize menu border color */
 }
 
 .custom-date-picker .rs-picker-toolbar {
-  background-color: #6148FF; /* Customize toolbar background color */
+  background-color: #6148ff; /* Customize toolbar background color */
 }
 
 .custom-date-picker .rs-picker-toolbar button {
@@ -172,11 +175,11 @@ input[type="radio"] {
 }
 
 .custom-date-picker .rs-picker-menu .rs-calendar-header {
-  background-color: #6148FF; /* Customize calendar header background color */
+  background-color: #6148ff; /* Customize calendar header background color */
 }
 
 .custom-date-picker .rs-picker-menu .rs-calendar-table .rs-cell-hover {
-  background-color: #73CA5C !important; /* Customize calendar cell hover color */
+  background-color: #73ca5c !important; /* Customize calendar cell hover color */
 }
 
 @media only screen and (max-width: 600px) {

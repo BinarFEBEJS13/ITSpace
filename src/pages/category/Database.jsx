@@ -1,4 +1,5 @@
 import React from "react";
+import ScrollToTop from "react-scroll-to-top";
 import { Navbar } from "../../assets/components/Navbar";
 import database from "../../assets/img/category/database.jpeg";
 import { Footer } from "../../assets/components/Footer";
@@ -32,6 +33,7 @@ export const Database = () => {
   return (
     <>
       <div className="overflow-x-hidden">
+        <ScrollToTop smooth viewBox="0 0 24 22" svgPath="M12 18v-12h-3l4-4 4 4h-3v12h-2z" className="bg-white text-white p-2 shadow-sm-button flex items-center rounded-md fixed bottom-3 right-3 sm:bottom-6 sm:right-6 border border-white" />
         <Navbar />
         {/* Section Main Beranda */}
         <div className="w-screen">
