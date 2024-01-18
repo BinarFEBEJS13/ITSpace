@@ -365,9 +365,9 @@ export const BerandaKelasSaya = () => {
                           const progressPercentage = totalVideos !== 0 ? (completedVideos / totalVideos) * 100 : 0;
                           return (
                             <div key={value.id} className="w-full ">
-                              <div className="shadow-sm-button rounded-2xl">
-                                <div className="relative w-full h-32 lg:h-48 overflow-hidden">
-                                  <img src={value.thumbnailUrl} alt="" className="w-full h-full object-cover rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
+                              <div onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="w-full shadow-sm-button rounded-2xl cursor-pointer">
+                                <div className="relative w-full h-32 sm:h-44 lg:h-48 overflow-hidden">
+                                  <img src={value.thumbnailUrl} alt="" className="w-full h-full object-cover rounded-2xl" />
                                 </div>
                                 <div className="px-2 sm:px-4 py-4 flex flex-col gap-2 rounded-2xl">
                                   <div className="flex justify-between items-center">
