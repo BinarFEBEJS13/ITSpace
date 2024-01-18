@@ -328,7 +328,7 @@ export const DetailKelas = () => {
                           {dataChapters?.map((valuedata) => (
                             <div key={valuedata.id} className="w-full">
                               <div className="flex flex-col gap-2">
-                                <div className="text-xs flex gap-2 justify-between text-biru-0 font-semibold">
+                                <div className="text-xs flex gap-2 justify-between items-center text-biru-0 font-semibold">
                                   <h3>
                                     Chapter {valuedata.number} - {valuedata.title}
                                   </h3>
