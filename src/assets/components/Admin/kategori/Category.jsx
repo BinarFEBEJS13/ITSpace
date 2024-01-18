@@ -36,7 +36,7 @@ export const Category = () => {
           console.log(result);
           toast({
             title: result?.message,
-            duration: 9000,
+            duration: 5000,
             status: "success",
             isClosable: true,
             position: "top",
@@ -48,7 +48,7 @@ export const Category = () => {
         .catch((err) => {
           toast({
             title: err?.response?.data?.message,
-            duration: 9000,
+            duration: 5000,
             status: "error",
             isClosable: true,
             position: "top",
@@ -62,7 +62,7 @@ export const Category = () => {
           console.log(result, "KOCAK");
           toast({
             title: "Berhasil menambah kategori baru",
-            duration: 9000,
+            duration: 5000,
             status: "success",
             isClosable: true,
             position: "top",
@@ -73,7 +73,7 @@ export const Category = () => {
         .catch((err) => {
           toast({
             title: err?.response?.data?.message,
-            duration: 9000,
+            duration: 5000,
             status: "error",
             isClosable: true,
             position: "top",
@@ -100,7 +100,7 @@ export const Category = () => {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-[rgba(208,208,208,0.21)] sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
+    <div className="flex h-screen flex-col bg-[rgba(169,167,167,0.11)] sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
       {AlertDelete && (
         <AlertCategory
           reloadData={reloadData}
@@ -109,17 +109,17 @@ export const Category = () => {
         />
       )}
       <Sidebar />
-      <div className=" w-full lg:overflow-x-hidden">
+      <div className=" w-full bg-[rgba(169,167,167,0.11)] lg:overflow-x-hidden">
         {/* ========================= Header =========================  */}
         <Header />
         {/* ========================= User Data =========================  */}
 
-        <div className="flex flex-col gap-5 items-center  mx-[2rem] md:mx-[4rem] border-r-indigo-50 my-[2rem]">
+        <div className="flex  h-full flex-col gap-5 items-center  mx-[2rem] md:mx-[4rem]  my-[2rem]">
           <form
             onSubmit={handleSubmit}
-            className="bg-white shadow-xl h-[300px] sm:w-[40%] rounded-lg flex justify-center flex-col gap-3 py-4 px-10"
+            className="bg-white shadow-xl  h-[300px] w-full rounded-lg flex justify-center flex-col gap-3 py-4 px-10"
           >
-            <h1 className="font-bold text-center text-xl">
+            <h1 className="font-bold text-center sm:text-xl">
               Tambah Kategori Kelas
             </h1>
             <div className="flex flex-col gap-2">
@@ -135,21 +135,21 @@ export const Category = () => {
             <div className="flex gap-3 ">
               <button
                 type="submit"
-                className="bg-[#6148FF] sm:w-1/4 text-white font-bold rounded-lg p-3"
+                className="bg-[#6148FF] text-white font-bold rounded-lg py-3 px-4"
               >
                 {CategoryID ? "Edit" : "Tambah"}
               </button>
               {CategoryID && (
                 <button
                   onClick={handleBack}
-                  className="bg-gray-200 text-black sm:w-1/4 font-bold rounded-lg p-3"
+                  className="bg-gray-200 text-black font-bold rounded-lg py-3 px-4"
                 >
                   Cancel
                 </button>
               )}
             </div>
           </form>
-          <div className="bg-white shadow-xl rounded-lg w-full  py-4 px-10">
+          <div className="bg-white shadow-xl rounded-lg w-full py-4 px-10">
             <h1 className="text-center font-bold text-xl">Semua Kategori</h1>
             <TableContainer className="mt-3 capitalize text-xl">
               <Table variant="simple">
@@ -190,6 +190,7 @@ export const Category = () => {
               </Table>
             </TableContainer>
           </div>
+          <div className="mt-4 hidden">www</div>
         </div>
       </div>
     </div>

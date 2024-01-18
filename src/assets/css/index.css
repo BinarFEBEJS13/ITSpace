@@ -137,10 +137,11 @@ input[type="radio"] {
   scrollbar-color: #b9b5ba #ffffff;
 }
 
-/* Chrome, Edge, and Safari */
-*::-webkit-scrollbar {
-  width: 20px;
-}
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 1px;
+  }
 
 *::-webkit-scrollbar-track {
   background: #ffffff;
@@ -179,4 +180,17 @@ input[type="radio"] {
 
 .custom-date-picker .rs-picker-menu .rs-calendar-table .rs-cell-hover {
   background-color: #73ca5c !important; /* Customize calendar cell hover color */
+}
+
+@media only screen and (max-width: 600px) {
+  .date-picker-popover {
+    max-width: 80% !important;  
+  }
+}
+
+.truncate-4-lines {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4; /* Atur jumlah maksimal baris yang ingin ditampilkan */
 }

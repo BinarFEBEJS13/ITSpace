@@ -3,13 +3,13 @@ import { editDataCourse, useEditCourse } from "../../../../services/Admin/course
 import { FaCloudArrowUp } from "react-icons/fa6";
 import { useGetCourseBYID } from "../../../../services/Admin/courses/get-data-coursesID";
 import { FaTrash } from "react-icons/fa6";
-import { FormControl, FormErrorMessage, FormLabel, Select, Textarea, useToast } from "@chakra-ui/react";
+import { FormControl, FormErrorMessage, FormLabel, Select, Textarea, useToast, Input } from "@chakra-ui/react";
 import { useGetCategory } from "../../../../services/Admin/category/get-data-category";
 import makeAnimated from "react-select/animated";
 import Selectt from "react-select";
-import { Input } from "rsuite";
 
 export const EditCourse = (props) => {
+  const { handleClose, selectedCourseData, refetchData  } = props;
   const [NamaKelas, setNamaKelas] = useState("");
   const [Kategori, setKategori] = useState([]);
   const [KodeKelas, setKodeKelas] = useState("");
@@ -19,7 +19,7 @@ export const EditCourse = (props) => {
   const [Mentor, setMentor] = useState([]);
   const [Description, setDescription] = useState("");
   const [LinkKelas, setLinkKelas] = useState("");
-  const [fileName, setFileName] = useState("No selected file");
+  const [fileName, setFileName] = useState(selectedCourseData.fileName);
   const [selectedFile, setSelectedFile] = useState(null);
   const [Img, setImg] = useState(null);
   const [inputErrors, setInputErrors] = useState({
@@ -35,8 +35,6 @@ export const EditCourse = (props) => {
   });
   const toast = useToast();
   const animatedComponents = makeAnimated();
-
-  const { handleClose, selectedCourseData, refetchData  } = props;
 
   const { data: Edit } = useGetCourseBYID({
     courseId: selectedCourseData.id,
@@ -62,7 +60,7 @@ export const EditCourse = (props) => {
 
   useEffect(() => {
     if (selectedCourseData.id) {
-      setKodeKelas(Edit?.data?.code);
+      setKodeKelas(selectedCourseData.code);
       setKategori(
         courseKategori.map((category) => ({
           value: category,
@@ -88,6 +86,9 @@ export const EditCourse = (props) => {
       setSelectedFile(URL.createObjectURL(file));
       setFileName(file.name);
       setImg(file);
+    } else {
+  
+      setFileName(selectedCourseData.fileName || "No selected file");
     }
   };
   const validateForm = () => {
@@ -130,12 +131,11 @@ export const EditCourse = (props) => {
       errors.Level = "Pilih level Kelas";
       isValid = false;
     }
-
-    if (Harga === 0) {
-      errors.Harga = "Harga tidak boleh kosong";
+    if (Harga > 0 && TipeKelas === "0") {
+      errors.Harga = "Kelas Gratis tidak berbayar";
       isValid = false;
-    } else if (!Number.isInteger(Number(Harga))) {
-      errors.Harga = "Harga harus berupa angka bulat";
+    } else if (TipeKelas === "1" && Harga === 0) {
+      errors.Harga = "Masukkan harga untuk kelas premium";
       isValid = false;
     }
 
@@ -160,6 +160,7 @@ export const EditCourse = (props) => {
     if (!validateForm()) {
       return;
     }
+
     const formData = new FormData();
 
     formData.append("code", KodeKelas);
@@ -176,25 +177,26 @@ export const EditCourse = (props) => {
       formData.append(`mentorEmail[${index}]`, email);
     });
 
-  
     mapKategori.forEach((category, index) => {
       formData.append(`courseCategory[${index}]`, category);
     });
 
     editDataCourse({ id: selectedCourseData.id, input: formData }).then((result) => {
       toast({
-        title: result?.response?.data?.message,
-        duration: 9000,
+        title: result?.message,
+        duration: 5000,
         status: "success",
         position: "top",
+        isClosable: true,
       });
     refetchData()
     }).catch((err) => {
       toast({
         title: err?.response?.data?.message,
-        duration: 9000,
+        duration: 5000,
         status: "error",
         position: "top",
+        isClosable: true,
       });
     });;
     handleClose();
@@ -213,6 +215,11 @@ export const EditCourse = (props) => {
       }
       if (e.target.id === "TipeKelas") {
         setTipeKelas(e.target.value);
+      setHarga(e.target.value === "0" ? 0 : Harga);
+      setInputErrors((prevErrors) => ({
+        ...prevErrors,
+        Harga: e.target.value === "0" ? "" : prevErrors.Harga,
+      }));
       }
       if (e.target.id === "level") {
         setLevel(e.target.value);
@@ -221,13 +228,11 @@ export const EditCourse = (props) => {
         setMentor(e.target.value);
       }
       if (e.target.id === "harga") {
-        setHarga(parseInt(e.target.value));
-      }
-      if (e.target.id === "img") {
-        setImg(e.target.value);
+        const hargaan = parseInt(e.target.value);
+        setHarga(isNaN(hargaan) ? 0 : hargaan)
       }
       if (e.target.id === "LinkKelas") {
-        setLinkKelas(e.target.value || ""); 
+        setLinkKelas(e.target.value);
       }
       if (e.target.id === "description") {
         setDescription(e.target.value);
@@ -239,13 +244,13 @@ export const EditCourse = (props) => {
     setFileName("");
     setSelectedFile(null);
   };
-
+console.log(KodeKelas, "kodededededed");
   return (
     <div className="w-screen h-screen flex items-center justify-center fixed t-2 l-[50px] bg-[rgba(0,0,0,0.4)] ">
     <form
       encType="multipart/form-data"
       onSubmit={handleKelas}
-      className="pop-up overflow-y-auto max-h-[70%] lg:max-h-[95%] rounded-2xl  md:w-[50%] lg:w-[] xl:w-[35%] bg-white absolute"
+      className="pop-up overflow-y-auto max-h-[85%] lg:max-h-[95%] md:max-h-[95%] rounded-2xl w-[80%] xl:w-[65%] 2xl:w-[45%] bg-white absolute"
     >
       <i
         onClick={props.handleClose}
@@ -253,15 +258,14 @@ export const EditCourse = (props) => {
       ></i>
       <div className="flex items-center justify-center flex-col sm:gap-5">
         <h1 className="font-bold sm:text-xl text-[#6148FF] my-2">
-          Tambah Kelas
+          Edit Kelas
         </h1>
         <div className="flex flex-col gap-4 w-4/5 sm:w-4/5 ">
-          <FormControl isInvalid={inputErrors.KodeKelas !== ""}>
+        <FormControl isInvalid={inputErrors.KodeKelas !== ""}>
             <FormLabel>Kode Kelas</FormLabel>
             <Input
               id="KodeKelas"
               value={KodeKelas}
-              placeholder="Kode Kelas"
               onChange={(e) => {
                 handleOnchange(e);
                 setInputErrors((prevErrors) => ({
@@ -270,12 +274,13 @@ export const EditCourse = (props) => {
                 }));
               }}
               onBlur={validateForm}
+              placeholder="Nama Kelas"
             />
             {inputErrors.KodeKelas && (
               <FormErrorMessage>{inputErrors.KodeKelas}</FormErrorMessage>
             )}
           </FormControl>
-          <FormControl isInvalid={inputErrors}>
+          <FormControl isInvalid={inputErrors.Kategori.length !== 0}>
             <FormLabel>Kategori</FormLabel>
             <Selectt
               value={Kategori}
@@ -319,10 +324,15 @@ export const EditCourse = (props) => {
             )}
           </FormControl>
 
-          <FormControl isInvalid={inputErrors.TipeKelas !== "1" || inputErrors.TipeKelas !== "0"}>
-            <FormLabel>Level</FormLabel>
+          <FormControl
+            isInvalid={
+              inputErrors.TipeKelas !== "" &&
+              (inputErrors.TipeKelas !== "1" || inputErrors.TipeKelas !== "0")
+            }
+          >
+            <FormLabel>Tipe Kelas</FormLabel>
             <Select
-              id="level"
+              id="TipeKelas"
               value={TipeKelas}
               onChange={(e) => {
                 handleOnchange(e);
@@ -342,10 +352,17 @@ export const EditCourse = (props) => {
             )}
           </FormControl>
 
-          <FormControl isInvalid={inputErrors.Level !== "BEGINNER" || inputErrors.Level !== "INTERMEDIATE" || inputErrors.Level !== "ADVANCED"}>
+          <FormControl
+            isInvalid={
+              inputErrors.Level !== "" &&
+              (inputErrors.Level !== "BEGINNER" ||
+                inputErrors.Level !== "INTERMEDIATE" ||
+                inputErrors.Level !== "ADVANCED")
+            }
+          >
             <FormLabel>Level</FormLabel>
             <Select
-              id="TipeKelas"
+              id="level"
               value={Level}
               placeholder="Pilih level kelas"
               onChange={(e) => {
@@ -408,8 +425,8 @@ export const EditCourse = (props) => {
 
           <div className="flex flex-col gap-1">
             <FormLabel>Images</FormLabel>
-            <div className="py-4 bg-[#ebf3fc63] flex flex-col gap-4 justify-center items-center border-2 border-dashed- w-full h-[300px] pointer rounded-lg">
-              <div className="border-4 border-dashed border-[#D0D0D0] rounded-lg h-[70%] w-[90%] flex flex-col items-center justify-center">
+            <div className="py-4 bg-[#e6e9ed36] flex flex-col gap-4 justify-center items-center border w-full h-[300px] pointer rounded-lg">
+              <div className="border-[3px] border-dashed border-[#D0D0D0] rounded-lg h-full w-[95%] flex flex-col items-center justify-center">
                 <input
                   className="opacity-0 translate-y-[3rem] translate-x-8"
                   onChange={handleFileChange}
@@ -419,21 +436,17 @@ export const EditCourse = (props) => {
                 <FaCloudArrowUp size={60} />
                 <p>Upload Your Image Here</p>
               </div>
-              <div className="flex justify-between items-center border-4 rounded-lg border-[#D0D0D0] h-[30%] w-[90%]">
-                <div className="px-4 flex items-center text-xl gap-4">
-                  {selectedFile && (
-                    <>
-                      <img width={70} height={40} alt="" src={selectedFile} />
-                      <p>{fileName}</p>
-                    </>
-                  )}
-                </div>
-                {selectedFile && (
-                  <div className="bg-red-500 p-2 mx-5 rounded-lg  cursor-pointer">
+              {selectedFile && (
+                <div className="flex py-4 justify-between items-center border-2 rounded-lg border-[#D0D0D0] h-[30%] w-[95%]">
+                  <div className="px-4 flex items-center text-xl gap-4">
+                    <img width={70} height={40} alt="" src={selectedFile} />
+                    <p className="text-[12px] ">{fileName}</p>
+                  </div>
+                  <div className="bg-red-500 p-2 mx-5 rounded-lg text-white  cursor-pointer">
                     <FaTrash onClick={handleDeleteImage} />
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
 

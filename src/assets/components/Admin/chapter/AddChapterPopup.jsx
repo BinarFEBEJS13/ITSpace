@@ -94,7 +94,8 @@ export const AddChapterPopup = ({
         setTipeKelas(e.target.value);
       }
       if (e.target.id === "Chapter") {
-        setChapter(parseInt(e.target.value));
+        const chapterValue = parseInt(e.target.value);
+        setChapter(isNaN(chapterValue) ? 0 : chapterValue);
       }
     }
   };
@@ -129,7 +130,8 @@ export const AddChapterPopup = ({
             title: result?.data?.message,
             description: `Anda Telah Membuat chapter Dengan judul ${result?.data?.data?.title} `,
             status: "info",
-            duration: 9000,
+            duration: 5000,
+            isClosable: true,
             size: "lg",
             position: "top",
             colorScheme: "orange",
@@ -141,8 +143,9 @@ export const AddChapterPopup = ({
             title: err?.response?.data?.message,
             description: "Maaf terjadi kesalahan tolong cek kembali",
             status: "error",
-            duration: 9000,
+            duration: 5000,
             size: "lg",
+            isClosable: true,
             position: "top",
           });
         });
@@ -175,11 +178,11 @@ export const AddChapterPopup = ({
   };
 
   return (
-    <div className="w-screen h-screen flex items-start justify-center fixed t-2 l-[50px] bg-[rgba(0,0,0,0.4)] ">
+    <div className="w-screen z-40 h-screen flex items-start justify-center fixed t-2 l-[50px] bg-[rgba(0,0,0,0.4)] ">
       <form
         onSubmit={handleSubmit}
         encType="multipart/form-data"
-        className="pop-up overflow-y-auto  mt-[3rem]  rounded-lg w-[80%] xl:w-[25%] bg-white absolute"
+        className="pop-up overflow-y-auto  mt-[3rem]  rounded-lg w-[70%] lg:w-[40%] xl:w-[25%] bg-white absolute"
       >
         <FaXmark
           onClick={toggleClose}

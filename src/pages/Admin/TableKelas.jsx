@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Tambah from "../../../assets/svg/add-admin.svg";
+import Tambah from "../../assets/svg/add-admin.svg";
+import SearhIcon from "../../assets/svg/search-admin.svg";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
-import SearhIcon from "../../../assets/svg/search-admin.svg";
 import { FaTrash } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
 import { FaBook } from "react-icons/fa6";
@@ -24,20 +24,18 @@ import {
   MenuOptionGroup,
   MenuItemOption,
   MenuDivider,
-  Table,
 } from "@chakra-ui/react";
-import { useGetCourse } from "../../../services/Admin/courses/get-data-courses";
-import { useDeleteCourse } from "../../../services/Admin/courses/delete-data-courses";
+import { useGetCourse } from "../../services/Admin/courses/get-data-courses";
+import { useDeleteCourse } from "../../services/Admin/courses/delete-data-courses";
 
 import { IoChevronDownCircleOutline } from "react-icons/io5";
-import { useGetCategory } from "../../../services/Admin/category/get-data-category";
-import { Header } from "./Header";
-import { DataDashboard } from "./DataDashboard";
-import { Sidebar } from "./Sidebar";
+import { useGetCategory } from "../../services/Admin/category/get-data-category";
+import { Header } from "../../assets/components/Admin/Header";
+import { DataDashboard } from "../../assets/components/Admin/DataDashboard";
+import { Sidebar } from "../../assets/components/Admin/Sidebar";
 import { useNavigate } from "react-router-dom";
-import { EditCourse } from "./course/EditCourse";
-import { AddCourse } from "./course/AddCourse";
-import { Category } from "./kategori/Category";
+import { EditCourse } from "../../assets/components/Admin/course/EditCourse";
+import { AddCourse } from "../../assets/components/Admin/course/AddCourse";
 
 export const TableKelas = () => {
   const [AddPopupForm, setAddPopupForm] = useState(false);
@@ -51,6 +49,7 @@ export const TableKelas = () => {
   const [levelFilter, setlevelFilter] = useState("");
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [tipeKelasFilter, settipeKelasFilter] = useState("");
+  const [isFilterActive, setIsFilterActive] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -96,27 +95,55 @@ export const TableKelas = () => {
   const { mutate: deleteCourse } = useDeleteCourse({
     onSuccess: () => {
       refetchData();
-      toast.promise(examplePromise, {
-        success: { title: "Course Deleted", description: "Done" },
-        error: { title: "Error :(", description: "Something wrong" },
-        loading: { title: "Deleting Course...", description: "Please wait" },
+      toast({
+        title: "Berhasil Menghapus Course",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        size: "lg",
+        position: "top",
       });
+
       onClose();
     },
   });
 
-  const handleFilterByLevel = (selectedLevel) => {
-    setlevelFilter(selectedLevel);
-    setCurrentPage(1);
-  };
-
   const handleFilterByTipeKelas = (selectedLevel) => {
-    settipeKelasFilter(selectedLevel);
+    if (tipeKelasFilter === selectedLevel) {
+      // Jika filter sudah aktif, reset filter
+      settipeKelasFilter("");
+      setIsFilterActive(false);
+    } else {
+      // Jika filter belum aktif, set filter
+      settipeKelasFilter(selectedLevel);
+      setIsFilterActive(true);
+    }
     setCurrentPage(1);
   };
-
+  
+  const handleFilterByLevel = (selectedLevel) => {
+    if (levelFilter === selectedLevel) {
+      // Jika filter sudah aktif, reset filter
+      setlevelFilter("");
+      setIsFilterActive(false);
+    } else {
+      // Jika filter belum aktif, set filter
+      setlevelFilter(selectedLevel);
+      setIsFilterActive(true);
+    }
+    setCurrentPage(1);
+  };
+  
   const handleFilterByCategory = (selectedCategory) => {
-    setCategoryFilter(selectedCategory);
+    if (CategoryFilter === selectedCategory) {
+      // Jika filter sudah aktif, reset filter
+      setCategoryFilter("");
+      setIsFilterActive(false);
+    } else {
+      // Jika filter belum aktif, set filter
+      setCategoryFilter(selectedCategory);
+      setIsFilterActive(true);
+    }
     setCurrentPage(1);
   };
 
@@ -151,10 +178,16 @@ export const TableKelas = () => {
     setAddPopupForm(false);
     setPopupEdit(false);
   };
+  const handleResetFilter = () => {
+    settipeKelasFilter("");
+    setlevelFilter("");
+    setCategoryFilter("");
+    setIsFilterActive(false);
+    setCurrentPage(1);
+  };
   const cancelRef = React.useRef();
-
   return (
-    <div className="flex h-screen flex-col bg-[rgba(208,208,208,0.21)] sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
+    <div className="flex h-screen flex-col bg-[rgba(169,167,167,0.11)] sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
       <Sidebar setSidebarVisible={setSidebarVisible} />
 
       <div className=" w-full lg:overflow-x-hidden">
@@ -213,13 +246,13 @@ export const TableKelas = () => {
           <div className="flex gap-2 sm:gap-3">
             <h4
               onClick={handleOpen}
-              className="flex items-center gap-2 border-2 px-4 py-1 font-bold text-base rounded-2xl bg-[#6148FF] border-[#6148FF] text-white"
+              className="flex items-center gap-2 border-2 p-2  sm:px-4 sm:py-1 font-bold text-base rounded-2xl bg-[#6148FF] border-[#6148FF] text-white"
             >
               <img src={Tambah} alt="" />
               Add
             </h4>
             <div>
-              <Menu>
+              <Menu flip preventOverflow placement="auto">
                 <MenuButton
                   border="1px"
                   borderRadius="16px"
@@ -229,13 +262,13 @@ export const TableKelas = () => {
                   as={Button}
                   leftIcon={<IoChevronDownCircleOutline />}
                 >
-                  Filter
+                  {isFilterActive ? "Reset Filter" : "Filter"}
                 </MenuButton>
                 <MenuList>
                   <MenuOptionGroup
                     color="#6148FF"
                     title="Tipe Kelas"
-                    type="radio"
+                    type="checkbox"
                   >
                     <MenuItemOption
                       onClick={() => handleFilterByTipeKelas("1")}
@@ -250,7 +283,7 @@ export const TableKelas = () => {
                       GRATIS
                     </MenuItemOption>
                   </MenuOptionGroup>
-                  <MenuOptionGroup color="#6148FF" title="Level" type="radio">
+                  <MenuOptionGroup color="#6148FF" title="Level" type="checkbox">
                     <MenuItemOption
                       onClick={() => handleFilterByLevel("BEGINNER")}
                       value="BEGINNER"
@@ -273,7 +306,7 @@ export const TableKelas = () => {
                   <MenuDivider />
                   <MenuOptionGroup
                     color="#6148FF"
-                    type="radio"
+                    type="checkbox"
                     title="Category"
                   >
                     {categoryCourse?.data?.map((filterCategory, index) => (
@@ -344,10 +377,9 @@ export const TableKelas = () => {
                     <th>Mentor</th>
                     <th>Harga Kelas</th>
                     <th>Image</th>
-                    <th>Description</th>
                     <th className="text-center">EDIT</th>
                     <th className="text-center">DELETE</th>
-                    <th className="text-center">ADD CHAPTER</th>
+                    <th className="text-center">Chapters</th>
                   </tr>
                 </thead>
                 <tbody className="font-bold text-sm">
@@ -411,7 +443,6 @@ export const TableKelas = () => {
                             alt=""
                           />
                         </td>
-                        <td>{kelas.description}</td>
                         <td>
                           <button
                             onClick={() => handleEdit(kelas.id)}
@@ -450,7 +481,7 @@ export const TableKelas = () => {
         </div>
         {Kelas?.data?.courses.length >= 0 && (
           <div className="flex mt-2 gap-2 justify-end mx-[4rem]">
-            <div className="flex bg-[rgba(0,0,0,0.4)] rounded-[50px] p-3 gap-3 text-white">
+            <div className="flex bg-gray-300 shadow-xl rounded-lg p-3 gap-3 text-white">
               <div
                 onClick={handlePrev}
                 className={`p-1 rounded-[50px] bg-[#6048ff] ${
@@ -461,7 +492,7 @@ export const TableKelas = () => {
               >
                 <IoIosArrowBack />
               </div>
-              <p>{currentPage}</p>
+              <p className="text-black">{currentPage}</p>
               <div
                 onClick={handleNext}
                 className={`p-1 rounded-[50px] bg-[#6148FF] ${

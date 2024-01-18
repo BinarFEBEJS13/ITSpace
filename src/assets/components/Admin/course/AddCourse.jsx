@@ -103,15 +103,15 @@ export const AddCourse = (props) => {
       errors.Level = "Pilih level Kelas";
       isValid = false;
     }
-
-    if (Harga === 0) {
-      errors.Harga = "Harga tidak boleh kosong";
+    
+    if (Harga > 0 && TipeKelas === "0") {
+      errors.Harga = "Kelas Gratis tidak berbayar";
       isValid = false;
-    } else if (!Number.isInteger(Number(Harga))) {
-      errors.Harga = "Harga harus berupa angka bulat";
+    } else if (TipeKelas === "1" && Harga === 0) {
+      errors.Harga = "Masukkan harga untuk kelas premium";
       isValid = false;
     }
-
+    
     if (!Mentor.length) {
       errors.Mentor = "Mentor tidak boleh kosong";
       isValid = false;
@@ -160,20 +160,20 @@ export const AddCourse = (props) => {
     postDataCourse(formData)
       .then((result) => {
         toast({
-          title:
-            result?.response?.data?.message || "Berhasil Menambah Kelas Baru",
-          duration: 9000,
+          title: result?.message || "Berhasil Menambah Kelas Baru",
+          duration: 5000,
           status: "success",
+          isClosable: true,
           position: "top",
         });
         refetchData();
       })
       .catch((err) => {
-        console.log(err, "err");
         toast({
           title: err?.response?.data?.message,
-          duration: 9000,
+          duration: 5000,
           status: "error",
+          isClosable: true,
           position: "top",
         });
       });
@@ -193,6 +193,11 @@ export const AddCourse = (props) => {
       }
       if (e.target.id === "TipeKelas") {
         setTipeKelas(e.target.value);
+      setHarga(e.target.value === "0" ? 0 : Harga);
+      setInputErrors((prevErrors) => ({
+        ...prevErrors,
+        Harga: e.target.value === "0" ? "" : prevErrors.Harga,
+      }));
       }
       if (e.target.id === "level") {
         setLevel(e.target.value);
@@ -201,7 +206,8 @@ export const AddCourse = (props) => {
         setMentor(e.target.value);
       }
       if (e.target.id === "harga") {
-        setHarga(parseInt(e.target.value));
+        const hargaan = parseInt(e.target.value);
+        setHarga(isNaN(hargaan) ? 0 : hargaan)
       }
       if (e.target.id === "LinkKelas") {
         setLinkKelas(e.target.value);
@@ -222,7 +228,7 @@ export const AddCourse = (props) => {
       <form
         encType="multipart/form-data"
         onSubmit={handleKelas}
-        className="pop-up overflow-y-auto max-h-[70%] lg:max-h-[95%] rounded-2xl  md:w-[50%] lg:w-[] xl:w-[35%] bg-white absolute"
+        className="pop-up overflow-y-auto max-h-[85%] lg:max-h-[95%] md:max-h-[95%] rounded-2xl w-[80%] xl:w-[65%] 2xl:w-[45%] bg-white absolute"
       >
         <i
           onClick={props.handleClose}
@@ -252,7 +258,7 @@ export const AddCourse = (props) => {
                 <FormErrorMessage>{inputErrors.KodeKelas}</FormErrorMessage>
               )}
             </FormControl>
-            <FormControl isInvalid={inputErrors}>
+            <FormControl isInvalid={inputErrors.Kategori.length !== 0}>
               <FormLabel>Kategori</FormLabel>
               <Selectt
                 value={Kategori}
@@ -296,8 +302,13 @@ export const AddCourse = (props) => {
               )}
             </FormControl>
 
-            <FormControl isInvalid={inputErrors.TipeKelas !== "" && (inputErrors.TipeKelas !== "1" || inputErrors.TipeKelas !== "0")}>
-              <FormLabel>Level</FormLabel>
+            <FormControl
+              isInvalid={
+                inputErrors.TipeKelas !== "" &&
+                (inputErrors.TipeKelas !== "1" || inputErrors.TipeKelas !== "0")
+              }
+            >
+              <FormLabel>Tipe Kelas</FormLabel>
               <Select
                 id="TipeKelas"
                 value={TipeKelas}
@@ -319,7 +330,14 @@ export const AddCourse = (props) => {
               )}
             </FormControl>
 
-            <FormControl isInvalid={inputErrors.Level !== "" && (inputErrors.Level !== "BEGINNER" || inputErrors.Level !== "INTERMEDIATE" || inputErrors.Level !== "ADVANCED")}>
+            <FormControl
+              isInvalid={
+                inputErrors.Level !== "" &&
+                (inputErrors.Level !== "BEGINNER" ||
+                  inputErrors.Level !== "INTERMEDIATE" ||
+                  inputErrors.Level !== "ADVANCED")
+              }
+            >
               <FormLabel>Level</FormLabel>
               <Select
                 id="level"
@@ -385,8 +403,8 @@ export const AddCourse = (props) => {
 
             <div className="flex flex-col gap-1">
               <FormLabel>Images</FormLabel>
-              <div className="py-4 bg-[#ebf3fc63] flex flex-col gap-4 justify-center items-center border-2 border-dashed- w-full h-[300px] pointer rounded-lg">
-                <div className="border-4 border-dashed border-[#D0D0D0] rounded-lg h-[70%] w-[90%] flex flex-col items-center justify-center">
+              <div className="py-4 bg-[#e6e9ed36] flex flex-col gap-4 justify-center items-center border w-full h-[500px] sm:h-[300px] pointer rounded-lg">
+                <div className="border-[3px] border-dashed border-[#D0D0D0] rounded-lg h-full w-[95%] flex flex-col items-center justify-center">
                   <input
                     className="opacity-0 translate-y-[3rem] translate-x-8"
                     onChange={handleFileChange}
@@ -396,21 +414,17 @@ export const AddCourse = (props) => {
                   <FaCloudArrowUp size={60} />
                   <p>Upload Your Image Here</p>
                 </div>
-                <div className="flex justify-between items-center border-4 rounded-lg border-[#D0D0D0] h-[30%] w-[90%]">
-                  <div className="px-4 flex items-center text-xl gap-4">
-                    {selectedFile && (
-                      <>
-                        <img width={70} height={40} alt="" src={selectedFile} />
-                        <p>{fileName}</p>
-                      </>
-                    )}
-                  </div>
-                  {selectedFile && (
-                    <div className="bg-red-500 p-2 mx-5 rounded-lg  cursor-pointer">
+                {selectedFile && (
+                  <div className="flex py-4 justify-between items-center border-2 rounded-lg border-[#D0D0D0] h-[30%] w-[95%]">
+                    <div className="px-4 flex items-center text-xl gap-4">
+                      <img width={70} height={40} alt="" src={selectedFile} />
+                      <span className="text-xs md:text-lg max-w-[1000px] ">{fileName}</span>
+                    </div>
+                    <div className="bg-red-500 p-2 mx-5 rounded-lg text-white  cursor-pointer">
                       <FaTrash onClick={handleDeleteImage} />
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -437,6 +451,7 @@ export const AddCourse = (props) => {
             <FormControl isInvalid={inputErrors.Description !== ""}>
               <FormLabel>Deskripsi</FormLabel>
               <Textarea
+              size= "lg"
                 id="description"
                 value={Description}
                 onChange={(e) => {

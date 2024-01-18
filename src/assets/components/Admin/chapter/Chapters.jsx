@@ -61,7 +61,7 @@ export const Chapters = () => {
   };
 
   return (
-    <div className="flex bg-[rgba(208,208,208,0.21)] h-screen flex-col sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
+    <div className="flex bg-[rgba(169,167,167,0.11)] h-screen flex-col sm:flex-row md:flex-col lg:flex-row lg:overflow-x-hidden">
       {AddChapters && (
         <AddChapterPopup
           setAddChapters={setAddChapters}
@@ -89,9 +89,9 @@ export const Chapters = () => {
         />
       )}
 
-      <div className="w-full lg:overflow-x-hidden">
+      <div className="w-full lg:overflow-x-hidden ">
         <Header />
-        <div className="mx-[2rem] my-[2rem] md:mx-[2rem] flex justify-between">
+        <div className="mx-[2rem] my-[2rem] md:mx-[2rem] flex justify-between ">
           <div className="flex text-3xl items-center gap-4">
             <FaArrowLeftLong
               onClick={() => navigate("/admin/dashboard/course")}
@@ -103,17 +103,17 @@ export const Chapters = () => {
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 sm:mx-[3rem]">
             <div
               onClick={toggleAddChapters}
-              className="flex items-center gap-2 py-1 px-2 border-2 sm:px-4 sm:py-2 font-bold text-base rounded-2xl bg-[#6148FF] border-[#6148FF] text-white"
+              className="flex items-center gap-2 py-2 px-3 border-2 sm:px-4 sm:py-2 font-bold text-base rounded-2xl bg-[#6148FF] border-[#6148FF] text-white"
             >
               <img src={Tambah} alt="" />
-              New Chapter
+              Tambah Chapter
             </div>
           </div>
         </div>
         {Chapter?.data?.length === 0 ? (
           <div className="flex flex-col gap-6 items-center justify-center h-[60%] ">
             <img className="w-[70%] sm:w-[30%]" src={chapterImg} alt="" />
-            <h1 className="sm:text-xl font-bold text-[#6148FF]">Maaf Chapter untuk course ini tidak ada</h1>
+            <h1 className="sm:text-xl font-bold text-[#6148FF]">Maaf chapter belum ada</h1>
           </div>
         ) : (
           <div>
@@ -124,7 +124,7 @@ export const Chapters = () => {
               <div className="flex items-center gap-3">
                 <h1 className="uppercase font-bold">{courses?.code}</h1>
                 <h1
-                  className={`rounded-[50px] font-bold px-3 text-white ${
+                  className={`rounded-[50px] text-[1.1rem] font-bold px-3 text-white ${
                     courses?.level === "BEGINNER"
                       ? " bg-[#73CA5C] "
                       : courses?.level === "INTERMEDIATE"
@@ -135,7 +135,7 @@ export const Chapters = () => {
                   {courses?.level}
                 </h1>
                 <h1
-                  className={`text-white rounded-full sm:px-3 px-2 py-1 font-bold ${
+                  className={`text-white text-[1.1rem] rounded-full sm:px-3 px-2 py-1 font-bold ${
                     Chapter?.data?.course?.isPremium === 1
                       ? "bg-[#6148FF]"
                       : "bg-[#73CA5C]"
@@ -155,7 +155,7 @@ export const Chapters = () => {
                 >
                   <div className="flex justify-between">
                     <div className="w-full justify-center p-6 flex flex-col gap-3">
-                      <h1 className="text-xl font-semibold sm:text-4xl text-[#6148FF]">
+                      <h1 className="text-xl font-semibold sm:text-4xl text-black">
                         Chapter {chapter.number}
                       </h1>
                       <div className="capitalize  flex items-center gap-3">
@@ -171,10 +171,10 @@ export const Chapters = () => {
                           Tipe Chapter :
                         </label>
                         <span
-                          className={`px-2 py-1 sm:px-7 sm:py-3 text-white font-bold text-sm rounded-[25px] ${
+                          className={`font-semibold text-lg rounded-[25px] ${
                             chapter.isPremium === true
-                              ? "bg-[#6148FF]"
-                              : "bg-[#73CA5C]"
+                              ? "text-[#6148FF]"
+                              : "text-[#73CA5C]"
                           }`}
                         >
                           {chapter.isPremium === true ? "PREMIUM" : "GRATIS"}
