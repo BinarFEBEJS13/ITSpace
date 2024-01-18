@@ -46,7 +46,6 @@ export const UbahPassword = () => {
   useEffect(() => {
     if (isSuccess) {
       toast({
-        title: "Berhasil",
         description: "Password berhasil diubah.",
         status: "success",
         duration: 3000,
@@ -59,8 +58,15 @@ export const UbahPassword = () => {
     } else if (error) {
       if (error.response && error.response.status === 400) {
         toast({
-          title: "Error",
-          description: "Harap isi semua kolom.",
+          description: error.response.data.message,
+          status: "error",
+          duration: 3000,
+          position: "top",
+          isClosable: true,
+        });
+      } else if (error.response && error.response.status === 401) {
+        toast({
+          description: error.response.data.message,
           status: "error",
           duration: 3000,
           position: "top",
@@ -68,8 +74,7 @@ export const UbahPassword = () => {
         });
       } else {
         toast({
-          title: "Error",
-          description: error.message,
+          description: error.response.data.message,
           status: "error",
           duration: 3000,
           position: "top",

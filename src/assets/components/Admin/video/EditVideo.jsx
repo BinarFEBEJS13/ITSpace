@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
-import { usePostDataVideos } from "../../../../services/Admin/videos/post-data-videos";
-import { FormControl, FormErrorMessage, FormLabel, useToast } from "@chakra-ui/react";
-import { useGetDataChaptersID } from "../../../../services/Admin/chapters/get-chapterID";
+
+import { FormControl, FormErrorMessage, FormLabel, Input, Textarea, useToast } from "@chakra-ui/react";
 import { useGetDataVideoId } from "../../../../services/Admin/videos/get-data-videoID";
 import { EditVideos, useEditVideo } from "../../../../services/Admin/videos/put-data-videos";
-import { Input } from "rsuite";
-import { duration } from "@mui/material";
 
 export const EditVideo = ({
   courseId,
   chapterId,
   selectVideo,
   settoggleForm,
-  reloadData
 }) => {
   const [Judul, setJudul] = useState("");
   const [Deskripsi, setDeskripsi] = useState("");
@@ -38,7 +34,7 @@ export const EditVideo = ({
     setNumber(selectVideo.number);
   }, []);
 
-  const { data: videoID } = useGetDataVideoId({
+  const { data: videoID, refetch } = useGetDataVideoId({
     courseId: courseId,
     chapterId: chapterId,
     videoId: selectVideo.id,
@@ -90,15 +86,17 @@ export const EditVideo = ({
         setLink(e.target.value);
       }
       if (e.target.id === "durasi") {
-        setDurasi(parseInt(e.target.value));
+        const durss = parseInt(e.target.value);
+        setDurasi(isNaN(durss) ? 0 : durss)
       }
+
       if (e.target.id === "number") {
-        setNumber(parseInt(e.target.value));
+        const numm = parseInt(e.target.value);
+        setNumber(isNaN(numm) ? 0 : numm)
       }
     }
   };
 
-//    
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -118,16 +116,18 @@ export const EditVideo = ({
     }).then((result) => {
       toast({
         title: result?.data?.message,
-        duration: 9000,
+        duration: 5000,
+        isClosable: true,
         status: "success",
         position: "top",
       });
-      reloadData()
+      return result
     }).catch((err) => {
       toast({
         title: err?.response?.data?.message,
-        duration: 9000,
+        duration: 5000,
         status: "error",
+        isClosable: true,
         position: "top",
       });
     });
@@ -141,7 +141,7 @@ export const EditVideo = ({
     <div className="w-full z-40 h-full fixed top-0 left-0 bg-[rgba(0,0,0,0.4)] flex items-start justify-center">
     <form
       onSubmit={handleSubmit}
-      className="bg-white flex rounded-lg shadow-lg flex-col items-center justify-center w-[80%] md:w-[70%] xl:w-[30%] mt-[5rem]"
+      className="bg-white flex rounded-lg shadow-lg flex-col max-h-[60%] overflow-y-auto w-[80%] md:w-[70%] xl:w-[30%] mt-[5rem]"
     >
       <div className="flex justify-between w-full px-6 my-4">
         <h1 className="font-bold text-2xl">Edit Video</h1>
@@ -232,7 +232,7 @@ export const EditVideo = ({
           </FormControl>
           <FormControl isInvalid={inputErrors.Deskripsi !== ""}>
             <FormLabel>Video Description</FormLabel>
-            <Input
+            <Textarea
             value={Deskripsi}
               size="lg"
               id="desc"
