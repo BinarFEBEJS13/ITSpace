@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Navbar } from "../assets/components/Navbar";
+import ScrollToTop from "react-scroll-to-top";
 // png main section
 import course from "../assets/img/course.png";
 import uiux from "../assets/img/ui-ux.jpeg";
@@ -28,9 +29,18 @@ import { NotFoundCourse } from "../assets/components/HandleErrorPage/NotFoundCou
 // IMPORT CHAKRA UI
 import { Spinner } from "@chakra-ui/react";
 import { useGetDataKursus } from "../services/get-Datas-Courses";
+// import { useGetCategories } from "../services/get-Datas-Categories";
 
 export const Beranda = () => {
   const [activePopular, setActivePopular] = useState("");
+  const [ActiveNavbar, setActiveNavbar] = useState(false);
+  window.addEventListener("scroll", function () {
+    if (this.window.scrollY > 100) {
+      setActiveNavbar(true);
+    } else {
+      setActiveNavbar(false);
+    }
+  });
 
   const handleActivePopular = (item) => {
     setActivePopular(item);
@@ -43,6 +53,10 @@ export const Beranda = () => {
   });
   const datasCourses = dataKursuss?.data?.courses;
 
+  // const { data: dataCategories } = useGetCategories();
+  // const dataKategori = dataCategories?.data;
+
+  // console.log(dataKategori);
   function capitalizeFirstLetter(str) {
     return str
       .split(" ")
@@ -53,6 +67,7 @@ export const Beranda = () => {
   return (
     <>
       <div className="overflow-x-hidden">
+        <ScrollToTop smooth viewBox="0 0 24 22" svgPath="M12 18v-12h-3l4-4 4 4h-3v12h-2z" className="bg-white text-white p-2 shadow-sm-button flex items-center rounded-md fixed bottom-3 right-3 sm:bottom-6 sm:right-6 border border-white" />
         <Navbar />
         {/* Section Main Beranda */}
         <div className="w-screen bg-gradientkanan">
@@ -95,28 +110,28 @@ export const Beranda = () => {
               <div className="flex justify-between items-center">
                 <h1 className="text-xl sm:text-2xl font-bold">Kategori Belajar</h1>
               </div>
-              <div className="flex flex-wrap justify-center sm:flex-nowrap sm:gap-2">
-                <div onClick={() => (window.location.href = "/category/uiux")} className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
+              <div className="w-full grid grid-cols-3 sm:grid-cols-6 gap-2 lg:gap-3">
+                <div onClick={() => (window.location.href = "/category/uiux")} className="w-full flex flex-col items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden sm:hover:shadow-sm-button">
                   <img src={uiux} alt="ui/ux" className="w-44 rounded-md" />
                   <h2 className="items-center text-xs sm:text-sm font-semibold text-center">UI/UX Design</h2>
                 </div>
-                <div onClick={() => (window.location.href = "/category/frontend")} className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
+                <div onClick={() => (window.location.href = "/category/frontend")} className="w-full flex flex-col items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden sm:hover:shadow-sm-button">
                   <img src={frontend} alt="frontend" className="w-44 rounded-md" />
                   <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Frontend</h2>
                 </div>
-                <div onClick={() => (window.location.href = "/category/database")} className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
+                <div onClick={() => (window.location.href = "/category/database")} className="w-full flex flex-col items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden sm:hover:shadow-sm-button">
                   <img src={database} alt="database" className="w-44 rounded-md" />
                   <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Database</h2>
                 </div>
-                <div onClick={() => (window.location.href = "/category/backend")} className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
+                <div onClick={() => (window.location.href = "/category/backend")} className="w-full flex flex-col items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden sm:hover:shadow-sm-button">
                   <img src={backend} alt="backend" className="w-44 rounded-md" />
                   <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Backend</h2>
                 </div>
-                <div onClick={() => (window.location.href = "/category/machinelearning")} className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
+                <div onClick={() => (window.location.href = "/category/machinelearning")} className="w-full flex flex-col items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden sm:hover:shadow-sm-button">
                   <img src={machinelearning} alt="machine learning" className="w-44 rounded-md" />
                   <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Machine Learning</h2>
                 </div>
-                <div onClick={() => (window.location.href = "/category/datascience")} className="flex flex-col w-1/3 sm:w-1/6 items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden hover:shadow-sm-button">
+                <div onClick={() => (window.location.href = "/category/datascience")} className="w-full flex flex-col items-center border rounded-md gap-2 pb-4 cursor-pointer overflow-hidden sm:hover:shadow-sm-button">
                   <img src={datascience} alt="data science" className="w-44 rounded-md" />
                   <h2 className="items-center text-xs sm:text-sm font-semibold text-center">Data Science</h2>
                 </div>
@@ -131,51 +146,51 @@ export const Beranda = () => {
               {/* Judul Kursus Populer */}
               <div className="flex justify-between items-center">
                 <h1 className="text-xl sm:text-2xl font-bold">Kelas Populer</h1>
-                <h6 onClick={() => (window.location.href = "/kursus/all")} className="text-ungu-0 text-sm cursor-pointer">
-                  Lihat Semua...
+                <h6 onClick={() => (window.location.href = "/kursus/all")} className="text-ungu-0 font-medium text-sm cursor-pointer">
+                  Lihat Semua
                 </h6>
               </div>
               {/* Button Filter Kursus */}
-              <div className="flex w-full ">
-                <div className="flex flex-wrap lg:flex-nowrap w-full justify-center gap-2 xl:gap-6">
+              <div className="flex w-full flex-row overflow-auto gap-2 scrollbar-hide">
+                <div className="flex w-full lg:justify-center items-center gap-2 xl:gap-4 ">
                   <button
-                    className={`${activePopular === "" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    className={`${activePopular === "" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
                     onClick={() => handleActivePopular("")}
                   >
                     All
                   </button>
                   <button
-                    className={`${activePopular === "ui/ux" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    className={`${activePopular === "ui/ux" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "} whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
                     onClick={() => handleActivePopular("ui/ux")}
                   >
                     UI/UX Design
                   </button>
                   <button
-                    className={`${activePopular === "frontend" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    className={`${activePopular === "frontend" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
                     onClick={() => handleActivePopular("frontend")}
                   >
                     Frontend
                   </button>
                   <button
-                    className={`${activePopular === "database" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    className={`${activePopular === "database" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
                     onClick={() => handleActivePopular("database")}
                   >
                     Database
                   </button>
                   <button
-                    className={`${activePopular === "backend" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    className={`${activePopular === "backend" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
                     onClick={() => handleActivePopular("backend")}
                   >
                     Backend
                   </button>
                   <button
-                    className={`${activePopular === "machine learning" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    className={`${activePopular === "machine learning" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
                     onClick={() => handleActivePopular("machine learning")}
                   >
                     Machine Learning
                   </button>
                   <button
-                    className={`${activePopular === "data science" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    className={`${activePopular === "data science" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
                     onClick={() => handleActivePopular("data science")}
                   >
                     Data Science
@@ -221,10 +236,10 @@ export const Beranda = () => {
                     >
                       {datasCourses?.slice(0, 10).map((value) => {
                         return (
-                          <SwiperSlide key={value.id} className="p-2 ">
-                            <div className="w-full shadow-sm-button rounded-2xl">
+                          <SwiperSlide key={value.id} className="p-2">
+                            <div onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="w-full shadow-sm-button rounded-2xl cursor-pointer">
                               <div className="relative w-full sm:h-44 lg:h-48 overflow-hidden">
-                                <img src={value.thumbnailUrl} alt="" className="w-full h-full object-cover rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
+                                <img src={value.thumbnailUrl} alt="" className="w-full h-full object-cover rounded-2xl" />
                               </div>
                               <div className="px-2 sm:px-4 py-4 flex flex-col gap-2 rounded-2xl">
                                 <div className="flex justify-between items-center">
@@ -235,15 +250,13 @@ export const Beranda = () => {
                                   </span>
                                 </div>
                                 <div>
-                                  <h2 onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="font-semibold truncate-3-lines cursor-pointer text-xs sm:text-base">
-                                    {capitalizeFirstLetter(value.title)}
-                                  </h2>
+                                  <h2 className="font-semibold truncate-3-lines  text-xs sm:text-base">{capitalizeFirstLetter(value.title)}</h2>
                                   <span className="opacity-50 text-xs sm:text-sm">by {value?.mentor[0]?.author?.profile?.name}</span>
                                 </div>
                                 <div className="flex flex-wrap w-full gap-2 text-xs sm:text-sm">
                                   <span className="flex gap-2 items-center">
                                     <img src={level} alt="" className="w-4" />
-                                    {value.level} Level
+                                    {value.level.charAt(0).toUpperCase() + value.level.slice(1).toLowerCase()} Level
                                   </span>
                                   <span className="flex gap-2 items-center">
                                     <img src={modul} alt="" className="w-4" />
@@ -270,7 +283,7 @@ export const Beranda = () => {
                                         </span>
                                       </div>
                                     ) : (
-                                      <div onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="flex gap-2 items-center justify-center bg-hijau-0 px-4 py-1 rounded-md cursor-pointer">
+                                      <div onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="flex gap-2 items-center justify-center bg-hijau-0 px-4 py-1 rounded-md ">
                                         <span className="text-xs sm:text-sm">Mulai Kelas</span>
                                       </div>
                                     )}
@@ -301,9 +314,9 @@ export const Beranda = () => {
                       {datasCourses?.slice(0, 10).map((value) => {
                         return (
                           <div key={value.id}>
-                            <div className="w-full shadow-sm-button rounded-2xl">
+                            <div onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="w-full shadow-sm-button rounded-2xl">
                               <div className="relative w-full h-32 overflow-hidden">
-                                <img src={value.thumbnailUrl} alt="" className="w-full h-full object-cover rounded-2xl hover:scale-110 transition-transform duration-300 ease-in-out" />
+                                <img src={value.thumbnailUrl} alt="" className="w-full h-full object-cover rounded-2xl " />
                               </div>
                               <div className="px-2 sm:px-4 py-4 flex flex-col gap-2 rounded-2xl">
                                 <div className="flex justify-between items-center">
@@ -314,15 +327,13 @@ export const Beranda = () => {
                                   </span>
                                 </div>
                                 <div>
-                                  <h2 onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="font-semibold truncate-3-lines cursor-pointer text-xs sm:text-base">
-                                    {capitalizeFirstLetter(value.title)}
-                                  </h2>
+                                  <h2 className="font-semibold truncate-3-lines cursor-pointer text-xs sm:text-base">{capitalizeFirstLetter(value.title)}</h2>
                                   <span className="opacity-50 text-xs sm:text-sm">by {value?.mentor[0]?.author?.profile?.name}</span>
                                 </div>
                                 <div className="flex flex-wrap w-full gap-2 text-xs sm:text-sm">
                                   <span className="flex gap-2 items-center">
                                     <img src={level} alt="" className="w-4" />
-                                    {value.level} Level
+                                    {value.level.charAt(0).toUpperCase() + value.level.slice(1).toLowerCase()} Level
                                   </span>
                                   <span className="flex gap-2 items-center">
                                     <img src={modul} alt="" className="w-4" />
@@ -349,7 +360,7 @@ export const Beranda = () => {
                                         </span>
                                       </div>
                                     ) : (
-                                      <div onClick={() => (window.location.href = `/detail-kelas/${value.id}`)} className="flex gap-2 bg-hijau-0 px-4 py-1 rounded-md cursor-pointer">
+                                      <div className="flex gap-2 bg-hijau-0 px-4 py-1 rounded-md cursor-pointer">
                                         <span className="text-xs sm:text-sm">Mulai Kelas</span>
                                       </div>
                                     )}

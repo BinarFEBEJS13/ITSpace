@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Navbar } from "../assets/components/Navbar";
+import { FaFilter } from "react-icons/fa";
+import ScrollToTop from "react-scroll-to-top";
 // svg card
 import nexticon from "../assets/svg/next.svg";
 import previcon from "../assets/svg/previous.svg";
@@ -214,6 +216,7 @@ export const Kursus = () => {
   return (
     <>
       <div className="overflow-x-hidden">
+        <ScrollToTop smooth viewBox="0 0 24 22" svgPath="M12 18v-12h-3l4-4 4 4h-3v12h-2z" className="bg-white text-white p-2 shadow-sm-button flex items-center rounded-md fixed bottom-3 right-3 sm:bottom-6 sm:right-6 border border-white" />
         <Navbar />
         <div className="w-screen">
           <div className="container mx-auto">
@@ -223,28 +226,34 @@ export const Kursus = () => {
                 <PencarianPageKursus />
                 <div onClick={handleFilter} className="flex gap-1 border border-ungu-0 rounded-md px-2 sm:hidden">
                   <img src={filterungu} alt="filter" className="w-4" />
-                  <h6 className=" text-ungu-0">Filter</h6>
+                  <h6 className=" text-ungu-0">FILTER</h6>
                 </div>
               </div>
               <div className="flex flex-col sm:flex-row gap-8">
                 {/* Filter Kelas Berjalan untuk tablet dan Laptop*/}
                 <div className="hidden sm:block w-2/6 xl:w-3/12 ">
-                  <div className="flex flex-col gap-3 px-6 py-8 bg-birumuda-0 shadow-sm-button rounded-md">
-                    <h2 className="font-semibold text-lg">Filter</h2>
-                    <div className="flex flex-col gap-4">
-                      <div className="flex flex-col gap-1">
-                        <div className="flex gap-2">
-                          <input ref={disukaiCheckboxRef} onChange={handleChangePalingDisukai} value={"disukai"} type="checkbox" className="accent-biru-0 w-4"></input>
-                          <p className="text-sm">Paling Disukai</p>
-                        </div>
-                        <div className="flex gap-2">
-                          <input ref={populerCheckboxRef} onChange={handleChangeSortPopular} value={"popularity"} type="checkbox" className="accent-biru-0 w-4"></input>
-                          <p className="text-sm">Paling Populer</p>
+                  <div className="flex flex-col gap-4 px-6 py-8 bg-birumuda-0 shadow-sm-button rounded-md">
+                    <div className="flex gap-2 items-center">
+                      <FaFilter />
+                      <h2 className="font-semibold text-lg">FILTER</h2>
+                    </div>
+                    <div className="flex flex-col gap-3">
+                      <div className="flex flex-col gap-2">
+                        <h2 className="font-medium text-base">Sipaling</h2>
+                        <div className="flex flex-col gap-1">
+                          <div className="flex gap-2">
+                            <input ref={disukaiCheckboxRef} onChange={handleChangePalingDisukai} value={"disukai"} type="checkbox" className="accent-biru-0 w-4 "></input>
+                            <p className="text-sm">Paling Disukai</p>
+                          </div>
+                          <div className="flex gap-2">
+                            <input ref={populerCheckboxRef} onChange={handleChangeSortPopular} value={"popularity"} type="checkbox" className="accent-biru-0 w-4"></input>
+                            <p className="text-sm">Paling Populer</p>
+                          </div>
                         </div>
                       </div>
                       {/* Berdasarkan Kategori */}
                       <div className="flex flex-col gap-2">
-                        <h2 className="font-semibold text-lg">Kategori</h2>
+                        <h2 className="font-medium text-base">Kategori</h2>
                         <div className="flex flex-col gap-1">
                           <div className="flex gap-2">
                             <input ref={(el) => kategoriCheckboxRef.current.push(el)} onChange={handleChangeKategori} value={"ui/ux"} type="checkbox" className="accent-biru-0 w-4"></input>
@@ -274,7 +283,7 @@ export const Kursus = () => {
                       </div>
                       {/* Berdasarkan Level kesulitan */}
                       <div className="flex flex-col gap-2">
-                        <h2 className="font-semibold text-lg">Level Kesulitan</h2>
+                        <h2 className="font-medium text-base">Level Kesulitan</h2>
                         <div className="flex flex-col gap-1">
                           <div className="flex gap-2">
                             <input ref={(el) => levelCheckboxRef.current.push(el)} onChange={handleChangeLevel} value={"BEGINNER"} type="checkbox" className="accent-biru-0 w-4"></input>
@@ -436,8 +445,8 @@ export const Kursus = () => {
           </div>
         </div>
         <Footer />
+        {activeFilter ? <FilterMobile onClose={handleFilter} onApplyFilter={handleApplyFilter} onClearFilter={handleClearFilter} /> : ""}
       </div>
-      {activeFilter ? <FilterMobile onClose={handleFilter} onApplyFilter={handleApplyFilter} onClearFilter={handleClearFilter} /> : ""}
     </>
   );
 };
