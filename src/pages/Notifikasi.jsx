@@ -48,7 +48,7 @@ export const Notifikasi = () => {
         </div>
         <div className="flex flex-col sm:flex-row sm:justify-center">
           <div className="flex px-0 sm:w-[50%] mt-5">
-            <div className="flex flex-col bg-transparent sm:bg-white w-full h-[550px] sm:h-[300px] rounded-xl z-10 sm:border-[1.5px] sm:border-[#6148FF]">
+            <div className="flex flex-col bg-transparent sm:bg-white w-full h-[550px] sm:h-[550px] rounded-xl z-10 sm:border-[1.5px] sm:border-[#6148FF]">
               <div className="hidden w-full min-h-[40px] justify-center items-center rounded-t-xl bg-gradientkanan text-white font-semibold tracking-[1px] z-0 sm:flex">
                 Notifikasi <span className="ml-1 bg-white text-center items-center rounded-md w-10 h-6 text-[#6148FF] font-bold">{jumlahNotifikasi}</span>
               </div>
@@ -83,7 +83,7 @@ export const Notifikasi = () => {
                       </div>
                     ))
                 ) : (
-                  <div className="flex flex-col items-center justify-center my-3">
+                  <div className="flex flex-col items-center justify-center my-3 h-full">
                     <img src={logo} alt="Empty Notifications" className="w-[160px]" />
                     <p className="text-gray-500">Tidak ada notifikasi saat ini</p>
                   </div>
