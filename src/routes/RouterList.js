@@ -33,6 +33,7 @@ import { Chapters } from "../assets/components/Admin/chapter/Chapters";
 import { Category } from "../assets/components/Admin/kategori/Category";
 import { ProfileAdmin } from "../assets/components/Admin/ProfileAdmin";
 import TokenProtectedAdmin from "../assets/components/Admin/TokenProtectedAdmin";
+import { NotFound } from "../pages/NotFound";
 
 export const RouterList = () => {
   return (
@@ -98,22 +99,13 @@ export const RouterList = () => {
             </TokenProtectedAdmin>
           }
         ></Route>
-        
-        <Route
-          path="/kelassaya/:queryEnrollments"
-          element={<BerandaKelasSaya />}
-        ></Route>
+
+        <Route path="/kelassaya/:queryEnrollments" element={<BerandaKelasSaya />}></Route>
         <Route path="/kursus/:querySearch" element={<Kursus />}></Route>
         <Route path="/detail-kelas/:courseId" element={<DetailKelas />}></Route>
         <Route path="/checkout/:courseId" element={<Checkout />}></Route>
-        <Route
-          path="/payment/:courseId/:idTransactions"
-          element={<Payment />}
-        ></Route>
-        <Route
-          path="/success/payment/:courseId/:idTransactions"
-          element={<Success />}
-        ></Route>
+        <Route path="/payment/:courseId/:idTransactions" element={<Payment />}></Route>
+        <Route path="/success/payment/:courseId/:idTransactions" element={<Success />}></Route>
         <Route
           path="/akun"
           element={
@@ -160,11 +152,10 @@ export const RouterList = () => {
         <Route path="/category/frontend" element={<Frontend />}></Route>
         <Route path="/category/backend" element={<Backend />}></Route>
         <Route path="/category/database" element={<Database />}></Route>
-        <Route
-          path="/category/machinelearning"
-          element={<MachineLearning />}
-        ></Route>
+        <Route path="/category/machinelearning" element={<MachineLearning />}></Route>
         <Route path="/category/datascience" element={<DataScience />}></Route>
+
+        <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>
   );
