@@ -13,7 +13,7 @@ import complete from "../assets/svg/progress.svg";
 import filterungu from "../assets/svg/filterungu.svg";
 import { FilterMobile } from "../assets/components/FilterMobile";
 import { BelumAdaKelas } from "../assets/components/HandleErrorPage/BelumAdaKelas";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 // import { useGetSearchMyEnrollments } from "../services/get-search-my-enrollments";
 import { PencarianPageKelasSaya } from "../assets/components/PencarianPageKelasSaya";
 import { Footer } from "../assets/components/Footer";
@@ -28,9 +28,24 @@ export const BerandaKelasSaya = () => {
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [activeInputSearch, setActiveInputSearch] = useState(false);
   const { queryEnrollments } = useParams();
+  const [SearchParams, setSearchParams] = useSearchParams();
+  const showActiveIsProgress = SearchParams.get("progress");
 
   const handleActiveProgress = (item) => {
     setActiveProgress(item);
+    if (item === "inprogress") {
+      const currentParams = new URLSearchParams(SearchParams);
+      currentParams.set("progress", "inprogress");
+      setSearchParams(currentParams);
+    } else if (item === "selesai") {
+      const currentParams = new URLSearchParams(SearchParams);
+      currentParams.set("progress", "selesai");
+      setSearchParams(currentParams);
+    } else {
+      const currentParams = new URLSearchParams(SearchParams);
+      currentParams.delete("progress");
+      setSearchParams(currentParams);
+    }
   };
 
   //Handle Filter SIPALING
@@ -329,17 +344,20 @@ export const BerandaKelasSaya = () => {
                 <div className="w-full sm:w-4/6 xl:w-9/12 flex flex-col gap-4">
                   {/* Button Filter kelas saya*/}
                   <div className="flex bg-white justify-between gap-4">
-                    <button className={`${activeProgress === "all" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`} onClick={() => handleActiveProgress("all")}>
+                    <button
+                      className={`${showActiveIsProgress === null ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
+                      onClick={() => handleActiveProgress("all")}
+                    >
                       All
                     </button>
                     <button
-                      className={`${activeProgress === "inprogress" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
+                      className={`${showActiveIsProgress === "inprogress" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
                       onClick={() => handleActiveProgress("inprogress")}
                     >
                       In Progress
                     </button>
                     <button
-                      className={`${activeProgress === "selesai" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
+                      className={`${showActiveIsProgress === "selesai" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
                       onClick={() => handleActiveProgress("selesai")}
                     >
                       Selesai
