@@ -29,11 +29,15 @@ import { NotFoundCourse } from "../assets/components/HandleErrorPage/NotFoundCou
 // IMPORT CHAKRA UI
 import { Spinner } from "@chakra-ui/react";
 import { useGetDataKursus } from "../services/get-Datas-Courses";
+import { useSearchParams } from "react-router-dom";
 // import { useGetCategories } from "../services/get-Datas-Categories";
 
 export const Beranda = () => {
   const [activePopular, setActivePopular] = useState("");
   const [ActiveNavbar, setActiveNavbar] = useState(false);
+  const [SearchParams, setSearchParams] = useSearchParams();
+  const showActiveIsCategory = SearchParams.get("category");
+
   window.addEventListener("scroll", function () {
     if (this.window.scrollY > 100) {
       setActiveNavbar(true);
@@ -44,6 +48,15 @@ export const Beranda = () => {
 
   const handleActivePopular = (item) => {
     setActivePopular(item);
+    if (item !== "") {
+      const currentParams = new URLSearchParams(SearchParams);
+      currentParams.set("category", item);
+      setSearchParams(currentParams);
+    } else {
+      const currentParams = new URLSearchParams(SearchParams);
+      currentParams.delete("category");
+      setSearchParams(currentParams);
+    }
   };
   const { data: dataKursuss, isLoading } = useGetDataKursus({
     category: activePopular,
@@ -154,43 +167,47 @@ export const Beranda = () => {
               <div className="flex w-full flex-row overflow-auto gap-2 scrollbar-hide">
                 <div className="flex w-full lg:justify-center items-center gap-2 xl:gap-4 ">
                   <button
-                    className={`${activePopular === "" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    className={`${showActiveIsCategory === null ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
                     onClick={() => handleActivePopular("")}
                   >
                     All
                   </button>
                   <button
-                    className={`${activePopular === "ui/ux" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "} whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    className={`${showActiveIsCategory === "ui/ux" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "} whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
                     onClick={() => handleActivePopular("ui/ux")}
                   >
                     UI/UX Design
                   </button>
                   <button
-                    className={`${activePopular === "frontend" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    className={`${showActiveIsCategory === "frontend" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
                     onClick={() => handleActivePopular("frontend")}
                   >
                     Frontend
                   </button>
                   <button
-                    className={`${activePopular === "database" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    className={`${showActiveIsCategory === "database" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
                     onClick={() => handleActivePopular("database")}
                   >
                     Database
                   </button>
                   <button
-                    className={`${activePopular === "backend" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    className={`${showActiveIsCategory === "backend" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
                     onClick={() => handleActivePopular("backend")}
                   >
                     Backend
                   </button>
                   <button
-                    className={`${activePopular === "machine learning" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    className={`${
+                      showActiveIsCategory === "machine learning" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "
+                    }whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
                     onClick={() => handleActivePopular("machine learning")}
                   >
                     Machine Learning
                   </button>
                   <button
-                    className={`${activePopular === "data science" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
+                    className={`${
+                      showActiveIsCategory === "data science" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "
+                    }whitespace-nowrap border rounded-md px-2 sm:px-4 xl:px-8 py-2 xl:py-4 text-sm hover:bg-ungu-0 hover:text-white`}
                     onClick={() => handleActivePopular("data science")}
                   >
                     Data Science
