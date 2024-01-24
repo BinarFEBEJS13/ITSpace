@@ -13,7 +13,7 @@ import diamond from "../assets/svg/diamond.svg";
 import filterungu from "../assets/svg/filterungu.svg";
 import { FilterMobile } from "../assets/components/FilterMobile";
 import { NotFoundCourse } from "../assets/components/HandleErrorPage/NotFoundCourse";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Footer } from "../assets/components/Footer";
 import { PencarianPageKursus } from "../assets/components/PencarianPageKursus";
 // Import Chakra UI
@@ -28,9 +28,24 @@ export const Kursus = () => {
   const [activeInputSearch, setActiveInputSearch] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const { querySearch } = useParams();
+  const [SearchParams, setSearchParams] = useSearchParams();
+  const showActiveIsPremium = SearchParams.get("ispremium");
 
   const handleActivePremium = (item) => {
     setActivePremium(item);
+    if (item === "1") {
+      const currentParams = new URLSearchParams(SearchParams);
+      currentParams.set("ispremium", "premium");
+      setSearchParams(currentParams);
+    } else if (item === "0") {
+      const currentParams = new URLSearchParams(SearchParams);
+      currentParams.set("ispremium", "gratis");
+      setSearchParams(currentParams);
+    } else {
+      const currentParams = new URLSearchParams(SearchParams);
+      currentParams.delete("ispremium");
+      setSearchParams(currentParams);
+    }
   };
 
   //Handle Filter SIPALING
@@ -313,21 +328,21 @@ export const Kursus = () => {
                   <div className="flex justify-between gap-4">
                     <button
                       value={""}
-                      className={`${ActivePremium === "" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
+                      className={`${showActiveIsPremium === null ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
                       onClick={() => handleActivePremium("")}
                     >
                       All
                     </button>
                     <button
                       value={"1"}
-                      className={`${ActivePremium === "1" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
+                      className={`${showActiveIsPremium === "premium" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
                       onClick={() => handleActivePremium("1")}
                     >
                       Kelas Premium
                     </button>
                     <button
                       value={"0"}
-                      className={`${ActivePremium === "0" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
+                      className={`${showActiveIsPremium === "gratis" ? "bg-ungu-0 text-white " : "bg-birumuda-0 text-black "}w-1/3 border rounded-md py-2 text-sm hover:bg-ungu-0 hover:text-white`}
                       onClick={() => handleActivePremium("0")}
                     >
                       Kelas Gratis
